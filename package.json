@@ -7,15 +7,15 @@
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
-		"postinstall": "nuxt prepare"
+		"postinstall": "nuxt prepare && prisma generate"
 	},
 	"prisma": {
-    "seed": "node prisma/seed.js"
-  },
+		"seed": "node prisma/seed.js"
+	},
 	"dependencies": {
 		"@nuxtjs/eslint-config-typescript": "^12.1.0",
 		"@pinia/nuxt": "^0.5.1",
-		"@prisma/client": "^5.11.0",
+		"@prisma/client": "^5.12.1",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/jsonwebtoken": "^9.0.6",
 		"bcryptjs": "^2.4.3",
@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^20.12.2",
-		"prisma": "^5.11.0",
+		"prisma": "^5.12.1",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.4.3"
 	}
