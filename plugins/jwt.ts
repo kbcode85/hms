@@ -8,16 +8,15 @@ export const createJwtToken = async () => {
 }
 
 export const checkJwtToken = async (token: string) => {
-	return jwt.verify(token, runtimeConfig.tokenSecret, (err, decoded) => {
-		if (err) {
-			let { name, message } = err
-			return {
-				name: name,
-				message: message,
-				success: false,
-			}
-		}
-
+	try {
+		const decoded = jwt.verify(token, runtimeConfig.tokenSecret)
 		return decoded
-	})
+	} catch (err: any) {
+		let { name, message } = err
+		return {
+			name: name,
+			message: message,
+			success: false,
+		}
+	}
 }
