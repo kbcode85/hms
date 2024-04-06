@@ -7,34 +7,46 @@
 		<hr />
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
-				<a href="#" class="nav-link active" aria-current="page">
-					<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-					Home
-				</a>
+				<NuxtLink to="/" class="nav-link active d-flex align-items-center">
+					<i class="material-icons-sharp">dashboard</i>
+					<span class="ms-1">Dashboard</span>
+				</NuxtLink>
 			</li>
-			<li>
-				<a href="#" class="nav-link text-white">
-					<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-					Dashboard
-				</a>
+			<li class="nav-item">
+				<NuxtLink to="/checkinout" class="nav-link text-white d-flex align-items-center">
+					<i class="material-icons-sharp">hotel</i>
+					<span class="ms-1">Meldunki</span>
+				</NuxtLink>
 			</li>
-			<li>
-				<a href="#" class="nav-link text-white">
-					<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-					Orders
-				</a>
+			<li class="nav-item">
+				<NuxtLink to="/bookings" class="nav-link text-white d-flex align-items-center">
+					<i class="material-icons-sharp">event</i>
+					<span class="ms-1">Rezerwacje</span>
+				</NuxtLink>
 			</li>
-			<li>
-				<a href="#" class="nav-link text-white">
-					<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-					Products
-				</a>
+			<li class="nav-item">
+				<NuxtLink to="/guest" class="nav-link text-white d-flex align-items-center">
+					<i class="material-icons-sharp">people</i>
+					<span class="ms-1">Księga gości</span>
+				</NuxtLink>
 			</li>
-			<li>
-				<a href="#" class="nav-link text-white">
-					<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-					Customers
-				</a>
+			<li class="nav-item">
+				<NuxtLink to="/rooms" class="nav-link text-white d-flex align-items-center">
+					<i class="material-icons-sharp">bed</i>
+					<span class="ms-1">Pokoje</span>
+				</NuxtLink>
+			</li>
+			<li class="nav-item">
+				<NuxtLink to="/invoices" class="nav-link text-white d-flex align-items-center">
+					<i class="material-icons-sharp">receipt_long</i>
+					<span class="ms-1">Faktury</span>
+				</NuxtLink>
+			</li>
+			<li class="nav-item">
+				<NuxtLink to="/reports" class="nav-link text-white d-flex align-items-center">
+					<i class="material-icons-sharp">show_chart</i>
+					<span class="ms-1">Raporty</span>
+				</NuxtLink>
 			</li>
 		</ul>
 		<hr />
@@ -48,10 +60,25 @@
 				<p class="ms-2 mb-0">{{ username }}</p>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-				<li><a class="dropdown-item" href="#">Settings</a></li>
-				<li><a class="dropdown-item" href="#">Profile</a></li>
+				<li class="dropdown-item">
+					<NuxtLink to="/settings" class="nav-link d-flex align-items-center">
+						<i class="material-icons-sharp">settings</i>
+						<span class="ms-1">Ustawienia</span>
+					</NuxtLink>
+				</li>
+				<li class="dropdown-item">
+					<NuxtLink to="/profile" class="nav-link d-flex align-items-center">
+						<i class="material-icons-sharp">person</i>
+						<span class="ms-1">Profil</span>
+					</NuxtLink>
+				</li>
 				<li><hr class="dropdown-divider" /></li>
-				<li><a class="dropdown-item" href="#">Sign out</a></li>
+				<li class="dropdown-item">
+					<NuxtLink class="nav-link d-flex align-items-center" @click.prevent="logout">
+						<i class="material-icons-sharp">logout</i>
+						<span class="ms-1">Wyloguj</span>
+					</NuxtLink>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -60,5 +87,9 @@
 <script lang="ts" setup>
 const store = useAuthStore()
 let username = store.data.userdata.username
+
+const logout = async () => {
+	await store.logout()
+}
 </script>
 <style></style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<h1 class="text-center">Dashboard</h1>
+		<h1 class="text-center">Pofil</h1>
 		<p class="text-center">
 			Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab molestias impedit libero recusandae nam exercitationem
 			minima tempora voluptas, quos velit! Odio iste dignissimos, sit itaque rem optio eligendi quam officia!
@@ -13,12 +13,6 @@ definePageMeta({
 	middleware: ['auth'],
 })
 
-
-const store = useAuthStore()
-
-const logout = async () => {
-	await store.logout()
-}
 </script>
 
 <style></style>
