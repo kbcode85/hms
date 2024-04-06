@@ -1,6 +1,6 @@
-import bcrypt from 'bcryptjs'
-import { createJwtToken } from '~~/plugins/jwt'
+import { comparePasswords } from '~~/server/utils/password'
 import { prisma } from '~~/prisma/db'
+import { createAccessToken, createAndSetRefreshToken } from '~~/server/utils/session'
 
 export default defineEventHandler(async event => {
 	const { username, password } = await readBody(event)
@@ -11,14 +11,30 @@ export default defineEventHandler(async event => {
 		})
 
 		if (user) {
-			const match = await bcrypt.compare(password, user.password)
+			const match = await comparePasswords(password, user.password)
 
 			if (match) {
-				const token = await createJwtToken()
+				const token = await createAccessToken(user.id)
 
 				setCookie(event, 'token', token)
 
-				const lastLoginIpAddr = event.req.headers.hasOwnProperty('x-forwarded-for') ? event.req.headers['x-forwarded-for']?.toString() : '127.0.0.1'
+				const refreshCookie = getCookie(event, 'refreshToken')
+
+				if (
+					!refreshCookie ||
+					user.refreshToken !== refreshCookie ||
+					(user.refreshTokenExpiresAt && user.refreshTokenExpiresAt < new Date())
+				) {
+					const newRequestToken = await createAndSetRefreshToken(user.id)
+
+					if (newRequestToken) {
+						setCookie(event, 'refreshToken', newRequestToken)
+					}
+				}
+
+				const lastLoginIpAddr = event.req.headers.hasOwnProperty('x-forwarded-for')
+					? event.req.headers['x-forwarded-for']?.toString()
+					: '127.0.0.1'
 
 				const userdata: any = await prisma.user.update({
 					where: { username: username },
@@ -27,35 +43,36 @@ export default defineEventHandler(async event => {
 					},
 				})
 
-				delete userdata.password
-				delete userdata.salt
-
-				setCookie(event, 'user', JSON.stringify(userdata))
+				// setCookie(event, 'user', userdata.id)
 
 				await prisma.$disconnect()
 
-				userdata.token = token
-				userdata.success = true
-
-				return userdata
+				return {
+					id: userdata.id,
+					token: token,
+					refreshToken: userdata.refreshToken,
+					refreshTokenExpiresAt: userdata.refreshTokenExpiresAt,
+					success: true,
+					message: 'Pomyślne zalogowanie',
+				}
 			} else {
 				return {
-					message: 'Invalid credentials',
 					success: false,
+					message: 'Nieprawidłowe dane uwierzytelniające',
 				}
 			}
 		} else {
 			await prisma.$disconnect()
 			return {
-				message: 'Invalid credentials',
 				success: false,
+				message: 'Nieprawidłowe dane uwierzytelniające',
 			}
 		}
 	} catch (error) {
 		await prisma.$disconnect()
 		return {
-			message: 'Internal Server Error',
 			success: false,
+			message: 'Wewnętrzny błąd serwera',
 		}
 	}
 })

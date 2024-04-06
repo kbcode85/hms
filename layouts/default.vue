@@ -1,5 +1,6 @@
 <template>
-	<div>
+	<div class="d-flex flex-nowrap">
+		<Sidebar />
 		<slot />
 	</div>
 </template>

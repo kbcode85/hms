@@ -1,6 +1,4 @@
-import bcrypt from 'bcryptjs'
-import { create } from 'domain'
-import { createJwtToken } from '~~/plugins/jwt'
+import { hashPassword } from '~~/server/utils/password'
 import { prisma } from '~~/prisma/db'
 
 export default defineEventHandler(async event => {
@@ -11,14 +9,13 @@ export default defineEventHandler(async event => {
 	})
 
 	if (user != null) {
-		prisma.$disconnect();
+		prisma.$disconnect()
 		return {
-				message: 'User already exists',
-				success: false
-			}
+			success: false,
+			message: 'Użytkownik już istnieje',
+		}
 	} else {
-		const salt = await bcrypt.genSalt()
-		const hash = await bcrypt.hash(password, salt)
+		const { salt, hash } = await hashPassword(password)
 
 		try {
 			const createUser: any = await prisma.user.create({
@@ -28,8 +25,6 @@ export default defineEventHandler(async event => {
 					password: hash,
 					salt: salt,
 					lastLoginIpAddress: '',
-					currentLoggedInAt: new Date(),
-					lastLoggedInAt: new Date()
 				},
 			})
 
@@ -44,8 +39,8 @@ export default defineEventHandler(async event => {
 		} catch (error) {
 			await prisma.$disconnect()
 			return {
-				message: 'Internal server error',
 				success: false,
+				message: 'Wewnętrzny błąd serwera',
 			}
 		}
 	}
