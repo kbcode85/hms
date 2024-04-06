@@ -2,8 +2,10 @@
 export default defineNuxtConfig({
 	devtools: { enabled: true },
 	runtimeConfig: {
-		tokenSecret: process.env.TOKEN_SECRET,
-		tokenExpiration: process.env.TOKEN_EXPIRATION,
+		AccessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+		AccessTokenExpiration: process.env.ACCESS_TOKEN_EXPIRATION,
+		RefreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+		RefreshTokenExpiration: process.env.REFRESH_TOKEN_EXPIRATION,
 	},
 	modules: ['@pinia/nuxt'],
 	app: {

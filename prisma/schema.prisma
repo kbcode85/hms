@@ -28,6 +28,8 @@ model User {
   currentLoggedInAt DateTime
   lastLoggedInAt DateTime
   createdAt DateTime @default(now())
+  refreshToken String?
+  refreshTokenExpiresAt DateTime?
 }
 
 model Hotel {

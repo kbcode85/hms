@@ -15,12 +15,12 @@ export const useAuthStore = defineStore({
 			const token = useCookie('token').value || ''
 
 			try {
-				const data: UserData = await $fetch('/api/auth/me', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						token: token,
-					}),
+				const data: UserData = await $fetch('/api/auth/token', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
 				})
 
 				this.data = data
