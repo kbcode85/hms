@@ -2,13 +2,28 @@ import { defineStore } from 'pinia'
 
 interface UserData {
 	success: boolean
-	user: object
+	message: string
+	user: {
+		userId: string
+		iat: number
+		exp: number
+	}
+	userdata: {
+		id: string
+		username: string
+		email: string
+	}
 }
 
 export const useAuthStore = defineStore({
 	id: 'auth',
 	state: () => ({
-		data: { success: false, user: {} } as UserData,
+		data: {
+			success: false,
+			message: '',
+			user: { userId: '', iat: 0, exp: 0 },
+			userdata: { id: '', username: '', email: '' },
+		} as UserData,
 	}),
 	actions: {
 		async checkAuth() {

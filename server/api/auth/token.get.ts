@@ -4,6 +4,7 @@ import {
 	createAccessToken,
 	getUserIdFromToken,
 	getStoreRefreshToken,
+	getUserData,
 } from '~/server/utils/session'
 
 export default defineEventHandler(async event => {
@@ -53,10 +54,12 @@ export default defineEventHandler(async event => {
 			}
 		}
 	} else {
+		const userdata: any = await getUserData(token)
 		return {
 			success: true,
 			message: 'Token dostępu jest poprawny',
 			user: isValid.decoded,
+			userdata,
 		}
 	}
 })

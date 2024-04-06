@@ -84,3 +84,21 @@ export async function createAndSetRefreshToken(userId: string) {
 		return null
 	}
 }
+
+export async function getUserData(token: string) {
+	const userId = getUserIdFromToken(token)
+	if (!userId) {
+		return null
+	}
+
+	const user = await prisma.user.findUnique({
+		where: { id: userId },
+		select: {
+			id: true,
+			username: true,
+			email: true,
+		},
+	})
+
+	return user
+}
