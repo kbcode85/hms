@@ -3,10 +3,8 @@ import {
 	verifyRefreshToken,
 	createAccessToken,
 	getUserIdFromToken,
-	decodeToken,
 	getStoreRefreshToken,
 } from '~/server/utils/session'
-import { prisma } from '~~/prisma/db'
 
 export default defineEventHandler(async event => {
 	const authHeader = event.req.headers.authorization
@@ -31,7 +29,7 @@ export default defineEventHandler(async event => {
 	if (!userId) {
 		return {
 			success: false,
-			message: 'Niepoprawny token dostępu [userId]',
+			message: 'Niepoprawny token dostępu',
 		}
 	}
 
@@ -51,12 +49,13 @@ export default defineEventHandler(async event => {
 		} else {
 			return {
 				success: false,
-				message: 'Niepoprawny token odswiezania',
+				message: 'Niepoprawny token odswiezania, zaloguj się ponownie aby uzyskać nowy token dostępu',
 			}
 		}
 	} else {
 		return {
 			success: true,
+			message: 'Token dostępu jest poprawny',
 			user: isValid.decoded,
 		}
 	}

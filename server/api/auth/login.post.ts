@@ -1,6 +1,6 @@
 import { comparePasswords } from '~~/server/utils/password'
 import { prisma } from '~~/prisma/db'
-import { createAccessToken, createRefreshToken } from '~~/server/utils/session'
+import { createAccessToken, createAndSetRefreshToken } from '~~/server/utils/session'
 
 export default defineEventHandler(async event => {
 	const { username, password } = await readBody(event)
@@ -20,34 +20,15 @@ export default defineEventHandler(async event => {
 
 				const refreshCookie = getCookie(event, 'refreshToken')
 
-				if (!refreshCookie) {
-					const refreshToken = await createRefreshToken(user.id)
-					setCookie(event, 'refreshToken', refreshToken)
-					await prisma.user.update({
-						where: { username: username },
-						data: {
-							refreshToken: refreshToken,
-							refreshTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-						},
-					})
-				} else {
-					const storedRefreshToken = user.refreshToken
-					const storedRefreshTokenExpiresAt = user.refreshTokenExpiresAt
+				if (
+					!refreshCookie ||
+					user.refreshToken !== refreshCookie ||
+					(user.refreshTokenExpiresAt && user.refreshTokenExpiresAt < new Date())
+				) {
+					const newRequestToken = await createAndSetRefreshToken(user.id)
 
-					if (
-						!storedRefreshToken ||
-						storedRefreshToken !== refreshCookie ||
-						(storedRefreshTokenExpiresAt && storedRefreshTokenExpiresAt < new Date())
-					) {
-						const refreshToken = await createRefreshToken(user.id)
-						setCookie(event, 'refreshToken', refreshToken)
-						await prisma.user.update({
-							where: { username: username },
-							data: {
-								refreshToken: refreshToken,
-								refreshTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-							},
-						})
+					if (newRequestToken) {
+						setCookie(event, 'refreshToken', newRequestToken)
 					}
 				}
 
@@ -72,25 +53,26 @@ export default defineEventHandler(async event => {
 					refreshToken: userdata.refreshToken,
 					refreshTokenExpiresAt: userdata.refreshTokenExpiresAt,
 					success: true,
+					message: 'Pomyślne zalogowanie',
 				}
 			} else {
 				return {
-					message: 'Invalid credentials',
 					success: false,
+					message: 'Nieprawidłowe dane uwierzytelniające',
 				}
 			}
 		} else {
 			await prisma.$disconnect()
 			return {
-				message: 'Invalid credentials',
 				success: false,
+				message: 'Nieprawidłowe dane uwierzytelniające',
 			}
 		}
 	} catch (error) {
 		await prisma.$disconnect()
 		return {
-			message: 'Internal Server Error',
 			success: false,
+			message: 'Wewnętrzny błąd serwera',
 		}
 	}
 })

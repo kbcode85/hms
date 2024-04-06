@@ -68,3 +68,19 @@ export async function getStoreRefreshToken(userId: string | null): Promise<strin
 		return null
 	}
 }
+
+export async function createAndSetRefreshToken(userId: string) {
+	try {
+		const refreshToken = await createRefreshToken(userId)
+		await prisma.user.update({
+			where: { id: userId },
+			data: {
+				refreshToken: refreshToken,
+				refreshTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+			},
+		})
+		return refreshToken
+	} catch (error) {
+		return null
+	}
+}

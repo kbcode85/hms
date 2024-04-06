@@ -11,8 +11,8 @@ export default defineEventHandler(async event => {
 	if (user != null) {
 		prisma.$disconnect()
 		return {
-			message: 'User already exists',
 			success: false,
+			message: 'Użytkownik już istnieje',
 		}
 	} else {
 		const { salt, hash } = await hashPassword(password)
@@ -25,8 +25,6 @@ export default defineEventHandler(async event => {
 					password: hash,
 					salt: salt,
 					lastLoginIpAddress: '',
-					currentLoggedInAt: new Date(),
-					lastLoggedInAt: new Date(),
 				},
 			})
 
@@ -41,8 +39,8 @@ export default defineEventHandler(async event => {
 		} catch (error) {
 			await prisma.$disconnect()
 			return {
-				message: 'Internal server error',
 				success: false,
+				message: 'Wewnętrzny błąd serwera',
 			}
 		}
 	}
