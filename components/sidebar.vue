@@ -2,48 +2,48 @@
 	<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; height: 100vh">
 		<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<img src="/assets/img/logo.png" alt="Favicon" class="bi pe-none me-2" width="40" height="32" />
-			<span class="fs-4">HMS</span>
+			<span class="fs-4">HMSuite</span>
 		</a>
 		<hr />
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
-				<NuxtLink to="/" class="nav-link active d-flex align-items-center">
+				<NuxtLink to="/" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">dashboard</i>
 					<span class="ms-1">Dashboard</span>
 				</NuxtLink>
 			</li>
 			<li class="nav-item">
-				<NuxtLink to="/checkinout" class="nav-link text-white d-flex align-items-center">
+				<NuxtLink to="/checkinout" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">hotel</i>
 					<span class="ms-1">Meldunki</span>
 				</NuxtLink>
 			</li>
 			<li class="nav-item">
-				<NuxtLink to="/bookings" class="nav-link text-white d-flex align-items-center">
+				<NuxtLink to="/bookings" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">event</i>
 					<span class="ms-1">Rezerwacje</span>
 				</NuxtLink>
 			</li>
 			<li class="nav-item">
-				<NuxtLink to="/guest" class="nav-link text-white d-flex align-items-center">
+				<NuxtLink to="/guest" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">people</i>
 					<span class="ms-1">Księga gości</span>
 				</NuxtLink>
 			</li>
 			<li class="nav-item">
-				<NuxtLink to="/rooms" class="nav-link text-white d-flex align-items-center">
+				<NuxtLink to="/rooms" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">bed</i>
 					<span class="ms-1">Pokoje</span>
 				</NuxtLink>
 			</li>
 			<li class="nav-item">
-				<NuxtLink to="/invoices" class="nav-link text-white d-flex align-items-center">
+				<NuxtLink to="/invoices" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">receipt_long</i>
 					<span class="ms-1">Faktury</span>
 				</NuxtLink>
 			</li>
 			<li class="nav-item">
-				<NuxtLink to="/reports" class="nav-link text-white d-flex align-items-center">
+				<NuxtLink to="/reports" class="nav-link text-white d-flex align-items-center" active-class="active">
 					<i class="material-icons-sharp">show_chart</i>
 					<span class="ms-1">Raporty</span>
 				</NuxtLink>

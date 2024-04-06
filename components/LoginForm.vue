@@ -2,7 +2,7 @@
 	<div class="login--card p-4 border rounded shadow bg-light my-auto mx-auto">
 		<div class="text-center">
 			<img class="logo img-fluid my-3" src="/assets/img/logo.png" alt="" />
-			<h1 class="title">Hotel Management System</h1>
+			<h1 class="title">HMSuite</h1>
 		</div>
 
 		<form class="my-3" @submit.prevent="login">
@@ -19,7 +19,7 @@
 						class="form-control"
 						id="username"
 						name="username"
-						placeholder="Username"
+						placeholder="Login"
 						v-model="LoginForm.username" />
 				</div>
 			</div>
@@ -36,11 +36,11 @@
 						class="form-control"
 						id="password"
 						name="password"
-						placeholder="Password"
+						placeholder="Hasło"
 						v-model="LoginForm.password" />
 				</div>
 			</div>
-			<button type="submit" class="btn btn-primary w-100 transform-hover" :disabled="!isFormValid">Login</button>
+			<button type="submit" class="btn btn-primary w-100 transform-hover" :disabled="!isFormValid">Zaloguj się</button>
 		</form>
 		<p class="d-flex align-items-center justify-content-center text-danger" v-if="login_message">
 			<span class="material-icons-sharp me-2">error</span> {{ login_message }}
