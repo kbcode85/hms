@@ -1,37 +1,30 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  username  String   @unique
-  name      String?
-  surname   String?
-  phone     String?
-  salt      String
-  password  String
-  lastLoginIpAddress String
-  createdAt DateTime @default(now())
-  refreshToken String?
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  username              String    @unique
+  name                  String?
+  surname               String?
+  phone                 String?
+  salt                  String
+  password              String
+  lastLoginIpAddress    String
+  createdAt             DateTime  @default(now())
+  refreshToken          String?
   refreshTokenExpiresAt DateTime?
 }
 
 model Hotel {
-  id          Int      @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   star        Int
   address     String
@@ -42,4 +35,47 @@ model Hotel {
   website     String
   zip_code    String
   description String
+  reservations Reservation[]
+  rooms       Room[]
+}
+
+model Guest {
+  id          Int    @id @default(autoincrement())
+  name        String
+  surname     String
+  phone       String
+  email       String
+  address     String
+  city        String
+  country     String
+  zip_code    String
+  description String
+  reservations Reservation[]
+}
+
+model Room {
+  id          Int    @id @default(autoincrement())
+  hotelId     Int
+  number      Int
+  floor       Int
+  description String
+  price       Float
+  capacity    Int
+  isAvailable Boolean
+  hotel       Hotel  @relation(fields: [hotelId], references: [id])
+  reservations Reservation[]
+}
+
+
+model Reservation {
+  id          Int      @id @default(autoincrement())
+  hotelId     Int
+  roomId      Int
+  guestId     Int
+  checkIn     DateTime
+  checkOut    DateTime
+  totalPrice  Float
+  hotel       Hotel      @relation(fields: [hotelId], references: [id])
+  room        Room       @relation(fields: [roomId], references: [id])
+  guest       Guest      @relation(fields: [guestId], references: [id])
 }

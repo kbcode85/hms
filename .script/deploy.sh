@@ -13,6 +13,6 @@ echo "Building the project..."
 npm run build
 
 echo "PM2 Reload"
-pm2 reload app_name
+pm2 reload hms
 
 echo "Deployment completed successfully"
