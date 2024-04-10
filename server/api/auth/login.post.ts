@@ -6,10 +6,11 @@ export default defineEventHandler(async event => {
 	const { username, password } = await readBody(event)
 
 	try {
+		console.log(1)
 		const user = await prisma.user.findUnique({
 			where: { username: username },
 		})
-
+		console.log(2)
 		if (user) {
 			const match = await comparePasswords(password, user.password)
 
@@ -69,6 +70,7 @@ export default defineEventHandler(async event => {
 			}
 		}
 	} catch (error) {
+		await prisma.$disconnect()
 		return {
 			success: false,
 			message: 'Wewnętrzny błąd serwera',
