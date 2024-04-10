@@ -41,6 +41,7 @@ export default defineEventHandler(async event => {
 			return {
 				success: false,
 				message: 'Wewnętrzny błąd serwera',
+				error: error,
 			}
 		}
 	}
