@@ -2,7 +2,7 @@
 	<div class="login--card p-4 border rounded shadow bg-light my-auto mx-auto">
 		<div class="text-center">
 			<img class="logo img-fluid my-3" src="/assets/img/logo.png" alt="" />
-			<h1 class="title">HMSuite</h1>
+			<h1 class="title">HMSuite App</h1>
 		</div>
 
 		<form class="my-3" @submit.prevent="login">
