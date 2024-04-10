@@ -69,7 +69,6 @@ export default defineEventHandler(async event => {
 			}
 		}
 	} catch (error) {
-		await prisma.$disconnect()
 		return {
 			success: false,
 			message: 'Wewnętrzny błąd serwera',
