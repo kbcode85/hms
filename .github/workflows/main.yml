@@ -12,10 +12,10 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      # - name: 📦 Deploy to server
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '20.11.1'
+      - name: 📦 Deploy to server
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
 
       - name: 📦 Install packages Project
         run: |
@@ -42,3 +42,6 @@ jobs:
 
       - name: 🚀 Deploy Project [3/3]
         run: pm2 start ecosystem.config.cjs
+
+      - name: 🚀 Deploy Project [4/4]
+        run: pm2 link 0wagw5bom25elx8 kvsaafyavyxr6um
