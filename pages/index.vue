@@ -12,13 +12,6 @@
 definePageMeta({
 	middleware: ['auth'],
 })
-
-
-const store = useAuthStore()
-
-const logout = async () => {
-	await store.logout()
-}
 </script>
 
 <style></style>
