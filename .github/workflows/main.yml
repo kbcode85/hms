@@ -18,4 +18,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          script: 'cd /var/www/hms && ./.scripts/deploy.sh'
+          script: 'sudo cd /var/www/hms && ./.scripts/deploy.sh'
