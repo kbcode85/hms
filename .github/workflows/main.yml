@@ -44,12 +44,12 @@ jobs:
 
       - name: 🔨 Create .env file
         run: |
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo DIRECT_URL=${{ secrets.DIRECT_URL }} >> .env
-          echo ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }} >> .env
-          echo ACCESS_TOKEN_EXPIRATION=${{ secrets.ACCESS_TOKEN_EXPIRATION }} >> .env
-          echo REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }} >> .env
-          echo REFRESH_TOKEN_EXPIRATION=${{ secrets.REFRESH_TOKEN_EXPIRATION }} >> .env
+          echo DATABASE_URL='"${{ secrets.DATABASE_URL }}"' >> .env
+          echo DIRECT_URL='"${{ secrets.DIRECT_URL }}"' >> .env
+          echo ACCESS_TOKEN_SECRET='"${{ secrets.ACCESS_TOKEN_SECRET }}"' >> .env
+          echo ACCESS_TOKEN_EXPIRATION='"${{ secrets.ACCESS_TOKEN_EXPIRATION }}"' >> .env
+          echo REFRESH_TOKEN_SECRET='"${{ secrets.REFRESH_TOKEN_SECRET }}"' >> .env
+          echo REFRESH_TOKEN_EXPIRATION='"${{ secrets.REFRESH_TOKEN_EXPIRATION }}"' >> .env
 
       - name: 🚀 Deploy Project [1/2]
         run: npm install pm2 -g
