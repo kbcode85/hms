@@ -44,6 +44,7 @@ jobs:
 
       - name: 🔨 Create .env file
         run: |
+          echo TY KURWO "JEBANA KURWO" '"JEBANA KURWO"' 'ZADZIAŁASZ'>> .env
           echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
           echo DIRECT_URL="${{ secrets.DIRECT_URL }}" >> .env
           echo ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}" >> .env
