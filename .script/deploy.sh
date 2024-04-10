@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Deploying to production..."
+echo "🚀 Deploying to production..."
 
 git pull origin main
 echo "Pulled latest changes from main branch"
