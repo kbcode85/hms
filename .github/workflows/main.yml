@@ -37,11 +37,6 @@ jobs:
       - name: 🚀 Deploy Project [1/2]
         run: npm install pm2 -g
 
-      - name: 🚀 Deploy Project [2/3]
-        run: pm2 kill
-
-      - name: 🚀 Deploy Project [3/3]
+      - name: 🚀 Deploy Project [2/2]
         run: pm2 start ecosystem.config.cjs
 
-      - name: 🚀 Deploy Project [4/4]
-        run: pm2 link 0wagw5bom25elx8 kvsaafyavyxr6um
