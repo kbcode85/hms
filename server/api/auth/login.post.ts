@@ -31,24 +31,24 @@ export default defineEventHandler(async event => {
 					}
 				}
 
-				// // const lastLoginIpAddr = event.req.headers.hasOwnProperty('x-forwarded-for')
-				// // 	? event.req.headers['x-forwarded-for']?.toString()
-				// // 	: '127.0.0.1'
+				const lastLoginIpAddr = event.req.headers.hasOwnProperty('x-forwarded-for')
+					? event.req.headers['x-forwarded-for']?.toString()
+					: '127.0.0.1'
 
-				// const userdata: any = await prisma.user.update({
-				// 	where: { username: username }
-				// 	// data: {
-				// 	// 	lastLoginIpAddress: lastLoginIpAddr,
-				// 	// },
-				// })
+				const userdata: any = await prisma.user.update({
+					where: { username: username },
+					data: {
+						lastLoginIpAddress: lastLoginIpAddr,
+					},
+				})
 
 				await prisma.$disconnect()
 
 				return {
-					id: user.id,
+					id: userdata.id,
 					token: token,
-					refreshToken: user.refreshToken,
-					refreshTokenExpiresAt: user.refreshTokenExpiresAt,
+					refreshToken: userdata.refreshToken,
+					refreshTokenExpiresAt: userdata.refreshTokenExpiresAt,
 					success: true,
 					message: 'Pomyślne zalogowanie',
 				}

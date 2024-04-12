@@ -7,6 +7,16 @@ export default defineNuxtConfig({
 		RefreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
 		RefreshTokenExpiration: process.env.REFRESH_TOKEN_EXPIRATION,
 	},
+	css: ['~/assets/scss/main.scss'],
+	vite: {
+		css: {
+			preprocessorOptions: {
+				scss: {
+					additionalData: '@use "~/assets/scss/_variables" as *;',
+				},
+			},
+		},
+	},
 	modules: ['@pinia/nuxt'],
 	app: {
 		head: {
