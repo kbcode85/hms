@@ -36,7 +36,7 @@ export function createRefreshToken(userId: string) {
 
 export function verifyAccessToken(token: string) {
   try {
-    const decoded = jwt.verify(token, runtimeConfig.AccessTokenSecret);
+    const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
     return { valid: true, expired: false, decoded };
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -49,7 +49,7 @@ export function verifyAccessToken(token: string) {
 
 export function verifyRefreshToken(token: string) {
   try {
-    const decoded = jwt.verify(token, runtimeConfig.RefreshTokenSecret);
+    const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET);
     return { valid: true, expired: false, decoded };
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
