@@ -2,15 +2,32 @@ import jwt from "jsonwebtoken";
 import { prisma } from "~~/prisma/db";
 const runtimeConfig = useRuntimeConfig();
 
+const ACCESS_TOKEN_SECRET = runtimeConfig.AccessTokenSecret;
+const ACCESS_TOKEN_EXPIRATION = runtimeConfig.AccessTokenExpiration;
+const REFRESH_TOKEN_SECRET = runtimeConfig.RefreshTokenSecret;
+const REFRESH_TOKEN_EXPIRATION = runtimeConfig.RefreshTokenExpiration;
+
+if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
+  throw new Error("Token secrets are not defined");
+}
+
+if (!ACCESS_TOKEN_EXPIRATION || !REFRESH_TOKEN_EXPIRATION) {
+  throw new Error("Token expirations are not defined");
+}
+
 export function createAccessToken(userId: string) {
-  return jwt.sign({ userId }, runtimeConfig.AccessTokenSecret, {
-    expiresIn: runtimeConfig.AccessTokenExpiration,
+  const payload = {
+    userId,
+  };
+
+  return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
+    expiresIn: ACCESS_TOKEN_EXPIRATION,
   });
 }
 
 export function createRefreshToken(userId: string) {
-  return jwt.sign({ userId }, runtimeConfig.RefreshTokenSecret, {
-    expiresIn: runtimeConfig.RefreshTokenExpiration,
+  return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRATION,
   });
 }
 
