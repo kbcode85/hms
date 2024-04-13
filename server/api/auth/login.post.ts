@@ -1,12 +1,15 @@
 import { comparePasswords } from "~~/server/utils/password";
-import { prisma } from "~~/prisma/db";
 import {
   createAccessToken,
   createAndSetRefreshToken,
 } from "~~/server/utils/session";
+import { usePrisma } from "~/server/utils/prisma";
 
 export default defineEventHandler(async (event) => {
   let username, password;
+
+  const prisma = usePrisma();
+
   try {
     ({ username, password } = await readBody(event));
   } catch (error) {
