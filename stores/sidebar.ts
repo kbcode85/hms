@@ -7,7 +7,6 @@ export const useSidebarStore = defineStore({
 	}),
 	actions: {
 		toggleSidebar() {
-			console.log('toggleSidebar is called')
 			this.isCollapsed = !this.isCollapsed
 		},
 	},
