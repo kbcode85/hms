@@ -1,76 +1,135 @@
-import { comparePasswords } from '~~/server/utils/password'
-import { prisma } from '~~/prisma/db'
-import { createAccessToken, createAndSetRefreshToken } from '~~/server/utils/session'
+import { comparePasswords } from "~~/server/utils/password";
+import { prisma } from "~~/prisma/db";
+import {
+  createAccessToken,
+  createAndSetRefreshToken,
+} from "~~/server/utils/session";
 
-export default defineEventHandler(async event => {
-	const { username, password } = await readBody(event)
+import * as Sentry from "@sentry/node";
 
-	try {
-		const user = await prisma.user.findUnique({
-			where: { username: username },
-		})
-		if (user) {
-			const match = await comparePasswords(password, user.password)
+export default defineEventHandler(async (event) => {
+  let username, password;
+  try {
+    ({ username, password } = await readBody(event));
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Error reading body: ${error.message}`);
+    }
+    throw error;
+  }
 
-			if (match) {
-				const token = await createAccessToken(user.id)
+  let user;
+  try {
+    user = await prisma.user.findUnique({
+      where: { username: username },
+    });
+  } catch (error) {
+    Sentry.captureException(error);
+    if (error instanceof Error) {
+      throw new Error(`Error finding user: ${error.message}`);
+    }
+    throw error;
+  }
 
-				setCookie(event, 'token', token)
+  if (user) {
+    let match;
+    try {
+      match = await comparePasswords(password, user.password);
+    } catch (error) {
+      Sentry.captureException(error);
+      if (error instanceof Error) {
+        throw new Error(`Error comparing passwords: ${error.message}`);
+      }
+      throw error;
+    }
 
-				const refreshCookie = getCookie(event, 'refreshToken')
+    if (match) {
+      let token;
+      try {
+        token = await createAccessToken(user.id);
+      } catch (error) {
+        Sentry.captureException(error);
+        if (error instanceof Error) {
+          throw new Error(`Error creating access token: ${error.message}`);
+        }
+        throw error;
+      }
 
-				if (
-					!refreshCookie ||
-					user.refreshToken !== refreshCookie ||
-					(user.refreshTokenExpiresAt && user.refreshTokenExpiresAt < new Date())
-				) {
-					const newRequestToken = await createAndSetRefreshToken(user.id)
+      setCookie(event, "token", token);
 
-					if (newRequestToken) {
-						setCookie(event, 'refreshToken', newRequestToken)
-					}
-				}
+      const refreshCookie = getCookie(event, "refreshToken");
 
-				// // const lastLoginIpAddr = event.req.headers.hasOwnProperty('x-forwarded-for')
-				// // 	? event.req.headers['x-forwarded-for']?.toString()
-				// // 	: '127.0.0.1'
+      if (
+        !refreshCookie ||
+        user.refreshToken !== refreshCookie ||
+        (user.refreshTokenExpiresAt && user.refreshTokenExpiresAt < new Date())
+      ) {
+        let newRequestToken;
+        try {
+          newRequestToken = await createAndSetRefreshToken(user.id);
+        } catch (error) {
+          Sentry.captureException(error);
+          if (error instanceof Error) {
+            throw new Error(`Error creating refresh token: ${error.message}`);
+          }
+          throw error;
+        }
 
-				// const userdata: any = await prisma.user.update({
-				// 	where: { username: username }
-				// 	// data: {
-				// 	// 	lastLoginIpAddress: lastLoginIpAddr,
-				// 	// },
-				// })
+        if (newRequestToken) {
+          setCookie(event, "refreshToken", newRequestToken);
+        }
+      }
 
-				await prisma.$disconnect()
+      const lastLoginIpAddr = event.req.headers.hasOwnProperty(
+        "x-forwarded-for"
+      )
+        ? event.req.headers["x-forwarded-for"]?.toString()
+        : "127.0.0.1";
 
-				return {
-					id: user.id,
-					token: token,
-					refreshToken: user.refreshToken,
-					refreshTokenExpiresAt: user.refreshTokenExpiresAt,
-					success: true,
-					message: 'Pomyślne zalogowanie',
-				}
-			} else {
-				return {
-					success: false,
-					message: 'Nieprawidłowe dane uwierzytelniające',
-				}
-			}
-		} else {
-			await prisma.$disconnect()
-			return {
-				success: false,
-				message: 'Nieprawidłowe dane uwierzytelniające',
-			}
-		}
-	} catch (error) {
-		await prisma.$disconnect()
-		return {
-			success: false,
-			message: 'Wewnętrzny błąd serwera',
-			error: error,
-		}
-	}
-})
+      let userdata;
+      try {
+        userdata = await prisma.user.update({
+          where: { username: username },
+          data: {
+            lastLoginIpAddress: lastLoginIpAddr,
+          },
+        });
+      } catch (error) {
+        Sentry.captureException(error);
+        if (error instanceof Error) {
+          throw new Error(`Error updating user: ${error.message}`);
+        }
+        throw error;
+      }
+
+      try {
+        await prisma.$disconnect();
+      } catch (error) {
+        Sentry.captureException(error);
+        if (error instanceof Error) {
+          throw new Error(`Error disconnecting from Prisma: ${error.message}`);
+        }
+        throw error;
+      }
+
+      return {
+        id: userdata.id,
+        token: token,
+        refreshToken: userdata.refreshToken,
+        refreshTokenExpiresAt: userdata.refreshTokenExpiresAt,
+        success: true,
+        message: "Pomyślne zalogowanie",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Nieprawidłowe dane logowania",
+      };
+    }
+  } else {
+    return {
+      success: false,
+      message: "Nieprawidłowe dane logowania",
+    };
+  }
+});
