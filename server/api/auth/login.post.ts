@@ -45,9 +45,7 @@ export default defineEventHandler(async (event) => {
         token = await createAccessToken(user.id);
       } catch (error) {
         if (error instanceof Error) {
-          throw new Error(
-            `Error creating access token: ${error.message} Userid: ${user.id}`
-          );
+          throw new Error(`Error creating access token: ${error.message}`);
         }
         throw error;
       }
