@@ -57,11 +57,7 @@ export default defineEventHandler(async (event) => {
 
       const refreshCookie = getCookie(event, "refreshToken");
 
-      if (
-        !refreshCookie ||
-        user.refreshToken !== refreshCookie ||
-        (user.refreshTokenExpiresAt && user.refreshTokenExpiresAt < new Date())
-      ) {
+      if (!refreshCookie || user.refreshToken !== refreshCookie) {
         let newRequestToken;
         try {
           newRequestToken = await createAndSetRefreshToken(user.id);
@@ -78,7 +74,7 @@ export default defineEventHandler(async (event) => {
       }
 
       const lastLoginIpAddr = event.req.headers.hasOwnProperty(
-        "x-forwarded-for"
+        "x-forwarded-for",
       )
         ? event.req.headers["x-forwarded-for"]?.toString()
         : "127.0.0.1";

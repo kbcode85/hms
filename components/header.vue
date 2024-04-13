@@ -29,7 +29,7 @@
               class="avatar img-fluid rounded me-2"
               alt="user"
             />
-            <span class="text-dark">{{ username }}</span>
+            <span class="text-dark">{{ username }} {{ authed }}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-end">
             <NuxtLink to="/profile" class="dropdown-item"
@@ -62,6 +62,7 @@
 <script lang="ts" setup>
 const store = useAuthStore();
 let username = store.data.userdata.username;
+let authed = store.data.authed;
 
 const logout = async () => {
   await store.logout();
