@@ -12,6 +12,9 @@
     "pull": "prisma db pull",
     "push": "prisma db push"
   },
+  "prisma": {
+    "schema": "server/schema.prisma"
+  },
   "dependencies": {
     "@nuxt/types": "^2.17.3",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",

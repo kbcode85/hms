@@ -1,8 +1,9 @@
+import { usePrisma } from "~/server/utils/prisma";
 import { hashPassword } from "~~/server/utils/password";
-import { prisma } from "~~/prisma/db";
 
 export default defineEventHandler(async (event) => {
   try {
+    const prisma = usePrisma();
     const { email, username, password } = await readBody(event);
 
     const user = await prisma.user.findFirst({
