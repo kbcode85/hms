@@ -29,7 +29,7 @@
               class="avatar img-fluid rounded me-2"
               alt="user"
             />
-            <span class="text-dark">{{ username }} {{ authed }}</span>
+            <span class="text-dark">{{ username }}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-end">
             <NuxtLink to="/profile" class="dropdown-item"
@@ -43,7 +43,7 @@
               >
               Ustwienia i prywatność</NuxtLink
             >
-            <NuxtLink to="/support" class="dropdown-item" href="#"
+            <NuxtLink to="/support" class="dropdown-item""
               ><i class="align-middle me-1 material-icons-sharp">support</i>
               Pomoc</NuxtLink
             >
@@ -62,7 +62,6 @@
 <script lang="ts" setup>
 const store = useAuthStore();
 let username = store.data.userdata.username;
-let authed = store.data.authed;
 
 const logout = async () => {
   await store.logout();
@@ -119,7 +118,9 @@ const toggleSidebar = sidebar.toggleSidebar;
   display: block;
   font-size: 1.5rem;
   color: #6c757d;
-  transition: background 0.1s ease-in-out, color 0.1s ease-in-out;
+  transition:
+    background 0.1s ease-in-out,
+    color 0.1s ease-in-out;
   line-height: 1.4;
 
   &:after {
@@ -217,7 +218,9 @@ const toggleSidebar = sidebar.toggleSidebar;
   background: #495057;
   display: block;
   content: "";
-  transition: background 0.1s ease-in-out, color 0.1s ease-in-out,
+  transition:
+    background 0.1s ease-in-out,
+    color 0.1s ease-in-out,
     transform 0.3s ease-in-out;
   position: relative;
 }
@@ -290,7 +293,9 @@ const toggleSidebar = sidebar.toggleSidebar;
 }
 
 .dropdown-item {
-  transition: 0.1s ease-in-out, color 0.1s ease-in-out;
+  transition:
+    0.1s ease-in-out,
+    color 0.1s ease-in-out;
 }
 
 .dropdown-menu {
