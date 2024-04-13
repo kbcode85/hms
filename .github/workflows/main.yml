@@ -21,10 +21,6 @@ jobs:
         run: |
           npm install
 
-      - name: 🔨 Build Project
-        run: |
-          npm run build
-
       - name: 🔨 Create .env file
         run: |
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
@@ -35,6 +31,10 @@ jobs:
           echo NUXT_REFRESH_TOKEN_EXP=${{ secrets.NUXT_REFRESH_TOKEN_EXP }} >> .env
           echo NUXT_PUBLIC_SENTRY_DSN=${{ secrets.NUXT_PUBLIC_SENTRY_DSN }} >> .env
           echo NUXT_PUBLIC_ENV=${{ secrets.NUXT_PUBLIC_ENV }} >> .env
+
+      - name: 🔨 Build Project
+        run: |
+          npm run build
 
       - name: 🚀 Deploy Project [1/2]
         run: npm install pm2 -g
