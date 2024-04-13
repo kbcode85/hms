@@ -43,7 +43,7 @@
               >
               Ustwienia i prywatność</NuxtLink
             >
-            <NuxtLink to="/support" class="dropdown-item""
+            <NuxtLink to="/support" class="dropdown-item"
               ><i class="align-middle me-1 material-icons-sharp">support</i>
               Pomoc</NuxtLink
             >

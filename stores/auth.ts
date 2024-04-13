@@ -24,7 +24,7 @@ export const useAuthStore = defineStore({
       }
 
       try {
-        const response = await fetch("/api/auth/token", {
+        const response = await fetch(`/api/auth/token`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
