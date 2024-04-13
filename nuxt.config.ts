@@ -2,10 +2,10 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
-    AccessTokenSecret: import.meta.env.ACCESS_TOKEN_SECRET,
-    AccessTokenExpiration: import.meta.env.ACCESS_TOKEN_EXPIRATION,
-    RefreshTokenSecret: import.meta.env.REFRESH_TOKEN_SECRET,
-    RefreshTokenExpiration: import.meta.env.REFRESH_TOKEN_EXPIRATION,
+    AccessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+    AccessTokenExpiration: process.env.ACCESS_TOKEN_EXPIRATION,
+    RefreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+    RefreshTokenExpiration: process.env.REFRESH_TOKEN_EXPIRATION,
     public: {
       sentry: {
         dsn: import.meta.env.NUXT_PUBLIC_SENTRY_DSN,
