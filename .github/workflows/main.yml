@@ -21,20 +21,20 @@ jobs:
         run: |
           npm install
 
+      - name: 🔨 Create .env file
+        run: |
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo DIRECT_URL=${{ secrets.DIRECT_URL }} >> .env
+          echo NUXT_ACCESS_TOKEN=${{ secrets.NUXT_ACCESS_TOKEN }} >> .env
+          echo NUXT_ACCESS_TOKEN_EXP=${{ secrets.NUXT_ACCESS_TOKEN_EXP }} >> .env
+          echo NUXT_REFRESH_TOKEN=${{ secrets.NUXT_REFRESH_TOKEN }} >> .env
+          echo NUXT_REFRESH_TOKEN_EXP=${{ secrets.NUXT_REFRESH_TOKEN_EXP }} >> .env
+          echo NUXT_PUBLIC_SENTRY_DSN=${{ secrets.NUXT_PUBLIC_SENTRY_DSN }} >> .env
+          echo NUXT_PUBLIC_ENV=${{ secrets.NUXT_PUBLIC_ENV }} >> .env
+
       - name: 🔨 Build Project
         run: |
           npm run build
-
-      - name: 🔨 Create .env file
-        run: |
-          echo DATABASE_URL='${{ secrets.DATABASE_URL }}' >> .env
-          echo DIRECT_URL='${{ secrets.DIRECT_URL }}' >> .env
-          echo ACCESS_TOKEN_SECRET='${{ secrets.ACCESS_TOKEN_SECRET }}' >> .env
-          echo ACCESS_TOKEN_EXPIRATION='${{ secrets.ACCESS_TOKEN_EXPIRATION }}' >> .env
-          echo REFRESH_TOKEN_SECRET='${{ secrets.REFRESH_TOKEN_SECRET }}' >> .env
-          echo REFRESH_TOKEN_EXPIRATION='${{ secrets.REFRESH_TOKEN_EXPIRATION }}' >> .env
-          echo NUXT_PUBLIC_SENTRY_DSN='${{ secrets.NUXT_PUBLIC_SENTRY_DSN }}' >> .env
-          echo NUXT_PUBLIC_ENV='${{ secrets.NUXT_PUBLIC_ENV }}' >> .env
 
       - name: 🚀 Deploy Project [1/2]
         run: npm install pm2 -g

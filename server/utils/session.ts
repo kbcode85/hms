@@ -2,10 +2,10 @@ import jwt from "jsonwebtoken";
 import { prisma } from "~~/prisma/db";
 const runtimeConfig = useRuntimeConfig();
 
-const ACCESS_TOKEN_SECRET = runtimeConfig.AccessTokenSecret;
-const ACCESS_TOKEN_EXPIRATION = runtimeConfig.AccessTokenExpiration;
-const REFRESH_TOKEN_SECRET = runtimeConfig.RefreshTokenSecret;
-const REFRESH_TOKEN_EXPIRATION = runtimeConfig.RefreshTokenExpiration;
+const ACCESS_TOKEN_SECRET = runtimeConfig.access.token;
+const ACCESS_TOKEN_EXPIRATION = runtimeConfig.access.exp;
+const REFRESH_TOKEN_SECRET = runtimeConfig.refresh.token;
+const REFRESH_TOKEN_EXPIRATION = runtimeConfig.refresh.exp;
 
 if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
   throw new Error("Token secrets are not defined");
