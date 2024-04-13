@@ -26,7 +26,10 @@ export function createAccessToken(userId: string) {
 }
 
 export function createRefreshToken(userId: string) {
-  return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
+  const payload = {
+    userId,
+  };
+  return jwt.sign(payload, REFRESH_TOKEN_SECRET, {
     expiresIn: REFRESH_TOKEN_EXPIRATION,
   });
 }
