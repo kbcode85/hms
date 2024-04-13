@@ -34,17 +34,18 @@ jobs:
 
       - name: 🔨 Create ecosystem.config.cjs file
         run: |
-          echo module.exports = {^
-            apps: [^
-              {^
-                name: "HMS",^
-                port: "3000",^
-                exec_mode: "cluster",^
-                instances: "max",^
-                script: "./.output/server/index.mjs",^
-              },^
-            ],^
-          }; >> ecosystem.config.cjs
+          echo "module.exports = {" >> ecosystem.config.cjs
+          echo "  apps: [" >> ecosystem.config.cjs
+          echo "    {" >> ecosystem.config.cjs
+          echo "      name: \"HMS\"," >> ecosystem.config.cjs
+          echo "      port: \"3000\"," >> ecosystem.config.cjs
+          echo "      exec_mode: \"cluster\"," >> ecosystem.config.cjs
+          echo "      instances: \"max\"," >> ecosystem.config.cjs
+          echo "      script: \"./.output/server/index.mjs\"," >> ecosystem.config.cjs
+          echo "    }," >> ecosystem.config.cjs
+          echo "  ]," >> ecosystem.config.cjs
+          echo "};" >> ecosystem.config.cjs
+        
 
       - name: 🔨 Build Project
         run: |

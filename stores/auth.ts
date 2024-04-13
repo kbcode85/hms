@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 
 interface UserData {
-  success: boolean;
-  message: string;
+  authed: boolean;
   userdata: {
     id: string;
     username: string;
@@ -10,26 +9,22 @@ interface UserData {
   };
 }
 
-interface ServerResponse {
-  message: string;
-  status: number;
-}
-
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
     data: {
-      success: false,
-      message: "",
+      authed: true,
       userdata: { id: "", username: "", email: "" },
     } as UserData,
   }),
   actions: {
-    async checkAuth() {
-      const token = useCookie("token").value || "";
+    async checkToken(token: string) {
+      if (!token) {
+        this.data.authed = false;
+      }
 
       try {
-        const response: ServerResponse = await $fetch("/api/auth/token", {
+        const response = await fetch("/api/auth/token", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -38,52 +33,53 @@ export const useAuthStore = defineStore({
         });
 
         if (response.status === 200) {
-          this.data = {
-            success: true,
-            message: response.message,
-            userdata: { id: "", username: "", email: "" },
-          };
-		  
+          this.data.authed = true;
+          const data = await response.json();
+          this.data.userdata = data.userdata;
+        } else if (response.status === 401) {
+          this.data.authed = false;
         }
       } catch (error) {
         console.log(error);
-        // Dodać obsługę błędów
       }
     },
-    async logout(): Promise<ServerResponse> {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-      });
+    async logout() {
+      try {
+        const response = await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        this.data = {
-          success: false,
-          message: "",
-          userdata: { id: "", username: "", email: "" },
-        };
-        return { message: data.message, status: response.status };
-      } else {
-        return { message: data.message, status: response.status };
+        if (response.status === 200) {
+          this.data.authed = false;
+          if (process.client) {
+            window.location.reload();
+          }
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
-    async login(username: string, password: string): Promise<ServerResponse> {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    async login(username: string, password: string) {
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        this.data = data;
-        return { message: data.message, status: response.status };
-      } else {
-        return { message: data.message, status: response.status };
+        if (response.status === 200) {
+          const data = await response.json();
+          this.data.authed = true;
+          this.data.userdata = data.userdata;
+          navigateTo("/");
+        } else if (response.status === 401) {
+          this.data.authed = false;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
   },

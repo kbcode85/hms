@@ -15,6 +15,7 @@ export default defineNuxtConfig({
         dsn: import.meta.env.NUXT_PUBLIC_SENTRY_DSN,
         environment: import.meta.env.NUXT_PUBLIC_ENV,
       },
+      apiBaseUrl: import.meta.env.NUXT_PUBLIC_API_BASE_URL,
     },
   },
   css: ["~/assets/scss/main.scss"],

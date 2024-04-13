@@ -82,13 +82,13 @@ const login = async () => {
   const { username, password } = LoginForm;
 
   try {
-    const response = await authStore.login(username, password);
-    if (!response.success) {
-      login_message.value = response.message;
+    await authStore.login(username, password);
+    if (!authStore.data.authed) {
+      login_message.value = "Nieprawidłowe dane logowania";
     }
   } catch (error) {
     console.log(error);
-    login_message.value = "An error occurred";
+    login_message.value = "Wystąpił błąd";
   }
 };
 </script>

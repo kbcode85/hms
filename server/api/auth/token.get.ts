@@ -52,17 +52,23 @@ export default defineEventHandler(async (event) => {
         message: "A new access token has been generated",
       };
     } else {
+      deleteCookie(event, "refreshToken");
       setResponseStatus(event, 401, "Unauthorized");
       return {
         message:
-          "Invalid refresh token, please log in again to get a new access token",
+          "Invalid refresh token, please log in again to get a new refresh token",
       };
     }
   } else {
     const userdata: any = await getUserData(token);
-    setResponseStatus(event, 200, "OK");
+    setResponseStatus(event, 200, "Ok");
     return {
       message: "Access token is valid",
+      userdata: {
+        id: userdata.id,
+        username: userdata.username,
+        email: userdata.email,
+      },
     };
   }
 });
