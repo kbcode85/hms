@@ -5,8 +5,6 @@ import {
   createAndSetRefreshToken,
 } from "~~/server/utils/session";
 
-import * as Sentry from "@sentry/node";
-
 export default defineEventHandler(async (event) => {
   let username, password;
   try {
@@ -24,7 +22,6 @@ export default defineEventHandler(async (event) => {
       where: { username: username },
     });
   } catch (error) {
-    Sentry.captureException(error);
     if (error instanceof Error) {
       throw new Error(`Error finding user: ${error.message}`);
     }
@@ -36,7 +33,6 @@ export default defineEventHandler(async (event) => {
     try {
       match = await comparePasswords(password, user.password);
     } catch (error) {
-      Sentry.captureException(error);
       if (error instanceof Error) {
         throw new Error(`Error comparing passwords: ${error.message}`);
       }
@@ -48,7 +44,6 @@ export default defineEventHandler(async (event) => {
       try {
         token = await createAccessToken(user.id);
       } catch (error) {
-        Sentry.captureException(error);
         if (error instanceof Error) {
           throw new Error(`Error creating access token: ${error.message}`);
         }
@@ -68,7 +63,6 @@ export default defineEventHandler(async (event) => {
         try {
           newRequestToken = await createAndSetRefreshToken(user.id);
         } catch (error) {
-          Sentry.captureException(error);
           if (error instanceof Error) {
             throw new Error(`Error creating refresh token: ${error.message}`);
           }
@@ -95,7 +89,6 @@ export default defineEventHandler(async (event) => {
           },
         });
       } catch (error) {
-        Sentry.captureException(error);
         if (error instanceof Error) {
           throw new Error(`Error updating user: ${error.message}`);
         }
@@ -105,7 +98,6 @@ export default defineEventHandler(async (event) => {
       try {
         await prisma.$disconnect();
       } catch (error) {
-        Sentry.captureException(error);
         if (error instanceof Error) {
           throw new Error(`Error disconnecting from Prisma: ${error.message}`);
         }
