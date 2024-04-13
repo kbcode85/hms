@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
-import { prisma } from "~~/prisma/db";
+import { usePrisma } from "~/server/utils/prisma";
 const runtimeConfig = useRuntimeConfig();
+const prisma = usePrisma();
 
 const ACCESS_TOKEN_SECRET = runtimeConfig.access.token;
 const ACCESS_TOKEN_EXPIRATION = runtimeConfig.access.exp;

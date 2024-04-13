@@ -107,24 +107,25 @@ export default defineEventHandler(async (event) => {
         throw error;
       }
 
+      setResponseStatus(event, 200, "Authorized");
       return {
-        id: userdata.id,
-        token: token,
-        refreshToken: userdata.refreshToken,
-        refreshTokenExpiresAt: userdata.refreshTokenExpiresAt,
-        success: true,
-        message: "Pomyślne zalogowanie",
+        message: "Successful login",
+        userdata: {
+          id: userdata.id,
+          username: userdata.username,
+          email: userdata.email,
+        },
       };
     } else {
+      setResponseStatus(event, 401, "Unauthorized");
       return {
-        success: false,
-        message: "Nieprawidłowe dane logowania",
+        message: "Incorrect login credentials",
       };
     }
   } else {
+    setResponseStatus(event, 401, "Unauthorized");
     return {
-      success: false,
-      message: "Nieprawidłowe dane logowania",
+      message: "Incorrect login credentials",
     };
   }
 });

@@ -13,25 +13,25 @@ export default defineEventHandler(async (event) => {
     authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
   if (!token) {
+    setResponseStatus(event, 401, "Unauthorized");
     return {
-      success: false,
-      message: "Brak tokenu dostępu",
+      message: "No token access",
     };
   }
 
   if (verifyRefreshToken(token).valid) {
+    setResponseStatus(event, 401, "Unauthorized");
     return {
-      success: false,
-      message: "Token odświeżania nie może być używany do uwierzytelniania",
+      message: "Refresh token cannot be used for authentication",
     };
   }
 
   const userId = await getUserIdFromToken(token);
 
   if (!userId) {
+    setResponseStatus(event, 401, "Unauthorized");
     return {
-      success: false,
-      message: "Niepoprawny token dostępu",
+      message: "Invalid access token",
     };
   }
 
@@ -47,24 +47,22 @@ export default defineEventHandler(async (event) => {
     ) {
       const newToken = await createAccessToken(userId);
       setCookie(event, "token", newToken);
+      setResponseStatus(event, 200, "OK");
       return {
-        success: true,
-        message: "Został wygenerowany nowy token dostępu",
+        message: "A new access token has been generated",
       };
     } else {
+      setResponseStatus(event, 401, "Unauthorized");
       return {
-        success: false,
         message:
-          "Niepoprawny token odswiezania, zaloguj się ponownie aby uzyskać nowy token dostępu",
+          "Invalid refresh token, please log in again to get a new access token",
       };
     }
   } else {
     const userdata: any = await getUserData(token);
+    setResponseStatus(event, 200, "OK");
     return {
-      success: true,
-      message: "Token dostępu jest poprawny",
-      user: isValid.decoded,
-      userdata,
+      message: "Access token is valid",
     };
   }
 });
