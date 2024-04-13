@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   setCookie(event, "token", "");
+  setResponseStatus(event, 200, "OK");
   return {
-    success: true,
-    message: "Pomyślnie wylogowano",
+    message: "Successfully logged off",
   };
 });

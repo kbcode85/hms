@@ -32,6 +32,20 @@ jobs:
           echo NUXT_PUBLIC_SENTRY_DSN=${{ secrets.NUXT_PUBLIC_SENTRY_DSN }} >> .env
           echo NUXT_PUBLIC_ENV=${{ secrets.NUXT_PUBLIC_ENV }} >> .env
 
+      - name: 🔨 Create ecosystem.config.cjs file
+        run: |
+          echo module.exports = {^
+            apps: [^
+              {^
+                name: "HMS",^
+                port: "3000",^
+                exec_mode: "cluster",^
+                instances: "max",^
+                script: "./.output/server/index.mjs",^
+              },^
+            ],^
+          }; >> ecosystem.config.cjs
+
       - name: 🔨 Build Project
         run: |
           npm run build

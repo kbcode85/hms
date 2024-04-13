@@ -12,9 +12,9 @@ export default defineEventHandler(async (event) => {
 
     if (user != null) {
       prisma.$disconnect();
+      setResponseStatus(event, 409, "Conflict");
       return {
-        success: false,
-        message: "Użytkownik już istnieje",
+        message: "The user already exists",
       };
     } else {
       const { salt, hash } = await hashPassword(password);
@@ -36,7 +36,10 @@ export default defineEventHandler(async (event) => {
 
       createUser.success = true;
 
-      return createUser;
+      setResponseStatus(event, 201, "Created");
+      return {
+        message: "The user was created",
+      };
     }
   } catch (error) {
     if (error instanceof Error) {
