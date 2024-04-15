@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 interface UserData {
   authed: boolean;
-  userdata: {
+  userdata?: {
     id: string;
     username: string;
     email: string;
@@ -24,23 +24,23 @@ export const useAuthStore = defineStore({
       }
 
       try {
-        const response = await fetch(`/api/auth/token`, {
+        const respone = await $fetch<UserData>(`/api/auth/token`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-
-        if (response.status === 200) {
+        if (respone) {
           this.data.authed = true;
-          const data = await response.json();
-          this.data.userdata = data.userdata;
-        } else if (response.status === 401) {
+          this.data.userdata = respone.userdata;
+        } else {
           this.data.authed = false;
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
       }
     },
     async logout() {
@@ -58,28 +58,31 @@ export const useAuthStore = defineStore({
             window.location.reload();
           }
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
       }
     },
     async login(username: string, password: string) {
       try {
-        const response = await fetch("/api/auth/login", {
+        const respone = await $fetch<UserData>("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
         });
 
-        if (response.status === 200) {
-          const data = await response.json();
+        if (respone) {
           this.data.authed = true;
-          this.data.userdata = data.userdata;
+          this.data.userdata = respone.userdata;
           navigateTo("/");
-        } else if (response.status === 401) {
+        } else {
           this.data.authed = false;
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
       }
     },
   },

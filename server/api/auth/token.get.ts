@@ -13,14 +13,18 @@ export default defineEventHandler(async (event) => {
     authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
   if (!token) {
-    setResponseStatus(event, 401, "Unauthorized");
+    setResponseStatus(event, 401, "Unauthorized: No token provided");
     return {
       message: "No token access",
     };
   }
 
   if (verifyRefreshToken(token).valid) {
-    setResponseStatus(event, 401, "Unauthorized");
+    setResponseStatus(
+      event,
+      401,
+      "Unauthorized: Provided token is a refresh token",
+    );
     return {
       message: "Refresh token cannot be used for authentication",
     };
@@ -29,7 +33,7 @@ export default defineEventHandler(async (event) => {
   const userId = await getUserIdFromToken(token);
 
   if (!userId) {
-    setResponseStatus(event, 401, "Unauthorized");
+    setResponseStatus(event, 401, "Unauthorized: Invalid access token");
     return {
       message: "Invalid access token",
     };
