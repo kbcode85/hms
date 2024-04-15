@@ -37,8 +37,10 @@ export const useAuthStore = defineStore({
         } else {
           this.data.authed = false;
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
       }
     },
     async logout() {
@@ -56,7 +58,11 @@ export const useAuthStore = defineStore({
             window.location.reload();
           }
         }
-      } catch (error) {}
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
+      }
     },
     async login(username: string, password: string) {
       try {
@@ -73,8 +79,10 @@ export const useAuthStore = defineStore({
         } else {
           this.data.authed = false;
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
       }
     },
   },
