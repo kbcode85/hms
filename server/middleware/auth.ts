@@ -11,10 +11,12 @@ export default defineEventHandler(async (event) => {
     protectedPaths.some((path) => getRequestURL(event).pathname.includes(path))
   ) {
     if (
-      !token ||
-      verifyRefreshToken(token).valid ||
-      !getUserIdFromToken(token) ||
-      !verifyAccessToken(token).valid
+      [
+        !token,
+        token ? verifyRefreshToken(token).valid : true,
+        token ? !getUserIdFromToken(token) : true,
+        token ? !verifyAccessToken(token).valid : true,
+      ].some((condition) => condition)
     ) {
       throw createError({
         statusCode: 401,
