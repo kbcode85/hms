@@ -11,6 +11,7 @@ type ZipCode = Branded<string, "ZipCode">;
 type Description = Branded<string, "Description">;
 
 interface Guest {
+  id: number;
   name: Name;
   surname: Surname;
   phone: Phone;

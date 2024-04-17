@@ -138,8 +138,8 @@
               </tr>
             </thead>
             <tr
-              v-for="reservation in res"
-              :key="reservation.name"
+              v-for="(reservation, index) in res"
+              :key="index"
               :class="{ 'bg-light': index % 2 === 1 }"
             >
               <td>{{ reservation.name }}</td>

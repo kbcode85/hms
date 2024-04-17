@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
       ? authorization.slice(7)
       : null;
 
-  const protectedPaths = ["/api/auth/token", "/api/hotel"];
+  const protectedPaths = ["/api/hotel"];
 
   if (
     protectedPaths.some((path) => getRequestURL(event).pathname.includes(path))
