@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare",
     "migrate": "prisma migrate dev",
     "pull": "prisma db pull",
-    "push": "prisma db push"
+    "push": "prisma db push",
+    "deploy": "prisma db push && nuxt build"
   },
   "prisma": {
     "schema": "server/schema.prisma"
