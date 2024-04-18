@@ -37,7 +37,7 @@ const chartData = ref({
   datasets: [
     {
       label: "Rezerwacje",
-      backgroundColor: "#f87979",
+      backgroundColor: "#3b7ddd",
       data: [40, 20, 12, 50, 10, 30, 40],
     },
   ],

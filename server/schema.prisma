@@ -33,8 +33,6 @@ model Hotel {
   website      String
   zip_code     String
   description  String
-  reservations Reservation[]
-  rooms        Room[]
 }
 
 model Guest {
@@ -47,13 +45,13 @@ model Guest {
   city         String
   country      String
   zip_code     String
-  description  String
+  description  String?
+  nip          String?
   reservations Reservation[]
 }
 
 model Room {
   id           Int           @id @default(autoincrement())
-  hotelId      Int
   number       Int
   floor        Int
   description  String
@@ -61,7 +59,6 @@ model Room {
   capacity     Int
   isAvailable  Boolean
   reservations Reservation[]
-  hotel        Hotel         @relation(fields: [hotelId], references: [id])
 }
 
 model Reservation {
@@ -73,6 +70,5 @@ model Reservation {
   checkOut   DateTime
   totalPrice Float
   guest      Guest    @relation(fields: [guestId], references: [id])
-  hotel      Hotel    @relation(fields: [hotelId], references: [id])
   room       Room     @relation(fields: [roomId], references: [id])
 }

@@ -24,16 +24,16 @@ export const useAuthStore = defineStore({
       }
 
       try {
-        const respone = await $fetch<UserData>(`/api/auth/token`, {
+        const response = await $fetch<UserData>(`/api/auth/token`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        if (respone) {
+        if (response) {
           this.data.authed = true;
-          this.data.userdata = respone.userdata;
+          this.data.userdata = response.userdata;
         } else {
           this.data.authed = false;
         }
@@ -66,15 +66,15 @@ export const useAuthStore = defineStore({
     },
     async login(username: string, password: string) {
       try {
-        const respone = await $fetch<UserData>("/api/auth/login", {
+        const response = await $fetch<UserData>("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
         });
 
-        if (respone) {
+        if (response) {
           this.data.authed = true;
-          this.data.userdata = respone.userdata;
+          this.data.userdata = response.userdata;
           navigateTo("/");
         } else {
           this.data.authed = false;

@@ -64,38 +64,50 @@
 
   <div class="row mt-5">
     <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card mb-4">
+      <div class="card">
         <div class="card-header">
-          <h5 class="card-title mb-0">Przyjazdy</h5>
+          <h5 class="card-title">Przyjazdy</h5>
         </div>
-        <DashboardArrivals />
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Pobyty</h5>
+        <div class="card-body p-0 pre-scrollable">
+          <div class="chart chart-lg">
+            <DashboardArrivals />
+          </div>
         </div>
-        <DashboardStays />
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Wyjazdy</h5>
-        </div>
-        <DashboardDepartures />
       </div>
     </div>
 
     <div class="col-sm-12 col-xl-6 col-xxl-4">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">Statystyki pokoi</h5>
+          <h5 class="card-title">Pobyty</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0 pre-scrollable">
+          <div class="chart chart-lg">
+            <DashboardStays />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-xl-6 col-xxl-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Wyjazdy</h5>
+        </div>
+        <div class="card-body p-0 pre-scrollable">
+          <div class="chart chart-lg">
+            <DashboardDepartures />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-xl-6 col-xxl-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Pokoje</h5>
+        </div>
+        <div class="card-body p-0 chart-room">
           <div class="chart chart-lg">
             <DashboardRooms />
           </div>
@@ -106,7 +118,7 @@
     <div class="col-sm-12 col-xxl-8">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">Ostatnie rezerwacje</h5>
+          <h5 class="card-title">Rezerwacje</h5>
         </div>
         <div
           class="card-body"
@@ -117,28 +129,30 @@
               <tr
                 style="position: sticky; top: 0; background: white; z-index: 1"
               >
-                <th scope="col">Imię i nazwisko</th>
-                <th scope="col">Numer pokoju</th>
-                <th scope="col">Data rozpoczęcia</th>
-                <th scope="col">Data zakończenia</th>
+                <th scope="col">Gość</th>
+                <th scope="col">Pokój</th>
+                <th scope="col">Przyjazd</th>
+                <th scope="col">Wyjazd</th>
                 <th scope="col">Cena</th>
-                <th scope="col">Zapłacono</th>
+                <th scope="col">Płatność</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="reservation in res" :key="reservation.name">
-                <td>{{ reservation.name }}</td>
-                <td>{{ reservation.roomNumber }}</td>
-                <td>
-                  {{ new Date(reservation.startDate).toLocaleDateString() }}
-                </td>
-                <td>
-                  {{ new Date(reservation.endDate).toLocaleDateString() }}
-                </td>
-                <td>{{ reservation.price }}</td>
-                <td>{{ reservation.isPaid ? "Tak" : "Nie" }}</td>
-              </tr>
-            </tbody>
+            <tr
+              v-for="(reservation, index) in res"
+              :key="index"
+              :class="{ 'bg-light': index % 2 === 1 }"
+            >
+              <td>{{ reservation.name }}</td>
+              <td>{{ reservation.roomNumber }}</td>
+              <td>
+                {{ new Date(reservation.startDate).toLocaleDateString() }}
+              </td>
+              <td>
+                {{ new Date(reservation.endDate).toLocaleDateString() }}
+              </td>
+              <td>{{ reservation.price }}</td>
+              <td>{{ reservation.isPaid ? "Tak" : "Nie" }}</td>
+            </tr>
           </table>
         </div>
       </div>
@@ -272,5 +286,15 @@ tr {
   min-height: 209px;
   position: relative;
   width: 100%;
+}
+
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}
+
+.chart-room {
+  min-height: 340px;
+  max-height: 340px;
 }
 </style>
