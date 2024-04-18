@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-center">Pofil</h1>
+    <h1 class="text-center">Profil</h1>
     <p class="text-center">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab molestias
       impedit libero recusandae nam exercitationem minima tempora voluptas, quos
