@@ -22,17 +22,17 @@ model User {
 }
 
 model Hotel {
-  id           Int           @id @default(autoincrement())
-  name         String
-  star         Int
-  address      String
-  city         String
-  country      String
-  phone        String
-  email        String
-  website      String
-  zip_code     String
-  description  String
+  id          Int    @id @default(autoincrement())
+  name        String
+  star        Int
+  address     String
+  city        String
+  country     String
+  phone       String
+  email       String
+  website     String
+  zip_code    String
+  description String
 }
 
 model Guest {
