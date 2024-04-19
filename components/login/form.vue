@@ -17,12 +17,12 @@
             <span class="material-icons-sharp">person</span>
           </span>
           <input
+            id="username"
+            v-model="LoginForm.username"
             type="text"
             class="form-control"
-            id="username"
             name="username"
             placeholder="Login"
-            v-model="LoginForm.username"
           />
         </div>
       </div>
@@ -37,12 +37,12 @@
             <span class="material-icons-sharp">vpn_key</span>
           </span>
           <input
+            id="password"
+            v-model="LoginForm.password"
             type="password"
             class="form-control"
-            id="password"
             name="password"
             placeholder="Hasło"
-            v-model="LoginForm.password"
           />
         </div>
       </div>
@@ -55,8 +55,8 @@
       </button>
     </form>
     <p
-      class="d-flex align-items-center justify-content-center text-danger"
       v-if="login_message"
+      class="d-flex align-items-center justify-content-center text-danger"
     >
       <span class="material-icons-sharp me-2">error</span> {{ login_message }}
     </p>
@@ -69,13 +69,13 @@ interface LoginForm {
   password: string;
 }
 
-let LoginForm = reactive({
+const LoginForm = reactive({
   username: "",
   password: "",
 });
 
-let login_message = ref("");
-let isFormValid = computed(() => LoginForm.username && LoginForm.password);
+const login_message = ref("");
+const isFormValid = computed(() => LoginForm.username && LoginForm.password);
 const authStore = useAuthStore();
 
 const login = async () => {

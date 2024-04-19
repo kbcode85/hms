@@ -73,27 +73,6 @@ export default defineEventHandler(async (event) => {
         }
       }
 
-      const lastLoginIpAddr = event.req.headers.hasOwnProperty(
-        "x-forwarded-for",
-      )
-        ? event.req.headers["x-forwarded-for"]?.toString()
-        : "127.0.0.1";
-
-      let userdata;
-      try {
-        userdata = await prisma.user.update({
-          where: { username: username },
-          data: {
-            lastLoginIpAddress: lastLoginIpAddr,
-          },
-        });
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(`Error updating user: ${error.message}`);
-        }
-        throw error;
-      }
-
       try {
         await prisma.$disconnect();
       } catch (error) {
@@ -107,9 +86,9 @@ export default defineEventHandler(async (event) => {
       return {
         message: "Successful login",
         userdata: {
-          id: userdata.id,
-          username: userdata.username,
-          email: userdata.email,
+          id: user.id,
+          username: user.username,
+          email: user.email,
         },
       };
     } else {

@@ -1,159 +1,166 @@
 <template>
-  <div class="row mb-2 mb-xl-3">
-    <div class="col-auto d-none d-sm-block">
-      <h3>Dashboard</h3>
+  <div class="">
+    <div class="row mb-2 mb-xl-3">
+      <div class="col-auto d-none d-sm-block">
+        <h3>Dashboard</h3>
+      </div>
+
+      <div class="col-auto ms-auto text-end mt-n1">
+        <a href="#" class="btn btn-primary d-flex align-items-center gap-2">
+          Odswieź <span class="material-icons-sharp">refresh</span>
+        </a>
+      </div>
     </div>
 
-    <div class="col-auto ms-auto text-end mt-n1">
-      <a href="#" class="btn btn-primary d-flex align-items-center gap-2">
-        Odswieź <span class="material-icons-sharp">refresh</span>
-      </a>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xl-6 col-xxl-5 d-flex">
-      <div class="w-100">
-        <div class="row info">
-          <div class="col-sm-6" v-for="card in cards" :key="card.title">
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col mt-0">
-                    <h5 class="card-title">{{ card.title }}</h5>
-                  </div>
-                  <div class="col-auto">
-                    <div class="stat text-primary">
-                      <i class="material-icons-sharp">{{ card.icon }}</i>
+    <div class="row">
+      <div class="col-xl-6 col-xxl-5 d-flex">
+        <div class="w-100">
+          <div class="row info">
+            <div v-for="card in cards" :key="card.id" class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col mt-0">
+                      <h5 class="card-title">{{ card.title }}</h5>
+                    </div>
+                    <div class="col-auto">
+                      <div class="stat text-primary">
+                        <i class="material-icons-sharp">{{ card.icon }}</i>
+                      </div>
                     </div>
                   </div>
+                  <h1 class="mt-1 mb-3">{{ card.value }}</h1>
                 </div>
-                <h1 class="mt-1 mb-3">{{ card.value }}</h1>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6 col-xxl-7">
+        <div class="card flex-fill w-100">
+          <div class="card-header">
+            <div class="float-end">
+              <form class="row g-2">
+                <div class="col-auto">
+                  <select class="form-select form-select-sm bg-light border-0">
+                    <option>Jan</option>
+                    <option value="1">Feb</option>
+                    <option value="2">Mar</option>
+                    <option value="3">Apr</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <h5 class="card-title mb-0">Rezerwacje</h5>
+          </div>
+          <div class="card-body pt-2 pb-3">
+            <div class="chart chart-sm">
+              <DashboardReservation />
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-xl-6 col-xxl-7">
-      <div class="card flex-fill w-100">
-        <div class="card-header">
-          <div class="float-end">
-            <form class="row g-2">
-              <div class="col-auto">
-                <select class="form-select form-select-sm bg-light border-0">
-                  <option>Jan</option>
-                  <option value="1">Feb</option>
-                  <option value="2">Mar</option>
-                  <option value="3">Apr</option>
-                </select>
-              </div>
-            </form>
+    <div class="row mt-5">
+      <div class="col-sm-12 col-xl-6 col-xxl-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Przyjazdy</h5>
           </div>
-          <h5 class="card-title mb-0">Rezerwacje</h5>
-        </div>
-        <div class="card-body pt-2 pb-3">
-          <div class="chart chart-sm">
-            <DashboardReservation />
+          <div class="card-body p-0 pre-scrollable">
+            <div class="chart chart-lg">
+              <DashboardArrivals />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="row mt-5">
-    <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Przyjazdy</h5>
-        </div>
-        <div class="card-body p-0 pre-scrollable">
-          <div class="chart chart-lg">
-            <DashboardArrivals />
+      <div class="col-sm-12 col-xl-6 col-xxl-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Pobyty</h5>
+          </div>
+          <div class="card-body p-0 pre-scrollable">
+            <div class="chart chart-lg">
+              <DashboardStays />
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Pobyty</h5>
-        </div>
-        <div class="card-body p-0 pre-scrollable">
-          <div class="chart chart-lg">
-            <DashboardStays />
+      <div class="col-sm-12 col-xl-6 col-xxl-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Wyjazdy</h5>
+          </div>
+          <div class="card-body p-0 pre-scrollable">
+            <div class="chart chart-lg">
+              <DashboardDepartures />
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Wyjazdy</h5>
-        </div>
-        <div class="card-body p-0 pre-scrollable">
-          <div class="chart chart-lg">
-            <DashboardDepartures />
+      <div class="col-sm-12 col-xl-6 col-xxl-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Pokoje</h5>
+          </div>
+          <div class="card-body p-0 chart-room">
+            <div class="chart chart-lg">
+              <DashboardRooms />
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-12 col-xl-6 col-xxl-4">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Pokoje</h5>
-        </div>
-        <div class="card-body p-0 chart-room">
-          <div class="chart chart-lg">
-            <DashboardRooms />
+      <div class="col-sm-12 col-xxl-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Rezerwacje</h5>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-xxl-8">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Rezerwacje</h5>
-        </div>
-        <div
-          class="card-body"
-          style="max-height: 340px; overflow-y: auto; padding: 0"
-        >
-          <table class="table">
-            <thead>
+          <div
+            class="card-body"
+            style="max-height: 340px; overflow-y: auto; padding: 0"
+          >
+            <table class="table">
+              <thead>
+                <tr
+                  style="
+                    position: sticky;
+                    top: 0;
+                    background: white;
+                    z-index: 1;
+                  "
+                >
+                  <th scope="col">Gość</th>
+                  <th scope="col">Pokój</th>
+                  <th scope="col">Przyjazd</th>
+                  <th scope="col">Wyjazd</th>
+                  <th scope="col">Cena</th>
+                  <th scope="col">Płatność</th>
+                </tr>
+              </thead>
               <tr
-                style="position: sticky; top: 0; background: white; z-index: 1"
+                v-for="(reservation, index) in res"
+                :key="index"
+                :class="{ 'bg-light': index % 2 === 1 }"
               >
-                <th scope="col">Gość</th>
-                <th scope="col">Pokój</th>
-                <th scope="col">Przyjazd</th>
-                <th scope="col">Wyjazd</th>
-                <th scope="col">Cena</th>
-                <th scope="col">Płatność</th>
+                <td>{{ reservation.name }}</td>
+                <td>{{ reservation.roomNumber }}</td>
+                <td>
+                  {{ new Date(reservation.startDate).toLocaleDateString() }}
+                </td>
+                <td>
+                  {{ new Date(reservation.endDate).toLocaleDateString() }}
+                </td>
+                <td>{{ reservation.price }}</td>
+                <td>{{ reservation.isPaid ? "Tak" : "Nie" }}</td>
               </tr>
-            </thead>
-            <tr
-              v-for="(reservation, index) in res"
-              :key="index"
-              :class="{ 'bg-light': index % 2 === 1 }"
-            >
-              <td>{{ reservation.name }}</td>
-              <td>{{ reservation.roomNumber }}</td>
-              <td>
-                {{ new Date(reservation.startDate).toLocaleDateString() }}
-              </td>
-              <td>
-                {{ new Date(reservation.endDate).toLocaleDateString() }}
-              </td>
-              <td>{{ reservation.price }}</td>
-              <td>{{ reservation.isPaid ? "Tak" : "Nie" }}</td>
-            </tr>
-          </table>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -166,10 +173,22 @@ definePageMeta({
 });
 
 const cards = [
-  { title: "Pobyty", value: "124", icon: "hotel", data: "data1" },
-  { title: "Przyjazdy", value: "50", icon: "flight_land", data: "data2" },
-  { title: "Wyjazdy", value: "90", icon: "flight_takeoff", data: "data3" },
-  { title: "Rezerwacje", value: "54", icon: "fiber_new", data: "data4" },
+  { id: 1, title: "Pobyty", value: "124", icon: "hotel", data: "data1" },
+  {
+    id: 2,
+    title: "Przyjazdy",
+    value: "50",
+    icon: "flight_land",
+    data: "data2",
+  },
+  {
+    id: 3,
+    title: "Wyjazdy",
+    value: "90",
+    icon: "flight_takeoff",
+    data: "data3",
+  },
+  { id: 4, title: "Rezerwacje", value: "54", icon: "fiber_new", data: "data4" },
 ];
 
 import { faker } from "@faker-js/faker";
