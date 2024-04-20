@@ -117,7 +117,10 @@
       </table>
       <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <li
+            class="page-item"
+            :class="{ disabled: currentPage === 1 || totalPages === 0 }"
+          >
             <a class="page-link" href="#" @click.prevent="currentPage--">
               Poprzednia
             </a>
@@ -136,7 +139,9 @@
           </li>
           <li
             class="page-item"
-            :class="{ disabled: currentPage === totalPages }"
+            :class="{
+              disabled: currentPage === totalPages || totalPages === 0,
+            }"
           >
             <a class="page-link" href="#" @click.prevent="currentPage++">
               Następna
@@ -187,22 +192,15 @@ watch([entriesPerPage, currentPage, searchQuery], async () => {
 });
 
 watch(
-  () => store.sortField,
-  async (newSortField, oldSortField) => {
-    if (newSortField !== oldSortField) {
-      await store.fetchGuests(
-        entriesPerPage.value,
-        currentPage.value,
-        searchQuery.value,
-      );
-    }
-  },
-);
-
-watch(
-  () => store.sortDirection,
-  async (newSortDirection, oldSortDirection) => {
-    if (newSortDirection !== oldSortDirection) {
+  [() => store.sortField, () => store.sortDirection],
+  async (
+    [newSortField, newSortDirection],
+    [oldSortField, oldSortDirection],
+  ) => {
+    if (
+      newSortField !== oldSortField ||
+      newSortDirection !== oldSortDirection
+    ) {
       await store.fetchGuests(
         entriesPerPage.value,
         currentPage.value,
