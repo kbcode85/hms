@@ -20,101 +20,126 @@
         <input v-model="searchQuery" placeholder="Szukajka" type="input" />
       </div>
 
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>
-              Imię
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('name', 'asc') }"
-                @click="sort('name', 'asc')"
-              >
-                arrow_drop_up
-              </span>
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('name', 'desc') }"
-                @click="sort('name', 'desc')"
-              >
-                arrow_drop_down
-              </span>
-            </th>
-            <th>
-              Nazwisko
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('surname', 'asc') }"
-                @click="sort('surname', 'asc')"
-              >
-                arrow_drop_up
-              </span>
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('surname', 'desc') }"
-                @click="sort('surname', 'desc')"
-              >
-                arrow_drop_down
-              </span>
-            </th>
-            <th>
-              Telefon
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('phone', 'asc') }"
-                @click="sort('phone', 'asc')"
-              >
-                arrow_drop_up
-              </span>
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('phone', 'desc') }"
-                @click="sort('phone', 'desc')"
-              >
-                arrow_drop_down
-              </span>
-            </th>
-            <th>
-              Email
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('email', 'asc') }"
-                @click="sort('email', 'asc')"
-              >
-                arrow_drop_up
-              </span>
-              <span
-                class="material-icons-sharp"
-                :class="{ 'text-primary': isSorted('email', 'desc') }"
-                @click="sort('email', 'desc')"
-              >
-                arrow_drop_down
-              </span>
-            </th>
-            <th>Akcje</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(guest, index) in guests"
-            :key="guest.id"
-            :class="{ 'bg-light': index % 2 === 0 }"
-          >
-            <td>{{ guest.name }}</td>
-            <td>{{ guest.surname }}</td>
-            <td>{{ guest.phone }}</td>
-            <td>{{ guest.email }}</td>
-            <td class="action-buttons">
-              <button class="btn btn-primary">
-                <span class="material-icons-sharp"> edit </span>
-              </button>
-              <button class="btn btn-danger">
-                <span class="material-icons-sharp"> delete </span>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="w-25">
+                <div class="d-flex justify-content-between align-items-center">
+                  Imię
+                  <div class="d-flex flex-column">
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('name', 'asc') }"
+                      @click="sort('name', 'asc')"
+                    >
+                      arrow_drop_up
+                    </span>
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('name', 'desc') }"
+                      @click="sort('name', 'desc')"
+                    >
+                      arrow_drop_down
+                    </span>
+                  </div>
+                </div>
+              </th>
+              <th class="w-25">
+                <div class="d-flex justify-content-between align-items-center">
+                  Nazwisko
+                  <div class="d-flex flex-column">
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('surname', 'asc') }"
+                      @click="sort('surname', 'asc')"
+                    >
+                      arrow_drop_up
+                    </span>
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('surname', 'desc') }"
+                      @click="sort('surname', 'desc')"
+                    >
+                      arrow_drop_down
+                    </span>
+                  </div>
+                </div>
+              </th>
+              <th class="w-25">
+                <div class="d-flex justify-content-between align-items-center">
+                  Telefon
+                  <div class="d-flex flex-column">
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('phone', 'asc') }"
+                      @click="sort('phone', 'asc')"
+                    >
+                      arrow_drop_up
+                    </span>
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('phone', 'desc') }"
+                      @click="sort('phone', 'desc')"
+                    >
+                      arrow_drop_down
+                    </span>
+                  </div>
+                </div>
+              </th>
+              <th class="w-25">
+                <div class="d-flex justify-content-between align-items-center">
+                  Email
+                  <div class="d-flex flex-column">
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('email', 'asc') }"
+                      @click="sort('email', 'asc')"
+                    >
+                      arrow_drop_up
+                    </span>
+                    <span
+                      class="material-icons-sharp"
+                      :class="{ 'text-primary': isSorted('email', 'desc') }"
+                      @click="sort('email', 'desc')"
+                    >
+                      arrow_drop_down
+                    </span>
+                  </div>
+                </div>
+              </th>
+              <th class="w-25">Akcje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(guest, index) in guests"
+              :key="guest.id"
+              :class="{ 'bg-light': index % 2 === 0 }"
+            >
+              <td>{{ guest.name }}</td>
+              <td>{{ guest.surname }}</td>
+              <td>{{ guest.phone }}</td>
+              <td>{{ guest.email }}</td>
+              <td class="action-buttons text-center">
+                <div class="d-flex justify-content-center">
+                  <button class="btn btn-primary me-2" aria-label="Edit">
+                    <span class="material-icons-sharp">edit</span>
+                  </button>
+                  <button
+                    class="btn btn-danger"
+                    aria-label="Delete"
+                    @click="openModal(guest.id)"
+                  >
+                    <span class="material-icons-sharp">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
           <li
@@ -167,8 +192,21 @@ const currentPage = ref(1);
 const totalPages = computed(() => store.totalPages);
 const searchQuery = ref("");
 
+const modalStore = useMyModalStore();
+
+// Zmieniamy openModal na funkcję, która przyjmuje id gościa jako argument
+const openModal = (guestId: number) => {
+  // Tutaj możesz zrobić coś z guestId, na przykład zapisać go do sklepu
+  useMyModalStore().openModal(guestId);
+};
+
 const sort = (field: string, direction: "asc" | "desc") => {
-  store.sortGuests(field, direction);
+  if (store.sortField === field && store.sortDirection === direction) {
+    store.sortField = null;
+    store.sortDirection = null;
+  } else {
+    store.sortGuests(field, direction);
+  }
 };
 
 const isSorted = (field: string, direction: "asc" | "desc") => {
@@ -201,6 +239,19 @@ watch(
       newSortField !== oldSortField ||
       newSortDirection !== oldSortDirection
     ) {
+      await store.fetchGuests(
+        entriesPerPage.value,
+        currentPage.value,
+        searchQuery.value,
+      );
+    }
+  },
+);
+
+watch(
+  () => modalStore.isModalOpen,
+  async (newVal, oldVal) => {
+    if (!newVal && oldVal) {
       await store.fetchGuests(
         entriesPerPage.value,
         currentPage.value,
@@ -276,5 +327,9 @@ watch(
     background-color: lighten($danger-color, 10%);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
+}
+
+span.material-icons-sharp {
+  cursor: pointer;
 }
 </style>

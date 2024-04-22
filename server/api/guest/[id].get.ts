@@ -6,14 +6,11 @@ export default defineEventHandler(async (event) => {
   const params = getRouterParams(event);
   const id = Number(params.id);
 
-  await prisma.guest.delete({
+  const guest = await prisma.guest.findUnique({
     where: {
       id: id,
     },
   });
 
-  setResponseStatus(event, 202, "Accepted");
-  return {
-    message: "guest has been removed",
-  };
+  return guest;
 });
