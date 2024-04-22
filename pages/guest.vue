@@ -8,6 +8,13 @@
 
     <div class="row">
       <div class="d-flex justify-content-between">
+        <button
+          class="btn btn-primary me-2"
+          aria-label="Edit"
+          @click="openPanel('add')"
+        >
+          <span class="material-icons-sharp">add</span>
+        </button>
         <div class="custom-dropdown">
           Pokaż wpisy:
           <select v-model="entriesPerPage" class="selectpicker">
@@ -123,7 +130,11 @@
               <td>{{ guest.email }}</td>
               <td class="action-buttons text-center">
                 <div class="d-flex justify-content-center">
-                  <button class="btn btn-primary me-2" aria-label="Edit">
+                  <button
+                    class="btn btn-primary me-2"
+                    aria-label="Edit"
+                    @click="openPanel('edit', guest.id)"
+                  >
                     <span class="material-icons-sharp">edit</span>
                   </button>
                   <button
@@ -193,6 +204,8 @@ const totalPages = computed(() => store.totalPages);
 const searchQuery = ref("");
 
 const modalStore = useMyModalStore();
+const slideoutStore = useMySlideoutStore();
+const { openPanel } = useMySlideoutStore();
 
 // Zmieniamy openModal na funkcję, która przyjmuje id gościa jako argument
 const openModal = (guestId: number) => {
@@ -250,6 +263,18 @@ watch(
 
 watch(
   () => modalStore.isModalOpen,
+  async (newVal, oldVal) => {
+    if (!newVal && oldVal) {
+      await store.fetchGuests(
+        entriesPerPage.value,
+        currentPage.value,
+        searchQuery.value,
+      );
+    }
+  },
+);
+watch(
+  () => slideoutStore.isPanelOpen,
   async (newVal, oldVal) => {
     if (!newVal && oldVal) {
       await store.fetchGuests(

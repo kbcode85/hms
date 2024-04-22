@@ -78,13 +78,19 @@ const isCollapsed = computed(() => sidebar.$state.isCollapsed);
 .sidebar {
   min-width: 260px;
   max-width: 260px;
-  transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out,
-    margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+  transition:
+    margin-left 0.35s ease-in-out,
+    left 0.35s ease-in-out,
+    margin-right 0.35s ease-in-out,
+    right 0.35s ease-in-out;
   background: #1d2d40;
 
   &-content {
-    transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out,
-      margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    transition:
+      margin-left 0.35s ease-in-out,
+      left 0.35s ease-in-out,
+      margin-right 0.35s ease-in-out,
+      right 0.35s ease-in-out;
     display: flex;
     height: 100vh;
     flex-direction: column;

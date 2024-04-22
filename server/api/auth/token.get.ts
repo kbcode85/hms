@@ -57,6 +57,7 @@ export default defineEventHandler(async (event) => {
       };
     } else {
       deleteCookie(event, "refreshToken");
+      deleteCookie(event, "token");
       setResponseStatus(event, 401, "Unauthorized");
       return {
         message:

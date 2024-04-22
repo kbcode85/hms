@@ -32,6 +32,7 @@
         </div>
       </footer>
     </div>
+    <SlideoutpanelGuest />
   </div>
 </template>
 
@@ -50,8 +51,11 @@
   width: 100%;
   min-width: 0;
   min-height: 100vh;
-  transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out,
-    margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+  transition:
+    margin-left 0.35s ease-in-out,
+    left 0.35s ease-in-out,
+    margin-right 0.35s ease-in-out,
+    right 0.35s ease-in-out;
   background: #f5f7fb;
   flex-direction: column;
   overflow: hidden;
