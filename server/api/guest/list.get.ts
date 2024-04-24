@@ -3,17 +3,72 @@ import { usePrisma } from "~/server/utils/prisma";
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
 
-  const { limit, page } = getQuery(event);
+  const { limit, page, query, field, direction } = getQuery(event);
+
+  if (typeof field !== "string") {
+    throw new Error("Field must be a string");
+  }
 
   let guests;
   let totalPages;
   try {
+    const orderBy = field && direction ? { [field]: direction } : undefined;
     guests = await prisma.guest.findMany({
       take: Number(limit),
       skip: (Number(page) - 1) * Number(limit),
+      where: {
+        OR: [
+          {
+            name: {
+              contains: String(query),
+            },
+          },
+          {
+            surname: {
+              contains: String(query),
+            },
+          },
+          {
+            phone: {
+              contains: String(query),
+            },
+          },
+          {
+            email: {
+              contains: String(query),
+            },
+          },
+        ],
+      },
+      orderBy,
     });
 
-    const totalGuests = await prisma.guest.count();
+    const totalGuests = await prisma.guest.count({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: String(query),
+            },
+          },
+          {
+            surname: {
+              contains: String(query),
+            },
+          },
+          {
+            phone: {
+              contains: String(query),
+            },
+          },
+          {
+            email: {
+              contains: String(query),
+            },
+          },
+        ],
+      },
+    });
     totalPages = Math.ceil(totalGuests / Number(limit));
 
     return { guests, totalPages };

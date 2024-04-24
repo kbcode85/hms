@@ -61,7 +61,7 @@
 
 <script lang="ts" setup>
 const store = useAuthStore();
-let username = store.data.userdata.username;
+const username = store.data.userdata?.username
 
 const logout = async () => {
   await store.logout();

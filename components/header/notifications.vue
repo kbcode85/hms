@@ -1,9 +1,9 @@
 <template>
   <li class="nav-item dropdown">
     <a
+      id="alertsDropdown"
       class="nav-icon dropdown-toggle"
       href="#"
-      id="alertsDropdown"
       data-bs-toggle="dropdown"
     >
       <div class="position-relative">
