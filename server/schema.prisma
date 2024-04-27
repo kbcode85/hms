@@ -16,9 +16,9 @@ model User {
   phone              String?
   salt               String
   password           String
-  lastLoginIpAddress String
   createdAt          DateTime @default(now())
   refreshToken       String?
+  role               UserRole @default(USER)
 }
 
 model Hotel {
@@ -47,28 +47,62 @@ model Guest {
   zip_code     String
   description  String?
   nip          String?
-  reservations Reservation[]
 }
 
 model Room {
-  id           Int           @id @default(autoincrement())
-  number       Int
-  floor        Int
-  description  String
-  price        Float
-  capacity     Int
-  isAvailable  Boolean
-  reservations Reservation[]
+  id             Int       @id @default(autoincrement())
+  number         String    @unique
+  type           RoomStandard
+  maxGuests      Int
+  pricePerNight  Float
+  status         RoomStatus
+  equipment      Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId    Int
 }
 
-model Reservation {
-  id         Int      @id @default(autoincrement())
-  hotelId    Int
-  roomId     Int
-  guestId    Int
-  checkIn    DateTime
-  checkOut   DateTime
-  totalPrice Float
-  guest      Guest    @relation(fields: [guestId], references: [id])
-  room       Room     @relation(fields: [roomId], references: [id])
+model Equipment {
+  id             Int      @id @default(autoincrement())
+  singleBeds     Int      @default(0)
+  doubleBeds     Int      @default(0)
+  hasTV          Boolean  @default(false)
+  hasWifi        Boolean  @default(false)
+  hasBathroom    Boolean  @default(false)
+  bathroomType   BathroomType?
+  hasKitchen     Boolean  @default(false)
+  hasFridge      Boolean  @default(false)
+  hasBalcony     Boolean  @default(false)
+  hasAirConditioning Boolean @default(false)
+  hasWardrobe    Boolean  @default(false)
+  hasHairDryer   Boolean  @default(false)
+  hasCoffeeAndTeaSet Boolean @default(false)
+  hasCosmetics   Boolean  @default(false)
+  hasTowels      Boolean  @default(false)
+  rooms          Room[]
+}
+
+
+enum RoomStatus {
+  CLEAN
+  DIRTY
+  SERVICE
+  OCCUPIED
+  ARRIVAL
+}
+
+enum RoomStandard {
+  ECONOMY
+  STANDARD
+  LUXURY
+  APARTMENT
+}
+
+enum BathroomType {
+  SHOWER
+  BATHTUB
+  BOTH
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

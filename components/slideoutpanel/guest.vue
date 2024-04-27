@@ -1,5 +1,9 @@
 <template>
-  <div class="overlay" :class="{ active: isCollapsed }"></div>
+  <div
+    class="overlay"
+    :class="{ active: isCollapsed }"
+    @click="slideout.closePanel"
+  ></div>
   <div class="sidebar2" :class="{ collapsed: isCollapsed }">
     <button class="close-btn" @click="slideout.closePanel">X</button>
     <h3 class="text-dark">Active action: {{ action }}</h3>

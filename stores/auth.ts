@@ -34,10 +34,9 @@ export const useAuthStore = defineStore({
         if (response) {
           this.data.authed = true;
           this.data.userdata = response.userdata;
-        } else {
-          this.data.authed = false;
         }
       } catch (error: unknown) {
+        this.data.authed = false;
         if (error instanceof Error) {
           console.log(error.message);
         }

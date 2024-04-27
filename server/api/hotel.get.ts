@@ -9,12 +9,7 @@ export default defineEventHandler(async (event) => {
   });
 
   if (!hotel) {
-    return {
-      status: 404,
-      body: {
-        message: "Hotel not found",
-      },
-    };
+    setResponseStatus(event, 201, "No Content");
   } else {
     return {
       body: hotel,

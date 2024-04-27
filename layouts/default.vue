@@ -33,6 +33,8 @@
       </footer>
     </div>
     <SlideoutpanelGuest />
+    <ModalGuest />
+    <ModalRoom />
   </div>
 </template>
 

@@ -11,7 +11,8 @@
     "migrate": "prisma migrate dev",
     "pull": "prisma db pull",
     "push": "prisma db push",
-    "deploy": "prisma db push && nuxt build"
+    "deploy": "prisma db push && nuxt build",
+    "studio": "prisma studio"
   },
   "prisma": {
     "schema": "server/schema.prisma"
