@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import type { Room } from "~/server/models/room";
+import type { Room, Equipment } from "~/server/models/room";
+
+type Response = {
+  room: Room;
+  equipment: Equipment;
+};
 
 export const useMyRoomStore = defineStore({
   id: "myRoomStore",
@@ -7,8 +12,9 @@ export const useMyRoomStore = defineStore({
     rooms: [] as Room[],
     isLoading: false,
     isModalOpen: false,
-    activeAction: "",
+    activeAction: null as string | null,
     room: {} as Room,
+    equipment: {} as Equipment,
   }),
   actions: {
     async fetchRooms() {
@@ -31,14 +37,79 @@ export const useMyRoomStore = defineStore({
         this.isLoading = false;
       }
     },
+    async openModal(action: string, roomId?: number) {
+      if (action === "info") {
+        try {
+          const response = await $fetch<Response>(`/api/room/${roomId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response) {
+            this.room = response.room;
+            this.equipment = response.equipment;
+          }
+        } catch (error) {
+          console.error("Failed to fetch room:", error);
+        }
+        this.activeAction = "info";
+      }
+
+      if (action === "add") {
+        this.activeAction = "add";
+      }
+
+      if (action === "delete") {
+        try {
+          const response = await $fetch<Response>(`/api/room/${roomId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response) {
+            this.room = response.room;
+            this.equipment = response.equipment;
+          }
+        } catch (error) {
+          console.error("Failed to fetch room:", error);
+        }
+        this.activeAction = "delete";
+      }
+
+      if (action === "edit") {
+        try {
+          const response = await $fetch<Response>(`/api/room/${roomId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response) {
+            this.room = response.room;
+            this.equipment = response.equipment;
+          }
+        } catch (error) {
+          console.error("Failed to fetch room:", error);
+        }
+        this.activeAction = "edit";
+      }
+
+      this.isModalOpen = true;
+    },
     closeModal() {
+      this.room = {} as Room;
+      this.equipment = {} as Equipment;
       this.isModalOpen = false;
     },
-    openModal(action: string) {
-      this.isModalOpen = true;
-      this.activeAction = action;
-    },
-    async deleteRoom(roomId?: number) {
+    async deleteRoom(roomId: number) {
       try {
         await $fetch(`/api/room/${roomId}`, {
           method: "DELETE",
@@ -48,26 +119,58 @@ export const useMyRoomStore = defineStore({
           },
         });
       } catch (error) {
-        console.error("Failed to delete room:", error);
+        push.error("Błąd podczas usuwania pokoju");
+      } finally {
+        push.success("Pokój usunięty pomyślnie");
+        this.closeModal();
       }
-
-      this.isModalOpen = false;
     },
-    async fetchRoom(roomId: number) {
+    async editRoom(roomId: number) {
       try {
+        const body = {
+          room: this.room,
+          equipment: this.equipment,
+        };
         const response = await $fetch<Room>(`/api/room/${roomId}`, {
-          method: "GET",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             // Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify(body),
+        });
+        if (!response) {
+          throw new Error(`HTTP error! status: ${response}`);
+        }
+      } catch (error) {
+        push.error("Błąd podczas aktualizacji pokoju");
+      } finally {
+        push.success("Pokój zaktualizowany pomyślnie");
+        this.closeModal();
+      }
+    },
+    async addRoom() {
+      try {
+        const body = {
+          room: this.room,
+          equipment: this.equipment,
+        };
+
+        const response = await $fetch<Room>("/api/room/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
         });
 
         if (response) {
-          this.room = response;
+          push.success("Pokój dodany pomyślnie!");
+          this.closeModal();
         }
       } catch (error) {
-        console.error("Failed to fetch room:", error);
+        push.error("Błąd podczas dodawania pokoju");
       }
     },
   },

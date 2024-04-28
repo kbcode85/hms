@@ -27,17 +27,20 @@
             <div class="card-actions d-flex justify-content-end">
               <button
                 class="btn btn-primary me-2"
-                @click="store.openModal('edit')"
+                @click="store.openModal('edit', room.id)"
               >
                 <i class="bi bi-pencil-square"></i> Edytuj
               </button>
               <button
                 class="btn btn-danger me-2"
-                @click="store.openModal('delete')"
+                @click="store.openModal('delete', room.id)"
               >
                 <i class="bi bi-trash"></i> Usuń
               </button>
-              <button class="btn btn-info" @click="store.openModal('info')">
+              <button
+                class="btn btn-info"
+                @click="store.openModal('info', room.id)"
+              >
                 <i class="bi bi-info-circle"></i> Info
               </button>
             </div>
@@ -72,8 +75,16 @@ const store = useMyRoomStore();
 
 const rooms = computed(() => store.$state.rooms);
 
+const isModalOpen = computed(() => store.$state.isModalOpen);
+
 onMounted(async () => {
   await store.fetchRooms();
+});
+
+watch(isModalOpen, async (newVal, oldVal) => {
+  if (oldVal === true && newVal === false) {
+    await store.fetchRooms();
+  }
 });
 </script>
 

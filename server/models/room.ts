@@ -26,7 +26,7 @@ export interface Equipment {
   hasCoffeeAndTeaSet: boolean;
   hasCosmetics: boolean;
   hasTowels: boolean;
-  rooms: Room[];
+  rooms: { [key: string]: any }[];
 }
 
 export enum RoomStatus {

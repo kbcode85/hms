@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const params = getRouterParams(event);
   const id = Number(params.id);
 
-  const room = await prisma.room.findUnique({
+  const roomData = await prisma.room.findUnique({
     where: {
       id: id,
     },
@@ -15,5 +15,17 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  return room;
+  if (!roomData) {
+    setResponseStatus(event, 404, "Not Found");
+    return {
+      message: "Room not found",
+    };
+  }
+
+  const { equipment, ...room } = roomData;
+
+  return {
+    room,
+    equipment,
+  };
 });

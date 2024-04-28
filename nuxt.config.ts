@@ -18,7 +18,10 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ["~/assets/scss/main.scss"],
+  css: ["~/assets/scss/main.scss",
+  'notivue/notification.css', // Only needed if using built-in <Notification />
+  'notivue/animations.css'
+  ],
   vite: {
     css: {
       preprocessorOptions: {
@@ -28,7 +31,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ["@pinia/nuxt"],
+  modules: ["@pinia/nuxt", "notivue/nuxt"],
   app: {
     head: {
       title: "HMSuite",
