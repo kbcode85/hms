@@ -56,8 +56,8 @@ model Room {
   maxGuests      Int
   pricePerNight  Float
   status         RoomStatus
-  equipment      Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId    Int
+  equipment      Equipment? @relation(fields: [equipmentId], references: [id])
+  equipmentId    Int?
 }
 
 model Equipment {

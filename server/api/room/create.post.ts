@@ -22,7 +22,8 @@ export default defineEventHandler(async (event) => {
       // Na koniec aktualizujemy pokój z nowym equipmentId
       await prisma.room.update({
         where: { id: newRoom.id },
-        data: { equipmentId: newEquipment.id },
+        data: { equipmentId: newEquipment.id
+         },
       });
 
       setResponseStatus(event, 201, "Created");

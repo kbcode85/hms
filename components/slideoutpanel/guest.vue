@@ -291,6 +291,15 @@ const action = computed(() => slideout.activeAction);
   padding-left: 10px;
   z-index: 2;
   padding: 30px;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    max-width: 100%;
+    button {
+      margin-bottom: 60px;
+    }
+  }
 }
 
 .sidebar2.collapsed {
