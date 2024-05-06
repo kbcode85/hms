@@ -29,19 +29,19 @@
                 class="btn btn-primary me-2"
                 @click="store.openModal('edit', room.id)"
               >
-                <i class="bi bi-pencil-square"></i> Edytuj
+                <i class="bi bi-pencil-square"></i>
               </button>
               <button
                 class="btn btn-danger me-2"
                 @click="store.openModal('delete', room.id)"
               >
-                <i class="bi bi-trash"></i> Usuń
+                <i class="bi bi-trash"></i>
               </button>
               <button
                 class="btn btn-info"
                 @click="store.openModal('info', room.id)"
               >
-                <i class="bi bi-info-circle"></i> Info
+                <i class="bi bi-info-circle"></i>
               </button>
             </div>
           </div>
@@ -54,10 +54,10 @@
             class="card-body d-flex justify-content-center align-items-center"
           >
             <button
-              class="btn btn-success btn-lg"
+              class="btn btn-primary btn-lg"
               @click="store.openModal('add')"
             >
-              <i class="bi bi-plus-lg"></i> Dodaj
+              <i class="bi bi-plus-lg"></i>
             </button>
           </div>
         </div>

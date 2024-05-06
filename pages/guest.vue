@@ -6,8 +6,8 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="d-flex justify-content-between">
+    <div class="row align-items-center">
+      <div class="col">
         <button
           class="btn btn-primary me-2"
           aria-label="Edit"
@@ -15,177 +15,178 @@
         >
           <span class="material-icons-sharp">add</span>
         </button>
-        <div class="custom-dropdown">
-          Pokaż wpisy:
-          <select v-model="entriesPerPage" class="selectpicker">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
         <input v-model="searchQuery" placeholder="Szukajka" type="input" />
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th class="w-25">
-                <div class="d-flex justify-content-between align-items-center">
-                  Imię
-                  <div class="d-flex flex-column">
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('name', 'asc') }"
-                      @click="sort('name', 'asc')"
-                    >
-                      arrow_drop_up
-                    </span>
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('name', 'desc') }"
-                      @click="sort('name', 'desc')"
-                    >
-                      arrow_drop_down
-                    </span>
-                  </div>
-                </div>
-              </th>
-              <th class="w-25">
-                <div class="d-flex justify-content-between align-items-center">
-                  Nazwisko
-                  <div class="d-flex flex-column">
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('surname', 'asc') }"
-                      @click="sort('surname', 'asc')"
-                    >
-                      arrow_drop_up
-                    </span>
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('surname', 'desc') }"
-                      @click="sort('surname', 'desc')"
-                    >
-                      arrow_drop_down
-                    </span>
-                  </div>
-                </div>
-              </th>
-              <th class="w-25">
-                <div class="d-flex justify-content-between align-items-center">
-                  Telefon
-                  <div class="d-flex flex-column">
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('phone', 'asc') }"
-                      @click="sort('phone', 'asc')"
-                    >
-                      arrow_drop_up
-                    </span>
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('phone', 'desc') }"
-                      @click="sort('phone', 'desc')"
-                    >
-                      arrow_drop_down
-                    </span>
-                  </div>
-                </div>
-              </th>
-              <th class="w-25">
-                <div class="d-flex justify-content-between align-items-center">
-                  Email
-                  <div class="d-flex flex-column">
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('email', 'asc') }"
-                      @click="sort('email', 'asc')"
-                    >
-                      arrow_drop_up
-                    </span>
-                    <span
-                      class="material-icons-sharp"
-                      :class="{ 'text-primary': isSorted('email', 'desc') }"
-                      @click="sort('email', 'desc')"
-                    >
-                      arrow_drop_down
-                    </span>
-                  </div>
-                </div>
-              </th>
-              <th class="w-25">Akcje</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(guest, index) in guests"
-              :key="guest.id"
-              :class="{ 'bg-light': index % 2 === 0 }"
-            >
-              <td>{{ guest.name }}</td>
-              <td>{{ guest.surname }}</td>
-              <td>{{ guest.phone }}</td>
-              <td>{{ guest.email }}</td>
-              <td class="action-buttons text-center">
-                <div class="d-flex justify-content-center">
-                  <button
-                    class="btn btn-primary me-2"
-                    aria-label="Edit"
-                    @click="openPanel('edit', guest.id)"
-                  >
-                    <span class="material-icons-sharp">edit</span>
-                  </button>
-                  <button
-                    class="btn btn-danger"
-                    aria-label="Delete"
-                    @click="openModal(guest.id)"
-                  >
-                    <span class="material-icons-sharp">delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="col text-end">
+        Pokaż wpisy:
+        <select v-model="entriesPerPage" class="selectpicker">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
       </div>
-
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li
-            class="page-item"
-            :class="{ disabled: currentPage === 1 || totalPages === 0 }"
-          >
-            <a class="page-link" href="#" @click.prevent="currentPage--">
-              Poprzednia
-            </a>
-          </li>
-          <li class="page-item align-self-center">
-            <div class="input-group input-group-sm">
-              <input
-                v-model.number="currentPage"
-                type="number"
-                class="form-control text-center"
-                min="1"
-                :max="totalPages"
-              />
-              <span class="input-group-text">/ {{ totalPages }}</span>
-            </div>
-          </li>
-          <li
-            class="page-item"
-            :class="{
-              disabled: currentPage === totalPages || totalPages === 0,
-            }"
-          >
-            <a class="page-link" href="#" @click.prevent="currentPage++">
-              Następna
-            </a>
-          </li>
-        </ul>
-      </nav>
     </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="w-25">
+              <div class="d-flex justify-content-between align-items-center">
+                Imię
+                <div class="d-flex flex-column">
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('name', 'asc') }"
+                    @click="sort('name', 'asc')"
+                  >
+                    arrow_drop_up
+                  </span>
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('name', 'desc') }"
+                    @click="sort('name', 'desc')"
+                  >
+                    arrow_drop_down
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="w-25">
+              <div class="d-flex justify-content-between align-items-center">
+                Nazwisko
+                <div class="d-flex flex-column">
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('surname', 'asc') }"
+                    @click="sort('surname', 'asc')"
+                  >
+                    arrow_drop_up
+                  </span>
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('surname', 'desc') }"
+                    @click="sort('surname', 'desc')"
+                  >
+                    arrow_drop_down
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="w-25">
+              <div class="d-flex justify-content-between align-items-center">
+                Telefon
+                <div class="d-flex flex-column">
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('phone', 'asc') }"
+                    @click="sort('phone', 'asc')"
+                  >
+                    arrow_drop_up
+                  </span>
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('phone', 'desc') }"
+                    @click="sort('phone', 'desc')"
+                  >
+                    arrow_drop_down
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="w-25">
+              <div class="d-flex justify-content-between align-items-center">
+                Email
+                <div class="d-flex flex-column">
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('email', 'asc') }"
+                    @click="sort('email', 'asc')"
+                  >
+                    arrow_drop_up
+                  </span>
+                  <span
+                    class="material-icons-sharp"
+                    :class="{ 'text-primary': isSorted('email', 'desc') }"
+                    @click="sort('email', 'desc')"
+                  >
+                    arrow_drop_down
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="w-25">Akcje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(guest, index) in guests"
+            :key="guest.id"
+            :class="{ 'bg-light': index % 2 === 0 }"
+          >
+            <td>{{ guest.name }}</td>
+            <td>{{ guest.surname }}</td>
+            <td>{{ guest.phone }}</td>
+            <td>{{ guest.email }}</td>
+            <td class="action-buttons text-center">
+              <div class="d-flex justify-content-center">
+                <button
+                  class="btn btn-primary me-2"
+                  aria-label="Edit"
+                  @click="openPanel('edit', guest.id)"
+                >
+                  <span class="material-icons-sharp">edit</span>
+                </button>
+                <button
+                  class="btn btn-danger"
+                  aria-label="Delete"
+                  @click="openModal(guest.id)"
+                >
+                  <span class="material-icons-sharp">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li
+          class="page-item"
+          :class="{ disabled: currentPage === 1 || totalPages === 0 }"
+        >
+          <a class="page-link" href="#" @click.prevent="currentPage--">
+            Poprzednia
+          </a>
+        </li>
+        <li class="page-item align-self-center">
+          <div class="input-group input-group-sm">
+            <input
+              v-model.number="currentPage"
+              type="number"
+              class="form-control text-center"
+              min="1"
+              :max="totalPages"
+            />
+            <span class="input-group-text">/ {{ totalPages }}</span>
+          </div>
+        </li>
+        <li
+          class="page-item"
+          :class="{
+            disabled: currentPage === totalPages || totalPages === 0,
+          }"
+        >
+          <a class="page-link" href="#" @click.prevent="currentPage++">
+            Następna
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -333,24 +334,7 @@ watch(
 
   .material-icons-sharp {
     font-size: 1.2rem;
-    color: white; // Slightly larger icon
-  }
-}
-
-.btn-primary {
-  background-color: $primary-color;
-  &:hover {
-    background-color: lighten($primary-color, 10%);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-}
-
-.btn-danger {
-  background-color: $danger-color;
-  color: white;
-  &:hover {
-    background-color: lighten($danger-color, 10%);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: white;
   }
 }
 

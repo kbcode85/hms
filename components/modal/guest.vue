@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="overlay"
-    :class="{ active: isOpen }"
-    @click="modalStore.closeModal"
-  >
+  <div class="overlay" :class="{ active: isOpen }">
     <div
       class="modal fade"
       :class="{ show: isOpen }"

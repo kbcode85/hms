@@ -6,7 +6,7 @@
   ></div>
   <div class="sidebar2" :class="{ collapsed: isCollapsed }">
     <button class="close-btn" @click="slideout.closePanel">X</button>
-    <h3 class="text-dark">Active action: {{ action }}</h3>
+    <!-- <h3 class="text-dark">Active action: {{ action }}</h3> -->
 
     <div v-if="action === 'edit'">
       <form>
