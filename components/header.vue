@@ -32,7 +32,7 @@
             <span class="text-dark">{{ username }}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-end">
-            <NuxtLink to="/profile" class="dropdown-item"
+            <!-- <NuxtLink to="/profile" class="dropdown-item"
               ><i class="align-middle me-1 material-icons-sharp">person</i>
               Profil</NuxtLink
             >
@@ -46,8 +46,8 @@
             <NuxtLink to="/support" class="dropdown-item"
               ><i class="align-middle me-1 material-icons-sharp">support</i>
               Pomoc</NuxtLink
-            >
-            <div class="dropdown-divider"></div>
+            > -->
+            <!-- <div class="dropdown-divider"></div> -->
             <a class="dropdown-item" href="#" @click="logout"
               ><i class="align-middle me-1 material-icons-sharp">logout</i
               >Wyloguj</a

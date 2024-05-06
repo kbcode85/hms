@@ -32,7 +32,7 @@
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
-          <tr>
+          <tr class="align-middle">
             <th class="w-25">
               <div class="d-flex justify-content-between align-items-center">
                 Imię
@@ -120,7 +120,7 @@
             <th class="w-25">Akcje</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="align-middle">
           <tr
             v-for="(guest, index) in guests"
             :key="guest.id"
@@ -130,21 +130,21 @@
             <td>{{ guest.surname }}</td>
             <td>{{ guest.phone }}</td>
             <td>{{ guest.email }}</td>
-            <td class="action-buttons text-center">
-              <div class="d-flex justify-content-center">
+            <td>
+              <div class="d-flex justify-content-between align-items-center">
                 <button
-                  class="btn btn-primary me-2"
+                  class="btn btn-primary p-1"
                   aria-label="Edit"
                   @click="openPanel('edit', guest.id)"
                 >
                   <span class="material-icons-sharp">edit</span>
                 </button>
                 <button
-                  class="btn btn-danger"
+                  class="btn btn-danger p-1"
                   aria-label="Delete"
                   @click="openModal(guest.id)"
                 >
-                  <span class="material-icons-sharp">delete</span>
+                  <span class="material-icons-sharp">cancel</span>
                 </button>
               </div>
             </td>
@@ -289,38 +289,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.custom-dropdown {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.table {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 15px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-.table th {
-  background-color: #f8f9fa;
-  color: #495057;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.table-hover tbody tr:hover {
-  color: #212529;
-  background-color: rgba(0, 0, 0, 0.075);
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -336,9 +304,5 @@ watch(
     font-size: 1.2rem;
     color: white;
   }
-}
-
-span.material-icons-sharp {
-  cursor: pointer;
 }
 </style>

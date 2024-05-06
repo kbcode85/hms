@@ -7,7 +7,11 @@
     </div>
 
     <div class="row">
-      <div v-for="room in rooms" :key="room.id" class="col-md-4">
+      <div
+        v-for="room in rooms"
+        :key="room.id"
+        class="col-12 col-md-6 col-lg-4 col-xl-3"
+      >
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Pokój {{ room.number }}</h5>
@@ -48,7 +52,7 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <div class="card">
           <div
             class="card-body d-flex justify-content-center align-items-center"

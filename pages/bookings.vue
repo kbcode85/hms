@@ -35,9 +35,9 @@
     </div>
 
     <div class="table-responsive mt-2">
-      <table class="table">
+      <table class="table table-striped">
         <thead>
-          <tr>
+          <tr class="align-middle">
             <th scope="col">Numer</th>
             <th scope="col">OTA</th>
             <th scope="col">Osoba rezerwująca</th>
@@ -52,7 +52,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr class="align-middle">
             <td>3242</td>
             <td>-</td>
             <td>Kacper Baranowski</td>
@@ -64,27 +64,103 @@
             <td>Walk-in</td>
             <td>1235 PLN</td>
             <td>
-              <button
-                class="btn btn-success p-1"
-                aria-label="Edit"
-                @click="openPanel('edit', booking)"
-              >
-                <span class="material-icons-sharp">login</span>
-              </button>
-              <button
-                class="btn btn-primary p-1"
-                aria-label="Edit"
-                @click="openPanel('edit', booking)"
-              >
-                <span class="material-icons-sharp">edit</span>
-              </button>
-              <button
-                class="btn btn-danger p-1"
-                aria-label="Delete"
-                @click="deleteBooking(booking.id)"
-              >
-                <span class="material-icons-sharp">cancel</span>
-              </button>
+              <div class="d-flex justify-content-between align-items-center">
+                <button
+                  class="btn btn-success p-1"
+                  aria-label="Edit"
+                  @click="openPanel('edit', booking)"
+                >
+                  <span class="material-icons-sharp">login</span>
+                </button>
+                <button
+                  class="btn btn-primary p-1"
+                  aria-label="Edit"
+                  @click="openPanel('edit', booking)"
+                >
+                  <span class="material-icons-sharp">edit</span>
+                </button>
+                <button
+                  class="btn btn-danger p-1"
+                  aria-label="Delete"
+                  @click="deleteBooking(booking.id)"
+                >
+                  <span class="material-icons-sharp">cancel</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr class="align-middle">
+            <td class="text-success">3453</td>
+            <td class="text-success">-</td>
+            <td class="text-success">Jan Kowalski</td>
+            <td class="text-success">2</td>
+            <td class="text-success">102</td>
+            <td class="text-success">2024-05-02</td>
+            <td class="text-success">2024-05-04</td>
+            <td class="text-success">Gwarantowana</td>
+            <td class="text-success">Email</td>
+            <td class="text-success">2354 PLN</td>
+            <td>
+              <div class="d-flex justify-content-between align-items-center">
+                <button
+                  class="btn btn-success p-1 disabled"
+                  aria-label="Edit"
+                  @click="openPanel('edit', booking)"
+                >
+                  <span class="material-icons-sharp">login</span>
+                </button>
+                <button
+                  class="btn btn-primary p-1 disabled"
+                  aria-label="Edit"
+                  @click="openPanel('edit', booking)"
+                >
+                  <span class="material-icons-sharp">edit</span>
+                </button>
+                <button
+                  class="btn btn-danger p-1 disabled"
+                  aria-label="Delete"
+                  @click="deleteBooking(booking.id)"
+                >
+                  <span class="material-icons-sharp">cancel</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr class="align-middle">
+            <td class="text-danger">3533</td>
+            <td class="text-danger">-</td>
+            <td class="text-danger">Jan Kowalski</td>
+            <td class="text-danger">3</td>
+            <td class="text-danger">103</td>
+            <td class="text-danger">2024-06-01</td>
+            <td class="text-danger">2024-06-03</td>
+            <td class="text-danger">Gwarantowana</td>
+            <td class="text-danger">Telefon</td>
+            <td class="text-danger">2354 PLN</td>
+            <td>
+              <div class="d-flex justify-content-between align-items-center">
+                <button
+                  class="btn btn-success p-1 disabled"
+                  aria-label="Edit"
+                  @click="openPanel('edit', booking)"
+                >
+                  <span class="material-icons-sharp">login</span>
+                </button>
+                <button
+                  class="btn btn-primary p-1 disabled"
+                  aria-label="Edit"
+                  @click="openPanel('edit', booking)"
+                >
+                  <span class="material-icons-sharp">edit</span>
+                </button>
+                <button
+                  class="btn btn-danger p-1"
+                  aria-label="Delete"
+                  @click="deleteBooking(booking.id)"
+                >
+                  <span class="material-icons-sharp">restore</span>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -99,7 +175,7 @@ definePageMeta({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .btn {
   display: inline-flex;
   align-items: center;
