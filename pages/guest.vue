@@ -144,7 +144,7 @@
                   aria-label="Delete"
                   @click="openModal(guest.id)"
                 >
-                  <span class="material-icons-sharp">cancel</span>
+                  <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
             </td>

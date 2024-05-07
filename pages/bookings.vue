@@ -86,6 +86,13 @@
                 >
                   <span class="material-icons-sharp">cancel</span>
                 </button>
+                <button
+                  class="btn btn-danger p-1"
+                  aria-label="Edit"
+                  @click="deleteBooking(booking.id)"
+                >
+                  <span class="material-icons-sharp">delete</span>
+                </button>
               </div>
             </td>
           </tr>
@@ -123,6 +130,13 @@
                 >
                   <span class="material-icons-sharp">cancel</span>
                 </button>
+                <button
+                  class="btn btn-danger p-1"
+                  aria-label="Edit"
+                  @click="deleteBooking(booking.id)"
+                >
+                  <span class="material-icons-sharp">delete</span>
+                </button>
               </div>
             </td>
           </tr>
@@ -159,6 +173,13 @@
                   @click="deleteBooking(booking.id)"
                 >
                   <span class="material-icons-sharp">restore</span>
+                </button>
+                <button
+                  class="btn btn-danger p-1"
+                  aria-label="Edit"
+                  @click="deleteBooking(booking.id)"
+                >
+                  <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
             </td>
