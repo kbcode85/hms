@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isStepper">
     <div class="row mb-2 mb-xl-3">
       <div class="col-auto d-none d-sm-block">
         <h3>Meldunki</h3>
@@ -16,16 +16,16 @@
         <button
           class="btn btn-primary me-2"
           aria-label="Edit"
-          @click="openPanel('add')"
+          @click="stepper('open')"
         >
           <span class="material-icons-sharp">add</span>
         </button>
-        <input v-model="searchQuery" placeholder="Szukajka" type="input" />
+        <input placeholder="Szukajka" type="input" />
       </div>
 
       <div class="col text-end">
         Pokaż wpisy:
-        <select v-model="entriesPerPage" class="selectpicker">
+        <select class="selectpicker">
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
@@ -78,32 +78,16 @@
             </td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-success p-1" aria-label="Edit">
                   <span class="material-icons-sharp">logout</span>
                 </button>
-                <button
-                  class="btn btn-warning p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-warning p-1" aria-label="Edit">
                   <span class="material-icons-sharp">change_circle</span>
                 </button>
-                <button
-                  class="btn btn-primary p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-primary p-1" aria-label="Edit">
                   <span class="material-icons-sharp">edit</span>
                 </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-danger p-1" aria-label="Edit">
                   <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
@@ -136,32 +120,16 @@
             </td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-success p-1" aria-label="Edit">
                   <span class="material-icons-sharp">logout</span>
                 </button>
-                <button
-                  class="btn btn-warning p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-warning p-1" aria-label="Edit">
                   <span class="material-icons-sharp">change_circle</span>
                 </button>
-                <button
-                  class="btn btn-primary p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-primary p-1" aria-label="Edit">
                   <span class="material-icons-sharp">edit</span>
                 </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-danger p-1" aria-label="Edit">
                   <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
@@ -192,32 +160,16 @@
             </td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-success p-1" aria-label="Edit">
                   <span class="material-icons-sharp">logout</span>
                 </button>
-                <button
-                  class="btn btn-warning p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-warning p-1" aria-label="Edit">
                   <span class="material-icons-sharp">change_circle</span>
                 </button>
-                <button
-                  class="btn btn-primary p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-primary p-1" aria-label="Edit">
                   <span class="material-icons-sharp">edit</span>
                 </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-danger p-1" aria-label="Edit">
                   <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
@@ -248,32 +200,16 @@
             </td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-success p-1 disabled" aria-label="Edit">
                   <span class="material-icons-sharp">logout</span>
                 </button>
-                <button
-                  class="btn btn-warning p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-warning p-1 disabled" aria-label="Edit">
                   <span class="material-icons-sharp">change_circle</span>
                 </button>
-                <button
-                  class="btn btn-primary p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-primary p-1 disabled" aria-label="Edit">
                   <span class="material-icons-sharp">edit</span>
                 </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-danger p-1" aria-label="Edit">
                   <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
@@ -283,12 +219,19 @@
       </table>
     </div>
   </div>
+  <StepperCheckinout v-else />
 </template>
 
 <script lang="ts" setup>
 definePageMeta({
   middleware: ["auth"],
 });
+
+const store = useMyCheckinoutStore();
+
+const { stepper } = store;
+
+const isStepper = computed(() => store.$state.isStepper);
 </script>
 
 <style lang="scss" scoped>

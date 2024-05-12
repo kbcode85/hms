@@ -6,6 +6,7 @@ interface UserData {
     id: string;
     username: string;
     email: string;
+    role: string;
   };
 }
 
@@ -14,7 +15,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     data: {
       authed: true,
-      userdata: { id: "", username: "", email: "" },
+      userdata: { id: "", username: "", email: "", role: "" },
     } as UserData,
   }),
   actions: {

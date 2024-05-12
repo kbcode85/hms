@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ["@pinia/nuxt", "notivue/nuxt"],
+  modules: ["@pinia/nuxt", "notivue/nuxt", "@samk-dev/nuxt-vcalendar"],
   app: {
     head: {
       title: "HMSuite",

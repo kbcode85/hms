@@ -17,6 +17,30 @@ export const useMyRoomStore = defineStore({
     equipment: {} as Equipment,
   }),
   actions: {
+    async fetchAvailableRooms(dateStart: Date, dateEnd: Date) {
+      this.isLoading = true;
+      try {
+        const response = await $fetch<Room[]>(`/api/room/available`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          params: {
+            dateStart: dateStart,
+            dateEnd: dateEnd,
+          },
+        });
+
+        if (response) {
+          console.log(response);
+        }
+      } catch (error) {
+        console.error("Failed to fetch available rooms:", error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async fetchRooms() {
       this.isLoading = true;
       try {

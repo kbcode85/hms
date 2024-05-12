@@ -21,11 +21,13 @@ export default defineEventHandler(async (event) => {
     });
 
     // Następnie usuń sprzęt
-    await prisma.equipment.delete({
-      where: {
-        id: room.equipmentId,
-      },
-    });
+    if (room.equipmentId !== null) {
+      await prisma.equipment.delete({
+        where: {
+          id: room.equipmentId,
+        },
+      });
+    }
   }
 
   setResponseStatus(event, 202, "Accepted");
