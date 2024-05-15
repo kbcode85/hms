@@ -99,10 +99,6 @@
 </template>
 
 <script lang="ts" setup>
-import { format } from "date-fns";
-const formatDate = (date: Date) => {
-  return format(date, "yyyy-mm-dd");
-};
 
 const calculateNights = (start: Date, end: Date) => {
   const diffTime = Math.abs(end.getTime() - start.getTime());
