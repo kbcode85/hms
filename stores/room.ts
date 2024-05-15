@@ -4,6 +4,8 @@ import type { Room, Equipment } from "~/server/models/room";
 type Response = {
   room: Room;
   equipment: Equipment;
+  vacant: number;
+  rooms: Room[];
 };
 
 export const useMyRoomStore = defineStore({
@@ -14,13 +16,15 @@ export const useMyRoomStore = defineStore({
     isModalOpen: false,
     activeAction: null as string | null,
     room: {} as Room,
+    availableRoom: [] as Room[],
+    availableVacant: 0,
     equipment: {} as Equipment,
   }),
   actions: {
-    async fetchAvailableRooms(dateStart: Date, dateEnd: Date) {
+    async fetchAvailableRooms(dateStart: string, dateEnd: string) {
       this.isLoading = true;
       try {
-        const response = await $fetch<Room[]>(`/api/room/available`, {
+        const response = await $fetch<Response>(`/api/room/available`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -33,7 +37,8 @@ export const useMyRoomStore = defineStore({
         });
 
         if (response) {
-          console.log(response);
+          this.availableRoom = response.rooms;
+          this.availableVacant = response.vacant;
         }
       } catch (error) {
         console.error("Failed to fetch available rooms:", error);

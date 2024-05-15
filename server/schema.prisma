@@ -47,7 +47,7 @@ model Guest {
   zip_code     String
   description  String?
   nip          String?
-  reservations Reservation[]
+  bookings   Booking[]
 }
 
 model Room {
@@ -59,7 +59,7 @@ model Room {
   status         RoomStatus
   equipment      Equipment? @relation(fields: [equipmentId], references: [id])
   equipmentId    Int?
-  reservations   Reservation[]
+  bookings   Booking[]
 }
 
 model Equipment {
@@ -83,7 +83,7 @@ model Equipment {
 }
 
 
-model Reservation {
+model Booking {
   id           Int      @id @default(autoincrement())
   room         Room     @relation(fields: [roomId], references: [id])
   roomId       Int
@@ -92,9 +92,29 @@ model Reservation {
   startDate    DateTime
   endDate      DateTime
   price        Float
-  status       ReservationStatus
+  status       BookingStatus
+  source       BookingSource
+  OTA          String?
   createdAt    DateTime @default(now())
+  additions    BookingAdditions[]
 }
+
+model BookingAdditions {
+  id           Int      @id @default(autoincrement())
+  booking      Booking  @relation(fields: [bookingId], references: [id])
+  bookingId    Int
+  addition     Addition @relation(fields: [additionId], references: [id])
+  additionId   Int
+  quantity     Int
+}
+
+model Addition {
+  id           Int      @id @default(autoincrement())
+  name         String
+  price        Float
+  bookings     BookingAdditions[]
+}
+
 
 enum RoomStatus {
   CLEAN
@@ -122,10 +142,19 @@ enum UserRole {
   ADMIN
 }
 
-enum ReservationStatus {
+enum BookingStatus {
   PENDING
   CONFIRMED
+  GUARANTEED
   CANCELED
   CHECKED_IN
   CHECKED_OUT
+}
+
+enum BookingSource {
+  DIRECT
+  EMAIL
+  PHONE
+  BOOKING
+  OTHER
 }

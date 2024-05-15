@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     rooms = await prisma.room.findMany({
       where: {
         NOT: {
-          reservations: {
+          bookings: {
             some: {
               AND: [
                 {
@@ -39,7 +39,10 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 201, "No Content");
     }
 
-    return rooms;
+    return {
+      rooms,
+      vacant: rooms.length,
+    };
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Error finding available rooms: ${error.message}`);

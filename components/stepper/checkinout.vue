@@ -68,18 +68,156 @@
             <div v-if="activeStep.id === 1" class="m-2">
               <p>
                 <strong>Data przyjazdu:</strong>
-                {{ dateStart }}
+                {{ formatDate(dateStart) }}
               </p>
               <p>
                 <strong>Data wyjazdu:</strong>
-                {{ dateEnd }}
+                {{ formatDate(dateEnd) }}
               </p>
               <p>
                 <strong>Ilość nocy:</strong>
                 {{ calculateNights(date.start, date.end) }}
               </p>
+              <p>
+                <strong>Dostępność pokoi:</strong>
+                {{ vacant }}
+              </p>
             </div>
-            <div v-if="activeStep.id === 2" class="m-2">pokoje</div>
+            <div v-if="activeStep.id === 2" class="m-2">
+              <p>
+                <strong>Wybierz pokój:</strong>
+              </p>
+              <div class="d-flex flex-wrap">
+                <div v-for="room in rooms" :key="room.id" class="card m-2">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ room.number }}</h5>
+                    <p class="card-text">
+                      <strong>Standard:</strong>
+                      {{ room.type }}
+                    </p>
+                    <p class="card-text">
+                      <strong>Liczba gości:</strong>
+                      {{ room.maxGuests }}
+                    </p>
+                    <p class="card-text">
+                      <strong>Cena za noc:</strong> {{ room.pricePerNight }} PLN
+                    </p>
+                    <button
+                      class="btn btn-primary me-1"
+                      @click="store.selectRoom(room.id)"
+                    >
+                      Wybierz
+                    </button>
+                    <button
+                      class="btn btn-info"
+                      @click="roomStore.openModal('info', room.id)"
+                    >
+                      <i class="bi bi-info-circle"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="activeStep.id === 3" class="m-2 w-100">
+              <p>
+                <strong>Wybierz gościa</strong>
+              </p>
+              <div class="row align-items-center">
+                <div class="col">
+                  <button
+                    class="btn btn-primary me-2"
+                    aria-label="Edit"
+                    @click="openPanel('add')"
+                  >
+                    Nowy gość
+                  </button>
+                  <input
+                    v-model="searchQuery"
+                    placeholder="Szukaj gościa"
+                    type="input"
+                  />
+                </div>
+
+                <div class="col text-end">
+                  Ilość wyświetlanych:
+                  <select v-model="entriesPerPage" class="selectpicker">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="d-flex flex-wrap">
+                <div v-for="guest in guests" :key="guest.id" class="card m-2">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      {{ guest.name + " " + guest.surname }}
+                    </h5>
+                    <p class="card-text">
+                      <strong>Telefon:</strong>
+                      {{ guest.phone }}
+                    </p>
+                    <button
+                      class="btn btn-primary me-1"
+                      @click="store.selectGuest(guest.id)"
+                    >
+                      Wybierz
+                    </button>
+                    <button
+                      class="btn btn-info"
+                      @click="openPanel('edit', guest.id)"
+                    >
+                      <i class="bi bi-pen"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 || totalPages === 0 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="currentPage--"
+                    >
+                      Poprzednia
+                    </a>
+                  </li>
+                  <li class="page-item align-self-center">
+                    <div class="input-group input-group-sm">
+                      <input
+                        v-model.number="currentPage"
+                        type="number"
+                        class="form-control text-center"
+                        min="1"
+                        :max="totalPages"
+                      />
+                      <span class="input-group-text">/ {{ totalPages }}</span>
+                    </div>
+                  </li>
+                  <li
+                    class="page-item"
+                    :class="{
+                      disabled: currentPage === totalPages || totalPages === 0,
+                    }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="currentPage++"
+                    >
+                      Następna
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
 
@@ -99,6 +237,10 @@
 </template>
 
 <script lang="ts" setup>
+import { format } from "date-fns";
+const formatDate = (date: Date) => {
+  return format(date, "yyyy-MM-dd");
+};
 
 const calculateNights = (start: Date, end: Date) => {
   const diffTime = Math.abs(end.getTime() - start.getTime());
@@ -107,8 +249,13 @@ const calculateNights = (start: Date, end: Date) => {
 };
 
 const store = useMyCheckinoutStore();
+const roomStore = useMyRoomStore();
+const guestStore = useMyGuestStore();
+const modalStore = useMyModalStore();
+const slideoutStore = useMySlideoutStore();
 
-const rooms = useMyRoomStore();
+const { openPanel } = useMySlideoutStore();
+const totalPages = computed(() => guestStore.totalPages);
 
 const currentStep = computed(() => store.currentStep);
 const steps = computed(() => store.steps);
@@ -127,6 +274,10 @@ import { useScreens } from "vue-screen-utils";
 
 const dateStart = computed(() => store.dateStart);
 const dateEnd = computed(() => store.dateEnd);
+const vacant = computed(() => roomStore.availableVacant);
+const rooms = computed(() => roomStore.availableRoom);
+
+const guests = computed(() => guestStore.guests);
 
 const date = ref({
   start: new Date(),
@@ -135,6 +286,18 @@ const date = ref({
     date.setDate(date.getDate() + 1);
     return date;
   })(),
+});
+
+const entriesPerPage = ref(10);
+const currentPage = ref(1);
+const searchQuery = ref("");
+
+onMounted(async () => {
+  await guestStore.fetchGuests(
+    entriesPerPage.value,
+    currentPage.value,
+    searchQuery.value,
+  );
 });
 
 onMounted(async () => {
@@ -146,11 +309,50 @@ watch(date, async () => {
 });
 
 onMounted(async () => {
-  await rooms.fetchAvailableRooms(date.value.start, date.value.end);
+  await roomStore.fetchAvailableRooms(
+    formatDate(date.value.start),
+    formatDate(date.value.end),
+  );
 });
 
 watch(dateStart, async () => {
-  await rooms.fetchAvailableRooms(date.value.start, date.value.end);
+  await roomStore.fetchAvailableRooms(
+    formatDate(date.value.start),
+    formatDate(date.value.end),
+  );
+});
+
+watch(
+  () => modalStore.isModalOpen,
+  async (newVal, oldVal) => {
+    if (!newVal && oldVal) {
+      await guestStore.fetchGuests(
+        entriesPerPage.value,
+        currentPage.value,
+        searchQuery.value,
+      );
+    }
+  },
+);
+watch(
+  () => slideoutStore.isPanelOpen,
+  async (newVal, oldVal) => {
+    if (!newVal && oldVal) {
+      await guestStore.fetchGuests(
+        entriesPerPage.value,
+        currentPage.value,
+        searchQuery.value,
+      );
+    }
+  },
+);
+
+watch([entriesPerPage, currentPage, searchQuery], async () => {
+  await guestStore.fetchGuests(
+    entriesPerPage.value,
+    currentPage.value,
+    searchQuery.value,
+  );
 });
 
 const attrs = ref([
@@ -241,6 +443,10 @@ watch(dateStart, async () => {
 .disabled {
   pointer-events: none;
   opacity: 0.6;
+}
+
+.card {
+  width: 18rem;
 }
 @media (max-width: 767px) {
   .material-icons-sharp {

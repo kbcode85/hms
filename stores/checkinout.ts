@@ -9,6 +9,8 @@ export const useMyCheckinoutStore = defineStore({
     isStepper: false,
     dateStart: new Date(),
     dateEnd: new Date(),
+    room: null as Number | null,
+    guest: null as Number | null,
     steps: [
       {
         id: 1,
@@ -37,6 +39,20 @@ export const useMyCheckinoutStore = defineStore({
     ],
   }),
   actions: {
+    selectRoom(roomId: number) {
+      this.room = roomId;
+      if (this.room !== null) {
+        this.checkStepCompleted(2);
+        console.log("selectRoom", this.room);
+      }
+    },
+    selectGuest(guestId: number) {
+      this.guest = guestId;
+      if (this.guest !== null) {
+        this.checkStepCompleted(3);
+        console.log("selectGuest", this.guest);
+      }
+    },
     setDate(dateStart: Date, dateEnd: Date) {
       this.dateStart = dateStart;
       this.dateEnd = dateEnd;
@@ -81,17 +97,19 @@ export const useMyCheckinoutStore = defineStore({
         }
       }
       if (stepId === 2) {
-        console.log("checkStepCompleded 2");
-        const step = this.steps.find((step) => step.id === stepId);
-        if (step) {
-          step.completed = true;
+        if (this.room !== null) {
+          const step = this.steps.find((step) => step.id === stepId);
+          if (step) {
+            step.completed = true;
+          }
         }
       }
       if (stepId === 3) {
-        console.log("checkStepCompleded 3");
-        const step = this.steps.find((step) => step.id === stepId);
-        if (step) {
-          step.completed = true;
+        if (this.guest !== null) {
+          const step = this.steps.find((step) => step.id === stepId);
+          if (step) {
+            step.completed = true;
+          }
         }
       }
     },
