@@ -20,51 +20,56 @@
               <div v-if="room">
                 <p class="card-text">
                   <strong>Wyposażenie: </strong>
-                  <span v-if="equipment.hasWifi" class="icon-with-text">
-                    <span class="material-icons-sharp">wifi</span> Wi-Fi
-                  </span>
-                  <span v-if="equipment.hasTV" class="icon-with-text">
-                    <span class="material-icons-sharp">tv</span> TV
-                  </span>
-                  <span v-if="equipment.hasKitchen" class="icon-with-text">
-                    <span class="material-icons-sharp">kitchen</span> Kuchnia
-                  </span>
-                  <span v-if="equipment.hasFridge" class="icon-with-text">
-                    <span class="material-icons-sharp">kitchen</span> Lodówka
-                  </span>
-                  <span v-if="equipment.hasBalcony" class="icon-with-text">
-                    <span class="material-icons-sharp">deck</span> Balkon
-                  </span>
-                  <span
-                    v-if="equipment.hasAirConditioning"
-                    class="icon-with-text"
-                  >
-                    <span class="material-icons-sharp">ac_unit</span>
-                    Klimatyzacja
-                  </span>
-                  <span v-if="equipment.hasWardrobe" class="icon-with-text">
-                    <span class="material-icons-sharp">checkroom</span> Szafa
-                  </span>
-                  <span v-if="equipment.hasHairDryer" class="icon-with-text">
-                    <span class="material-icons-sharp">dry</span> Suszarka
-                  </span>
-                  <span
-                    v-if="equipment.hasCoffeeAndTeaSet"
-                    class="icon-with-text"
-                  >
-                    <span class="material-icons-sharp">coffee_maker</span>
-                    Zestaw do kawy/herbaty
-                  </span>
-                  <span v-if="equipment.hasCosmetics" class="icon-with-text">
-                    <span class="material-icons-sharp">spa</span> Kosmetyki
-                  </span>
-                  <span v-if="equipment.hasTowels" class="icon-with-text">
-                    <span class="material-icons-sharp">clean_hands</span>
-                    Ręczniki
+                  <span class="m-1">
+                    <span v-if="equipment.hasWifi" class="icon-with-text">
+                      <span class="material-icons-sharp">wifi</span> Wi-Fi
+                    </span>
+                    <span v-if="equipment.hasTV" class="icon-with-text">
+                      <span class="material-icons-sharp">tv</span> TV
+                    </span>
+                    <span v-if="equipment.hasKitchen" class="icon-with-text">
+                      <span class="material-icons-sharp">kitchen</span> Kuchnia
+                    </span>
+                    <span v-if="equipment.hasFridge" class="icon-with-text">
+                      <span class="material-icons-sharp">kitchen</span> Lodówka
+                    </span>
+                    <span v-if="equipment.hasBalcony" class="icon-with-text">
+                      <span class="material-icons-sharp">deck</span> Balkon
+                    </span>
+                    <span
+                      v-if="equipment.hasAirConditioning"
+                      class="icon-with-text"
+                    >
+                      <span class="material-icons-sharp">ac_unit</span>
+                      Klimatyzacja
+                    </span>
+                    <span v-if="equipment.hasWardrobe" class="icon-with-text">
+                      <span class="material-icons-sharp">checkroom</span> Szafa
+                    </span>
+                    <span v-if="equipment.hasHairDryer" class="icon-with-text">
+                      <span class="material-icons-sharp">dry</span> Suszarka
+                    </span>
+                    <span
+                      v-if="equipment.hasCoffeeAndTeaSet"
+                      class="icon-with-text"
+                    >
+                      <span class="material-icons-sharp">coffee_maker</span>
+                      Zestaw do kawy/herbaty
+                    </span>
+                    <span v-if="equipment.hasCosmetics" class="icon-with-text">
+                      <span class="material-icons-sharp">spa</span> Kosmetyki
+                    </span>
+                    <span v-if="equipment.hasTowels" class="icon-with-text">
+                      <span class="material-icons-sharp">clean_hands</span>
+                      Ręczniki
+                    </span>
                   </span>
                 </p>
-                <p class="card-text d-flex flex-column">
-                  <strong>Typ łazienki:</strong>
+                <p
+                  v-if="equipment.hasBathroom"
+                  class="card-text d-flex flex-column"
+                >
+                  <strong>Łazienka: </strong>
                   <span
                     v-if="equipment.bathroomType === 'SHOWER'"
                     class="icon-with-text"
