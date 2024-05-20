@@ -1,5 +1,12 @@
 import { defineStore } from "pinia";
 
+type Addition = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
 export const useMyCheckinoutStore = defineStore({
   id: "myCheckinoutStore",
   state: () => ({
@@ -11,6 +18,8 @@ export const useMyCheckinoutStore = defineStore({
     dateEnd: new Date(),
     room: null as Number | null,
     guest: null as Number | null,
+    price: null as Number | null,
+    additions: [] as Addition[],
     steps: [
       {
         id: 1,
@@ -32,6 +41,12 @@ export const useMyCheckinoutStore = defineStore({
       },
       {
         id: 4,
+        title: "Dodatki",
+        icon: "note_add",
+        completed: false,
+      },
+      {
+        id: 5,
         title: "Podsumowanie",
         icon: "receipt",
         completed: false,
@@ -68,6 +83,12 @@ export const useMyCheckinoutStore = defineStore({
     nextStep() {
       if (this.currentStep < this.steps.length) {
         this.currentStep++;
+      }
+      if (this.currentStep === 4) {
+        this.checkStepCompleted(4);
+      }
+      if (this.currentStep === 5) {
+        this.checkStepCompleted(5);
       }
     },
     setCurrentStep(stepId: number) {
@@ -112,6 +133,50 @@ export const useMyCheckinoutStore = defineStore({
           }
         }
       }
+      if (stepId === 4) {
+        if (this.additions !== null) {
+          const step = this.steps.find((step) => step.id === stepId);
+          if (step) {
+            step.completed = true;
+          }
+        }
+      }
+      if (stepId === 5) {
+        if (this.guest !== null) {
+          const step = this.steps.find((step) => step.id === stepId);
+          if (step) {
+            step.completed = true;
+          }
+        }
+      }
+    },
+    async getAddition() {
+      try {
+        const response = await $fetch(`/api/booking/addition`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response) {
+          this.additions = response;
+        }
+      } catch (error) {
+        console.error("Failed to fetch additions:", error);
+      }
+    },
+    updateAddition(additionId: number, quantity: number) {
+      const addition = this.additions.find(
+        (addition) => addition.id === additionId,
+      );
+      if (addition) {
+        addition.quantity = quantity;
+      }
+    },
+    addCheckin() {
+      console.log("addCheckin");
     },
   },
 });

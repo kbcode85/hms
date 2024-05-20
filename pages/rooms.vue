@@ -61,7 +61,7 @@
               class="btn btn-primary btn-lg"
               @click="store.openModal('add')"
             >
-              <i class="bi bi-plus-lg"></i>
+              <span>Nowy pokój</span>
             </button>
           </div>
         </div>

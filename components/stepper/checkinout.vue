@@ -83,7 +83,7 @@
                 {{ vacant }}
               </p>
             </div>
-            <div v-if="activeStep.id === 2" class="m-2">
+            <div v-if="activeStep.id === 2" class="m-2 w-100">
               <p>
                 <strong>Wybierz pokój:</strong>
               </p>
@@ -218,6 +218,90 @@
                 </ul>
               </nav>
             </div>
+            <div v-if="activeStep.id === 4" class="m-2 w-100">
+              <p>
+                <strong>Dodatki</strong>
+              </p>
+              <div class="d-flex flex-wrap">
+                <div
+                  v-for="addition in additions"
+                  :key="addition.id"
+                  class="card m-2"
+                >
+                  <div class="card-body">
+                    <h5 class="card-title">{{ addition.name }}</h5>
+                    <p class="card-text">
+                      <strong>Cena:</strong>
+                      {{ addition.price }}
+                    </p>
+                    <div class="form-floating">
+                      <input
+                        id="quantity"
+                        v-model.number="addition.quantity"
+                        class="form-control"
+                        placeholder="Ilość"
+                        type="number"
+                        min="0"
+                        @input="updateAddition(addition.id, addition.quantity)"
+                      />
+                      <label for="quantity">Ilość</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="activeStep.id === 5" class="m-2 w-100">
+              <p class="font-weight-bold">
+                <strong>Podsumowanie</strong>
+              </p>
+              <p>
+                <i class="bi bi-person-fill"></i>
+                <!-- Ikona osoby -->
+                Dane gościa: {{ selectedGuest.name }},
+                {{ selectedGuest?.surname }} <br /><i
+                  class="bi bi-telephone-fill"
+                ></i>
+                <!-- Ikona telefonu -->
+                Telefon: {{ selectedGuest.phone }} <br /><i
+                  class="bi bi-geo-alt-fill"
+                ></i>
+                <!-- Ikona adresu -->
+                Adres: {{ selectedGuest.address }} {{ selectedGuest.city }}
+                {{ selectedGuest.postalCode }} {{ selectedGuest.country }}
+                <br /><i class="bi bi-envelope-fill"></i>
+                <!-- Ikona emaila -->
+                Email: {{ selectedGuest.email }}
+              </p>
+              <p>
+                <i class="bi bi-house-door-fill"></i>
+                <!-- Ikona pokoju -->
+                Pokój: {{ selectedRoom.number }} <br /><i class="bi bi-bed"></i>
+                <!-- Ikona łóżka -->
+                Łóżka: {{ selectedRoom.beds }} <br /><i
+                  class="bi bi-shower"
+                ></i>
+                <!-- Ikona łazienki -->
+                Łazienki: {{ selectedRoom.bathrooms }}
+              </p>
+              <p>
+                <i class="bi bi-basket-fill"></i>
+                <!-- Ikona dodatków -->
+                Dodatki:
+              </p>
+              <ul class="list-group">
+                <li
+                  v-for="addition in additions"
+                  :key="addition.id"
+                  class="list-group-item"
+                >
+                  <span v-if="addition.quantity > 0">
+                    {{ addition.name }}: {{ addition.quantity }} x
+                    {{ addition.price }} zł =
+                    {{ addition.quantity * addition.price }} zł
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -226,9 +310,9 @@
           <button
             class="btn btn-primary"
             :disabled="!activeStep?.completed"
-            @click="nextStep()"
+            @click="currentStep === 5 ? addCheckin() : nextStep()"
           >
-            Następny
+            {{ currentStep === 5 ? "Dodaj" : "Następny" }}
           </button>
         </div>
       </div>
@@ -279,6 +363,24 @@ const rooms = computed(() => roomStore.availableRoom);
 
 const guests = computed(() => guestStore.guests);
 
+const additions = computed(() => store.additions);
+const updateAddition = (id: number, quantity: number) => {
+  store.updateAddition(id, quantity);
+};
+
+const addCheckin = () => store.addCheckin();
+
+const sroom = computed(() => store.room);
+const sguest = computed(() => store.guest);
+
+
+const selectedGuest = computed(() =>
+  guests.value.find((guest) => guest.id === sguest.value),
+);
+const selectedRoom = computed(() =>
+  rooms.value.find((room) => room.id === sroom.value),
+);
+
 const date = ref({
   start: new Date(),
   end: (() => {
@@ -298,6 +400,10 @@ onMounted(async () => {
     currentPage.value,
     searchQuery.value,
   );
+});
+
+onMounted(async () => {
+  await store.getAddition();
 });
 
 onMounted(async () => {

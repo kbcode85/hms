@@ -13,7 +13,7 @@
           aria-label="Edit"
           @click="openPanel('add')"
         >
-          <span class="material-icons-sharp">add</span>
+          <span>Nowy gość</span>
         </button>
         <input v-model="searchQuery" placeholder="Szukajka" type="input" />
       </div>
