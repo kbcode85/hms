@@ -290,6 +290,18 @@
                     {{ addition.quantity * addition.price }} zł
                   </li>
                 </ul>
+                <p>
+                  <strong>Data przyjazdu:</strong>
+                  {{ formatDate(dateStart) }}
+                </p>
+                <p>
+                  <strong>Data wyjazdu:</strong>
+                  {{ formatDate(dateEnd) }}
+                </p>
+                <p>
+                  <strong>Ilość nocy:</strong>
+                  {{ calculateNights(date.start, date.end) }}
+                </p>
               </div>
             </div>
           </div>
