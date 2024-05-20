@@ -250,57 +250,47 @@
                 </div>
               </div>
             </div>
-            <div v-if="activeStep.id === 5" class="m-2 w-100">
-              <p class="font-weight-bold">
-                <strong>Podsumowanie</strong>
-              </p>
-              <p>
-                <i class="bi bi-person-fill"></i>
-                <!-- Ikona osoby -->
-                Dane gościa: {{ selectedGuest.name }},
-                {{ selectedGuest?.surname }} <br /><i
-                  class="bi bi-telephone-fill"
-                ></i>
-                <!-- Ikona telefonu -->
-                Telefon: {{ selectedGuest.phone }} <br /><i
-                  class="bi bi-geo-alt-fill"
-                ></i>
-                <!-- Ikona adresu -->
-                Adres: {{ selectedGuest.address }} {{ selectedGuest.city }}
-                {{ selectedGuest.postalCode }} {{ selectedGuest.country }}
-                <br /><i class="bi bi-envelope-fill"></i>
-                <!-- Ikona emaila -->
-                Email: {{ selectedGuest.email }}
-              </p>
-              <p>
-                <i class="bi bi-house-door-fill"></i>
-                <!-- Ikona pokoju -->
-                Pokój: {{ selectedRoom.number }} <br /><i class="bi bi-bed"></i>
-                <!-- Ikona łóżka -->
-                Łóżka: {{ selectedRoom.beds }} <br /><i
-                  class="bi bi-shower"
-                ></i>
-                <!-- Ikona łazienki -->
-                Łazienki: {{ selectedRoom.bathrooms }}
-              </p>
-              <p>
-                <i class="bi bi-basket-fill"></i>
-                <!-- Ikona dodatków -->
-                Dodatki:
-              </p>
-              <ul class="list-group">
-                <li
-                  v-for="addition in additions"
-                  :key="addition.id"
-                  class="list-group-item"
-                >
-                  <span v-if="addition.quantity > 0">
+            <div v-if="activeStep.id === 5" class="m-4 w-100">
+              <p class="fs-4 fw-bold mb-3">Podsumowanie</p>
+
+              <div class="mb-4">
+                <p class="fs-5 mb-2">
+                  <i class="bi bi-person-fill"></i>
+                  Dane gościa: {{ selectedGuest.name }},
+                  {{ selectedGuest.surname }} <br />
+                  <i class="bi bi-telephone-fill"></i>
+                  Telefon: {{ selectedGuest.phone }} <br />
+                  <i class="bi bi-geo-alt-fill"></i>
+                  Adres: {{ selectedGuest.address }} {{ selectedGuest.city }}
+                  {{ selectedGuest.postalCode }} {{ selectedGuest.country }}
+                  <br />
+                  <i class="bi bi-envelope-fill"></i>
+                  Email: {{ selectedGuest.email }}
+                </p>
+
+                <p class="fs-5 mb-2">
+                  <i class="bi bi-house-door-fill"></i>
+                  Pokój: {{ selectedRoom.number }} <br />
+                  <i class="bi bi-bed"></i>
+                </p>
+
+                <p class="fs-5 mb-2">
+                  <i class="bi bi-basket-fill"></i>
+                  Dodatki:
+                </p>
+
+                <ul class="list-group">
+                  <li
+                    v-for="addition in additions.filter((a) => a.quantity > 0)"
+                    :key="addition.id"
+                    class="list-group-item fs-5"
+                  >
                     {{ addition.name }}: {{ addition.quantity }} x
                     {{ addition.price }} zł =
                     {{ addition.quantity * addition.price }} zł
-                  </span>
-                </li>
-              </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -372,7 +362,6 @@ const addCheckin = () => store.addCheckin();
 
 const sroom = computed(() => store.room);
 const sguest = computed(() => store.guest);
-
 
 const selectedGuest = computed(() =>
   guests.value.find((guest) => guest.id === sguest.value),
