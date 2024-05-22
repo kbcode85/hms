@@ -84,11 +84,16 @@
               </p>
             </div>
             <div v-if="activeStep.id === 2" class="m-2 w-100">
-              <p>
+              <p class="d-none d-sm-block">
                 <strong>Wybierz pokój:</strong>
               </p>
               <div class="d-flex flex-wrap">
-                <div v-for="room in rooms" :key="room.id" class="card m-2">
+                <div
+                  v-for="room in rooms"
+                  :key="room.id"
+                  :class="{ 'selected-border': room.id === sroom }"
+                  class="card m-2"
+                >
                   <div class="card-body">
                     <h5 class="card-title">{{ room.number }}</h5>
                     <p class="card-text">
@@ -119,13 +124,13 @@
               </div>
             </div>
             <div v-if="activeStep.id === 3" class="m-2 w-100">
-              <p>
+              <p class="d-none d-sm-block">
                 <strong>Wybierz gościa</strong>
               </p>
               <div class="row align-items-center">
-                <div class="col">
+                <div class="col mb-2">
                   <button
-                    class="btn btn-primary me-2"
+                    class="btn btn-primary me-2 mb-2"
                     aria-label="Edit"
                     @click="openPanel('add')"
                   >
@@ -150,7 +155,12 @@
               </div>
 
               <div class="d-flex flex-wrap">
-                <div v-for="guest in guests" :key="guest.id" class="card m-2">
+                <div
+                  v-for="guest in guests"
+                  :key="guest.id"
+                  :class="{ 'selected-border': guest.id === sguest }"
+                  class="card m-2"
+                >
                   <div class="card-body">
                     <h5 class="card-title">
                       {{ guest.name + " " + guest.surname }}
@@ -219,7 +229,7 @@
               </nav>
             </div>
             <div v-if="activeStep.id === 4" class="m-2 w-100">
-              <p>
+              <p class="d-none d-sm-block">
                 <strong>Dodatki</strong>
               </p>
               <div class="d-flex flex-wrap">
@@ -251,35 +261,42 @@
               </div>
             </div>
             <div v-if="activeStep.id === 5" class="m-4 w-100">
-              <p class="fs-4 fw-bold mb-3">Podsumowanie</p>
+              <p class="fs-4 fw-bold mb-3 d-none d-sm-block">Podsumowanie</p>
 
               <div class="mb-4">
-                <p class="fs-5 mb-2">
+                <p class="fs-4 mb-2">
                   <i class="bi bi-person-fill"></i>
-                  Dane gościa: {{ selectedGuest.name }},
-                  {{ selectedGuest.surname }} <br />
+                  Gość: {{ selectedGuest?.name }} {{ selectedGuest?.surname }}
+                  <br />
                   <i class="bi bi-telephone-fill"></i>
-                  Telefon: {{ selectedGuest.phone }} <br />
+                  Telefon: {{ selectedGuest?.phone }} <br />
                   <i class="bi bi-geo-alt-fill"></i>
-                  Adres: {{ selectedGuest.address }} {{ selectedGuest.city }}
-                  {{ selectedGuest.postalCode }} {{ selectedGuest.country }}
+                  Adres: {{ selectedGuest?.address }} {{ selectedGuest?.city }}
+                  {{ selectedGuest?.zip_code }} {{ selectedGuest?.country }}
                   <br />
                   <i class="bi bi-envelope-fill"></i>
-                  Email: {{ selectedGuest.email }}
+                  Email: {{ selectedGuest?.email }}
                 </p>
 
-                <p class="fs-5 mb-2">
+                <p class="fs-4 mb-2">
                   <i class="bi bi-house-door-fill"></i>
-                  Pokój: {{ selectedRoom.number }} <br />
+                  Pokój: {{ selectedRoom?.number }} <br />
                   <i class="bi bi-bed"></i>
                 </p>
 
-                <p class="fs-5 mb-2">
+                <p class="fs-4 mb-2">
                   <i class="bi bi-basket-fill"></i>
                   Dodatki:
+                  {{
+                    additions.reduce(
+                      (acc, curr) => acc + curr.quantity * curr.price,
+                      0,
+                    ) + " zł"
+                  }}
+                  <i class="text-muted"> (Cena za 1 dzień pobytu)</i>
                 </p>
 
-                <ul class="list-group">
+                <ul class="list-group mb-2">
                   <li
                     v-for="addition in additions.filter((a) => a.quantity > 0)"
                     :key="addition.id"
@@ -290,17 +307,33 @@
                     {{ addition.quantity * addition.price }} zł
                   </li>
                 </ul>
-                <p>
-                  <strong>Data przyjazdu:</strong>
+                <p class="fs-4 mb-2">
+                  <i class="bi bi-calendar-check"></i>
+                  Data przyjazdu:
                   {{ formatDate(dateStart) }}
                 </p>
-                <p>
-                  <strong>Data wyjazdu:</strong>
+                <p class="fs-4 mb-2">
+                  <i class="bi bi-calendar-minus"></i>
+                  Data wyjazdu:
                   {{ formatDate(dateEnd) }}
                 </p>
-                <p>
-                  <strong>Ilość nocy:</strong>
+                <p class="fs-4 mb-2">
+                  <i class="bi bi-calendar3"></i>
+                  Ilość nocy:
                   {{ calculateNights(date.start, date.end) }}
+                </p>
+                <p class="fs-2 mb-2">
+                  <strong>Cena za pobyt:</strong>
+                  {{
+                    selectedRoom?.pricePerNight *
+                      calculateNights(date.start, date.end) +
+                    additions.reduce(
+                      (acc, curr) => acc + curr.quantity * curr.price,
+                      0,
+                    ) *
+                      calculateNights(date.start, date.end) +
+                    " zł"
+                  }}
                 </p>
               </div>
             </div>
@@ -558,6 +591,22 @@ watch(dateStart, async () => {
 @media (max-width: 767px) {
   .material-icons-sharp {
     font-size: 18px;
+  }
+}
+.selected-border {
+  border: 2px solid green;
+  animation: border-pulse 2s infinite;
+}
+
+@keyframes border-pulse {
+  0% {
+    border-color: green;
+  }
+  50% {
+    border-color: #00ff00;
+  }
+  100% {
+    border-color: green;
   }
 }
 </style>
