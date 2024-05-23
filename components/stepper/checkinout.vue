@@ -324,16 +324,7 @@
                 </p>
                 <p class="fs-2 mb-2">
                   <strong>Cena za pobyt:</strong>
-                  {{
-                    selectedRoom?.pricePerNight *
-                      calculateNights(date.start, date.end) +
-                    additions.reduce(
-                      (acc, curr) => acc + curr.quantity * curr.price,
-                      0,
-                    ) *
-                      calculateNights(date.start, date.end) +
-                    " zł"
-                  }}
+                  {{ totalPrice + " zł" }}
                 </p>
               </div>
             </div>
@@ -345,7 +336,7 @@
           <button
             class="btn btn-primary"
             :disabled="!activeStep?.completed"
-            @click="currentStep === 5 ? addCheckin() : nextStep()"
+            @click="currentStep === 5 ? addCheckin(totalPrice) : nextStep()"
           >
             {{ currentStep === 5 ? "Dodaj" : "Następny" }}
           </button>
@@ -403,7 +394,15 @@ const updateAddition = (id: number, quantity: number) => {
   store.updateAddition(id, quantity);
 };
 
-const addCheckin = () => store.addCheckin();
+const totalPrice = computed(() => {
+  return (
+    selectedRoom.value?.pricePerNight *
+      calculateNights(date.value.start, date.value.end) +
+    additions.value.reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
+  );
+});
+
+const addCheckin = () => store.addCheckin(totalPrice.value);
 
 const sroom = computed(() => store.room);
 const sguest = computed(() => store.guest);

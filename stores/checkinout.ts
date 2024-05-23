@@ -18,7 +18,6 @@ export const useMyCheckinoutStore = defineStore({
     dateEnd: new Date(),
     room: null as Number | null,
     guest: null as Number | null,
-    price: null as Number | null,
     additions: [] as Addition[],
     steps: [
       {
@@ -152,7 +151,7 @@ export const useMyCheckinoutStore = defineStore({
     },
     async getAddition() {
       try {
-        const response = await $fetch(`/api/booking/addition`, {
+        const response = await $fetch<Addition[]>(`/api/booking/addition`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -175,8 +174,47 @@ export const useMyCheckinoutStore = defineStore({
         addition.quantity = quantity;
       }
     },
-    addCheckin() {
-      console.log("addCheckin");
+    addCheckin(price: number) {
+      try {
+        const response = $fetch("/api/booking/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            startDate: this.dateStart,
+            endDate: this.dateEnd,
+            roomId: this.room,
+            guestId: this.guest,
+            additions: this.additions,
+            price: price,
+            status: "CHECKED_IN",
+            source: "DIRECT",
+          }),
+        });
+        if (response) {
+          push.success("Pomyślnie dodano meldunek");
+          console.log("response", response);
+        }
+      } catch (error) {
+        console.error("Failed to add checkin:", error);
+      }
+
+      this.stepper("close");
+      this.resetValues();
+    },
+    resetValues() {
+      this.currentStep = 1;
+      this.dateStart = new Date();
+      this.dateEnd = new Date();
+      this.room = null;
+      this.guest = null;
+      this.additions = [];
+
+      for (const step of this.steps) {
+        step.completed = false;
+      }
     },
   },
 });
