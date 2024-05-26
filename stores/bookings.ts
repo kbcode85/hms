@@ -1,24 +1,31 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
 interface ResponseType {
-  bookings: []
-  totalPages: number
+  bookings: [];
+  totalPages: number;
 }
 
 export const useMyBookingsStore = defineStore({
-  id: 'myBookingsStore',
-  state: () => ({ 
+  id: "myBookingsStore",
+  state: () => ({
     bookings: [],
     loading: false,
     totalPages: 0,
   }),
   actions: {
-    async fetchBookings(limit: number, page: number, sq: string, startDate: string, endDate: string, status?: string[]) {
+    async fetchBookings(
+      limit: number,
+      page: number,
+      sq: string,
+      startDate: string,
+      endDate: string,
+      status?: string[],
+    ) {
       try {
-        const response = await $fetch<ResponseType>('/api/booking/list', {
-          method: 'GET',
+        const response = await $fetch<ResponseType>("/api/booking/list", {
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             // Authorization: `Bearer ${token}`,
           },
           params: {
@@ -27,20 +34,19 @@ export const useMyBookingsStore = defineStore({
             query: sq,
             startDate: startDate,
             endDate: endDate,
-            status: status?.join(','),
+            status: status?.join(","),
           },
-        })
+        });
 
         if (response) {
-          this.bookings = response.bookings
-          this.totalPages = response.totalPages
+          this.bookings = response.bookings;
+          this.totalPages = response.totalPages;
         }
       } catch (error) {
-        console.error('Failed to fetch bookings:', error)
+        console.error("Failed to fetch bookings:", error);
       } finally {
-        this.loading = false
+        this.loading = false;
       }
-
-    }
-  }
-})
+    },
+  },
+});

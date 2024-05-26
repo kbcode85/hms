@@ -3,25 +3,46 @@ import { usePrisma } from "~/server/utils/prisma";
 type BookingStatus =
   | "PENDING"
   | "CONFIRMED"
-  | "CANCELLED"
+  | "GUARANTEED"
+  | "CANCELED"
   | "CHECKED_IN"
   | "CHECKED_OUT";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
 
-  const {
-    limit,
-    page,
-    query,
-    startDate,
-    endDate,
-    status: statusString,
-  } = getQuery(event);
+  const { limit, page, query, startDate, endDate, status } = getQuery(event);
 
-  const status = statusString
-    .split(",")
-    .map((s) => s.trim()) as BookingStatus[];
+  let statuses: BookingStatus[];
+
+  if (typeof status === "string") {
+    statuses = status.split(",") as BookingStatus[];
+  } else {
+    statuses = [
+      "PENDING",
+      "CONFIRMED",
+      "GUARANTEED",
+      "CANCELED",
+      "CHECKED_IN",
+      "CHECKED_OUT",
+    ];
+  }
+
+  let start: Date;
+  let end: Date;
+
+  if (typeof startDate === "string") {
+    start = new Date(startDate);
+  } else {
+    start = new Date();
+  }
+
+  if (typeof endDate === "string") {
+    end = new Date(endDate);
+  } else {
+    end = new Date();
+    end.setDate(end.getDate() + 7);
+  }
 
   let bookings;
   let totalPages;
@@ -32,19 +53,46 @@ export default defineEventHandler(async (event) => {
       include: {
         guest: true,
         room: true,
+        additions: {
+          include: {
+            addition: true,
+          },
+        },
       },
       where: {
-        OR: [
+        AND: [
           {
             status: {
-              in: status,
+              in: statuses,
+            },
+          },
+          {
+            startDate: {
+              gte: start,
+              lte: end,
             },
           },
         ],
       },
     });
 
-    const totalBookings = await prisma.booking.count({});
+    const totalBookings = await prisma.booking.count({
+      where: {
+        AND: [
+          {
+            status: {
+              in: statuses,
+            },
+          },
+          {
+            startDate: {
+              gte: start,
+              lte: end,
+            },
+          },
+        ],
+      },
+    });
     totalPages = Math.ceil(totalBookings / Number(limit));
 
     if (bookings.length === 0) {

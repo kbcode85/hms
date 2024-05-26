@@ -89,8 +89,8 @@ model Booking {
   roomId       Int
   guest        Guest    @relation(fields: [guestId], references: [id])
   guestId      Int
-  startDate    DateTime
-  endDate      DateTime
+  startDate    DateTime @db.Date
+  endDate      DateTime @db.Date
   price        Float
   status       BookingStatus
   source       BookingSource

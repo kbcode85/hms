@@ -12,7 +12,7 @@
       </div> -->
     </div>
     <div class="row align-items-center">
-      <div class="col">
+      <div class="col d-flex align-items-center me-2">
         <button
           class="btn btn-primary me-2"
           aria-label="Edit"
@@ -21,11 +21,17 @@
           <span class="material-icons-sharp">add</span>
         </button>
         <input placeholder="Szukajka" type="input" />
+        <div class="m-2">
+          <label>Zakres dat:</label>
+          <input id="start" v-model="startDate" type="date" name="trip-start" />
+          <label> - </label>
+          <input id="end" v-model="endDate" type="date" name="trip-end" />
+        </div>
       </div>
 
       <div class="col text-end">
         Pokaż wpisy:
-        <select class="selectpicker">
+        <select v-model="entriesPerPage" class="selectpicker">
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
@@ -40,24 +46,26 @@
           <tr class="align-middle">
             <th scope="col">Numer</th>
             <th scope="col">Osoba przebywająca</th>
-            <th scope="col">Ile osób</th>
             <th scope="col">Pokój</th>
             <th scope="col">Data przyjazdu</th>
             <th scope="col">Data wyjazdu</th>
             <th scope="col">Dodatki</th>
-            <th scope="col">DND</th>
-            <th scope="col">Serwis</th>
             <th scope="col">Akcje</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="align-middle">
-            <td>53453</td>
-            <td>Kacper Baranowski</td>
-            <td>2</td>
-            <td>101</td>
-            <td>2024-05-01</td>
-            <td>2024-05-03</td>
+        <tbody class="align-middle">
+          <tr
+            v-for="(checkinout, index) in checkinouts"
+            :key="checkinout.id"
+            :class="{ 'bg-light': index % 2 === 0 }"
+          >
+            <td>{{ checkinout.roomId }}</td>
+            <td>
+              {{ checkinout.guest.name + " " + checkinout.guest.surname }}
+            </td>
+            <td>{{ checkinout.room.number }}</td>
+            <td>{{ formatDate(checkinout.startDate) }}</td>
+            <td>{{ formatDate(checkinout.endDate) }}</td>
             <td>
               <span class="material-icons-sharp text-success">
                 local_parking
@@ -67,16 +75,6 @@
               </span>
             </td>
             <td>
-              <span class="material-icons-sharp text-muted">
-                do_not_disturb
-              </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-success">
-                cleaning_services
-              </span>
-            </td>
-            <td>
               <div class="d-flex justify-content-between align-items-center">
                 <button class="btn btn-success p-1" aria-label="Edit">
                   <span class="material-icons-sharp">logout</span>
@@ -85,128 +83,6 @@
                   <span class="material-icons-sharp">change_circle</span>
                 </button>
                 <button class="btn btn-primary p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">edit</span>
-                </button>
-                <button class="btn btn-danger p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">delete</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr class="align-middle">
-            <td>54323</td>
-            <td>Kacper Baranowski</td>
-            <td>2</td>
-            <td>103</td>
-            <td>2024-05-03</td>
-            <td>2024-05-05</td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                local_parking
-              </span>
-              <span class="material-icons-sharp text-success">
-                restaurant
-              </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-danger">
-                do_not_disturb
-              </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                cleaning_services
-              </span>
-            </td>
-            <td>
-              <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-success p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">logout</span>
-                </button>
-                <button class="btn btn-warning p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">change_circle</span>
-                </button>
-                <button class="btn btn-primary p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">edit</span>
-                </button>
-                <button class="btn btn-danger p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">delete</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr class="align-middle">
-            <td>54543</td>
-            <td>Jan Kowalski</td>
-            <td>2</td>
-            <td>104</td>
-            <td>2024-05-03</td>
-            <td>2024-05-05</td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                local_parking
-              </span>
-              <span class="material-icons-sharp text-muted"> restaurant </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                do_not_disturb
-              </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                cleaning_services
-              </span>
-            </td>
-            <td>
-              <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-success p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">logout</span>
-                </button>
-                <button class="btn btn-warning p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">change_circle</span>
-                </button>
-                <button class="btn btn-primary p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">edit</span>
-                </button>
-                <button class="btn btn-danger p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">delete</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr class="align-middle">
-            <td class="text-success">42341</td>
-            <td class="text-success">Jan Kowalski</td>
-            <td class="text-success">2</td>
-            <td class="text-success">102</td>
-            <td class="text-success">2024-05-02</td>
-            <td class="text-success">2024-05-04</td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                local_parking
-              </span>
-              <span class="material-icons-sharp text-muted"> restaurant </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                do_not_disturb
-              </span>
-            </td>
-            <td>
-              <span class="material-icons-sharp text-muted">
-                cleaning_services
-              </span>
-            </td>
-            <td>
-              <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-success p-1 disabled" aria-label="Edit">
-                  <span class="material-icons-sharp">logout</span>
-                </button>
-                <button class="btn btn-warning p-1 disabled" aria-label="Edit">
-                  <span class="material-icons-sharp">change_circle</span>
-                </button>
-                <button class="btn btn-primary p-1 disabled" aria-label="Edit">
                   <span class="material-icons-sharp">edit</span>
                 </button>
                 <button class="btn btn-danger p-1" aria-label="Edit">
@@ -218,6 +94,40 @@
         </tbody>
       </table>
     </div>
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li
+          class="page-item"
+          :class="{ disabled: currentPage === 1 || totalPages === 0 }"
+        >
+          <a class="page-link" href="#" @click.prevent="currentPage--">
+            Poprzednia
+          </a>
+        </li>
+        <li class="page-item align-self-center">
+          <div class="input-group input-group-sm">
+            <input
+              v-model.number="currentPage"
+              type="number"
+              class="form-control text-center"
+              min="1"
+              :max="totalPages"
+            />
+            <span class="input-group-text">/ {{ totalPages }}</span>
+          </div>
+        </li>
+        <li
+          class="page-item"
+          :class="{
+            disabled: currentPage === totalPages || totalPages === 0,
+          }"
+        >
+          <a class="page-link" href="#" @click.prevent="currentPage++">
+            Następna
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
   <StepperCheckinout v-else />
 </template>
@@ -228,10 +138,55 @@ definePageMeta({
 });
 
 const store = useMyCheckinoutStore();
-
 const { stepper } = store;
-
 const isStepper = computed(() => store.$state.isStepper);
+
+const checkinouts = computed(() => store.checkinout);
+
+const entriesPerPage = ref(10);
+const currentPage = ref(1);
+const searchQuery = ref("");
+const totalPages = computed(() => store.totalPages);
+
+function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  let month = "" + (d.getMonth() + 1);
+  let day = "" + d.getDate();
+  const year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
+
+const startDate = ref(formatDate(new Date()));
+const endDate = ref(formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)));
+
+onMounted(async () => {
+  await store.fetchCheckinout(
+    entriesPerPage.value,
+    currentPage.value,
+    searchQuery.value,
+    startDate.value,
+    endDate.value,
+    "CHECKED_IN",
+  );
+});
+
+watch(
+  [entriesPerPage, currentPage, searchQuery, startDate, endDate],
+  async () => {
+    await store.fetchCheckinout(
+      entriesPerPage.value,
+      currentPage.value,
+      searchQuery.value,
+      startDate.value,
+      endDate.value,
+      "CHECKED_IN",
+    );
+  },
+);
 </script>
 
 <style lang="scss" scoped>

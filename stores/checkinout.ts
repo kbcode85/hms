@@ -7,6 +7,55 @@ type Addition = {
   quantity: number;
 };
 
+type Checkinout = {
+  id: number;
+  startDate: Date;
+  endDate: Date;
+  roomId: number;
+  guestId: number;
+  status: string;
+  source: string;
+  price: number;
+  guest: {
+    id: number;
+    name: string;
+    surname: string;
+    phone: string;
+    email: string;
+    address: string;
+    city: string;
+    country: string;
+    zip_code: string;
+    description: null;
+    nip: null;
+  };
+  room: {
+    id: number;
+    number: string;
+    type: string;
+    maxGuests: number;
+    pricePerNight: number;
+    status: string;
+    equipmentId: number;
+  };
+  additions: {
+    id: number;
+    bookingId: number;
+    additionId: number;
+    quantity: number;
+    addition: {
+      id: number;
+      name: string;
+      price: number;
+    };
+  };
+};
+
+type ResponseType = {
+  bookings: Checkinout[];
+  totalPages: number;
+};
+
 export const useMyCheckinoutStore = defineStore({
   id: "myCheckinoutStore",
   state: () => ({
@@ -19,6 +68,8 @@ export const useMyCheckinoutStore = defineStore({
     room: null as Number | null,
     guest: null as Number | null,
     additions: [] as Addition[],
+    checkinout: [] as Checkinout[],
+    totalPages: 0,
     steps: [
       {
         id: 1,
@@ -73,9 +124,11 @@ export const useMyCheckinoutStore = defineStore({
     },
     stepper(action: string) {
       if (action === "open") {
+        this.resetValues();
         this.isStepper = true;
       }
       if (action === "close") {
+        this.resetValues();
         this.isStepper = false;
       }
     },
@@ -163,7 +216,7 @@ export const useMyCheckinoutStore = defineStore({
           this.additions = response;
         }
       } catch (error) {
-        console.error("Failed to fetch additions:", error);
+        push.error("Błąd podczas dodawania meldunku");
       }
     },
     updateAddition(additionId: number, quantity: number) {
@@ -174,9 +227,9 @@ export const useMyCheckinoutStore = defineStore({
         addition.quantity = quantity;
       }
     },
-    addCheckin(price: number) {
+    async addCheckin(price: number) {
       try {
-        const response = $fetch("/api/booking/create", {
+        const response = await $fetch("/api/booking/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -193,16 +246,15 @@ export const useMyCheckinoutStore = defineStore({
             source: "DIRECT",
           }),
         });
+
         if (response) {
           push.success("Pomyślnie dodano meldunek");
-          console.log("response", response);
+          this.stepper("close");
+          this.resetValues();
         }
       } catch (error) {
-        console.error("Failed to add checkin:", error);
+        push.error("Błąd podczas dodawania meldunku");
       }
-
-      this.stepper("close");
-      this.resetValues();
     },
     resetValues() {
       this.currentStep = 1;
@@ -214,6 +266,38 @@ export const useMyCheckinoutStore = defineStore({
 
       for (const step of this.steps) {
         step.completed = false;
+      }
+    },
+    async fetchCheckinout(
+      limit: number,
+      page: number,
+      query: string,
+      startDate: string,
+      endDate: string,
+      status: string,
+    ) {
+      try {
+        const response = await $fetch<ResponseType>("/api/booking/list", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          params: {
+            limit: limit,
+            page: page,
+            query: query,
+            startDate: startDate,
+            endDate: endDate,
+            status: status,
+          },
+        });
+        if (response) {
+          this.checkinout = response.bookings;
+          this.totalPages = response.totalPages;
+        }
+      } catch (error) {
+        push.error("Błąd podczas pobierania meldunków");
       }
     },
   },
