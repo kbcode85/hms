@@ -137,11 +137,11 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-const store = useMyCheckinoutStore();
+const store = useMyBookingsStore();
 const { stepper } = store;
 const isStepper = computed(() => store.$state.isStepper);
 
-const checkinouts = computed(() => store.checkinout);
+const checkinouts = computed(() => store.bookings);
 
 const entriesPerPage = ref(10);
 const currentPage = ref(1);
@@ -164,7 +164,7 @@ const startDate = ref(formatDate(new Date()));
 const endDate = ref(formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)));
 
 onMounted(async () => {
-  await store.fetchCheckinout(
+  await store.fetchBookings(
     entriesPerPage.value,
     currentPage.value,
     searchQuery.value,
@@ -177,7 +177,7 @@ onMounted(async () => {
 watch(
   [entriesPerPage, currentPage, searchQuery, startDate, endDate],
   async () => {
-    await store.fetchCheckinout(
+    await store.fetchBookings(
       entriesPerPage.value,
       currentPage.value,
       searchQuery.value,

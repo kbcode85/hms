@@ -28,6 +28,11 @@ export default defineEventHandler(async (event) => {
                     gte: new Date(dateStart),
                   },
                 },
+                {
+                  status: {
+                    in: ["CHECKED_IN", "GUARANTEED", "PENDING", "CONFIRMED"],
+                  },
+                },
               ],
             },
           },

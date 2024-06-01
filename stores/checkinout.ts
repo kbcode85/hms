@@ -268,37 +268,5 @@ export const useMyCheckinoutStore = defineStore({
         step.completed = false;
       }
     },
-    async fetchCheckinout(
-      limit: number,
-      page: number,
-      query: string,
-      startDate: string,
-      endDate: string,
-      status: string,
-    ) {
-      try {
-        const response = await $fetch<ResponseType>("/api/booking/list", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${token}`,
-          },
-          params: {
-            limit: limit,
-            page: page,
-            query: query,
-            startDate: startDate,
-            endDate: endDate,
-            status: status,
-          },
-        });
-        if (response) {
-          this.checkinout = response.bookings;
-          this.totalPages = response.totalPages;
-        }
-      } catch (error) {
-        push.error("Błąd podczas pobierania meldunków");
-      }
-    },
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isStepper">
     <div class="row mb-2 mb-xl-3">
       <div class="col-auto d-none d-sm-block">
         <h3>Rezerwacje</h3>
@@ -16,7 +16,7 @@
         <button
           class="btn btn-primary me-2"
           aria-label="Edit"
-          @click="openPanel('add')"
+          @click="stepper('open')"
         >
           <span class="material-icons-sharp">add</span>
         </button>
@@ -41,144 +41,54 @@
             <th scope="col">Numer</th>
             <th scope="col">OTA</th>
             <th scope="col">Osoba rezerwująca</th>
-            <th scope="col">Ile osób</th>
             <th scope="col">Pokój</th>
             <th scope="col">Data przyjazdu</th>
             <th scope="col">Data wyjazdu</th>
             <th scope="col">Status</th>
             <th scope="col">Źródło</th>
             <th scope="col">Kwota</th>
+            <th scope="col">Dodatki</th>
             <th scope="col">Akcje</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="align-middle">
-            <td>3242</td>
-            <td>-</td>
-            <td>Kacper Baranowski</td>
-            <td>2</td>
-            <td>101</td>
-            <td>2024-05-01</td>
-            <td>2024-05-03</td>
-            <td>Gwarantowana</td>
-            <td>Walk-in</td>
-            <td>1235 PLN</td>
+        <tbody class="align-middle">
+          <tr
+            v-for="(booking, index) in bookings"
+            :key="booking.id"
+            :class="{ 'bg-light': index % 2 === 0 }"
+          >
+            <td>{{ booking.id }}</td>
+            <td v-if="booking.ota">{{ booking.ota }}</td>
+            <td v-else>-</td>
             <td>
-              <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
-                  <span class="material-icons-sharp">login</span>
-                </button>
-                <button
-                  class="btn btn-primary p-1"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
-                  <span class="material-icons-sharp">edit</span>
-                </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Delete"
-                  @click="deleteBooking(booking.id)"
-                >
-                  <span class="material-icons-sharp">cancel</span>
-                </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="deleteBooking(booking.id)"
-                >
-                  <span class="material-icons-sharp">delete</span>
-                </button>
-              </div>
+              {{ booking.guest.name + " " + booking.guest.surname }}
             </td>
-          </tr>
-          <tr class="align-middle">
-            <td class="text-success">3453</td>
-            <td class="text-success">-</td>
-            <td class="text-success">Jan Kowalski</td>
-            <td class="text-success">2</td>
-            <td class="text-success">102</td>
-            <td class="text-success">2024-05-02</td>
-            <td class="text-success">2024-05-04</td>
-            <td class="text-success">Gwarantowana</td>
-            <td class="text-success">Email</td>
-            <td class="text-success">2354 PLN</td>
+            <td>{{ booking.room.number }}</td>
+            <td>{{ formatDate(booking.startDate) }}</td>
+            <td>{{ formatDate(booking.endDate) }}</td>
+            <td>{{ booking.status }}</td>
+            <td>{{ booking.source }}</td>
+            <td>{{ booking.price + " PLN" }}</td>
             <td>
-              <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
-                  <span class="material-icons-sharp">login</span>
-                </button>
-                <button
-                  class="btn btn-primary p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
-                  <span class="material-icons-sharp">edit</span>
-                </button>
-                <button
-                  class="btn btn-danger p-1 disabled"
-                  aria-label="Delete"
-                  @click="deleteBooking(booking.id)"
-                >
-                  <span class="material-icons-sharp">cancel</span>
-                </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="deleteBooking(booking.id)"
-                >
-                  <span class="material-icons-sharp">delete</span>
-                </button>
-              </div>
+              <span class="material-icons-sharp text-success">
+                local_parking
+              </span>
+              <span class="material-icons-sharp text-success">
+                restaurant
+              </span>
             </td>
-          </tr>
-          <tr class="align-middle">
-            <td class="text-danger">3533</td>
-            <td class="text-danger">-</td>
-            <td class="text-danger">Jan Kowalski</td>
-            <td class="text-danger">3</td>
-            <td class="text-danger">103</td>
-            <td class="text-danger">2024-06-01</td>
-            <td class="text-danger">2024-06-03</td>
-            <td class="text-danger">Gwarantowana</td>
-            <td class="text-danger">Telefon</td>
-            <td class="text-danger">2354 PLN</td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
-                <button
-                  class="btn btn-success p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
-                  <span class="material-icons-sharp">login</span>
+                <button class="btn btn-success p-1" aria-label="Edit">
+                  <span class="material-icons-sharp">logout</span>
                 </button>
-                <button
-                  class="btn btn-primary p-1 disabled"
-                  aria-label="Edit"
-                  @click="openPanel('edit', booking)"
-                >
+                <button class="btn btn-warning p-1" aria-label="Edit">
+                  <span class="material-icons-sharp">change_circle</span>
+                </button>
+                <button class="btn btn-primary p-1" aria-label="Edit">
                   <span class="material-icons-sharp">edit</span>
                 </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Delete"
-                  @click="deleteBooking(booking.id)"
-                >
-                  <span class="material-icons-sharp">restore</span>
-                </button>
-                <button
-                  class="btn btn-danger p-1"
-                  aria-label="Edit"
-                  @click="deleteBooking(booking.id)"
-                >
+                <button class="btn btn-danger p-1" aria-label="Edit">
                   <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
@@ -187,13 +97,99 @@
         </tbody>
       </table>
     </div>
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li
+          class="page-item"
+          :class="{ disabled: currentPage === 1 || totalPages === 0 }"
+        >
+          <a class="page-link" href="#" @click.prevent="currentPage--">
+            Poprzednia
+          </a>
+        </li>
+        <li class="page-item align-self-center">
+          <div class="input-group input-group-sm">
+            <input
+              v-model.number="currentPage"
+              type="number"
+              class="form-control text-center"
+              min="1"
+              :max="totalPages"
+            />
+            <span class="input-group-text">/ {{ totalPages }}</span>
+          </div>
+        </li>
+        <li
+          class="page-item"
+          :class="{
+            disabled: currentPage === totalPages || totalPages === 0,
+          }"
+        >
+          <a class="page-link" href="#" @click.prevent="currentPage++">
+            Następna
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
+  <StepperBookings v-else />
 </template>
 
 <script lang="ts" setup>
 definePageMeta({
   middleware: ["auth"],
 });
+
+const store = useMyBookingsStore();
+const { stepper } = store;
+const isStepper = computed(() => store.$state.isStepper);
+
+const bookings = computed(() => store.bookings);
+
+const entriesPerPage = ref(10);
+const currentPage = ref(1);
+const searchQuery = ref("");
+const totalPages = computed(() => store.totalPages);
+
+function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  let month = "" + (d.getMonth() + 1);
+  let day = "" + d.getDate();
+  const year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
+
+const startDate = ref(formatDate(new Date()));
+const endDate = ref(formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)));
+
+onMounted(async () => {
+  await store.fetchBookings(
+    entriesPerPage.value,
+    currentPage.value,
+    searchQuery.value,
+    startDate.value,
+    endDate.value,
+    "PENDING,CONFIRMED,GUARANTEED,CANCELED",
+  );
+});
+
+watch(
+  [entriesPerPage, currentPage, searchQuery, startDate, endDate],
+  async () => {
+    await store.fetchBookings(
+      entriesPerPage.value,
+      currentPage.value,
+      searchQuery.value,
+      startDate.value,
+      endDate.value,
+      "PENDING,CONFIRMED,GUARANTEED,CANCELED",
+    );
+  },
+);
 </script>
 
 <style lang="scss" scoped>
