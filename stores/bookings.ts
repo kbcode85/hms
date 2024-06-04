@@ -54,6 +54,7 @@ type Booking = {
 interface ResponseType {
   bookings: [];
   totalPages: number;
+  status: number;
 }
 
 export const useMyBookingsStore = defineStore({
@@ -108,12 +109,13 @@ export const useMyBookingsStore = defineStore({
     async fetchBookings(
       limit: number,
       page: number,
-      sq: string,
-      startDate: string,
-      endDate: string,
+      sq?: string,
       status?: string[],
+      startDate?: string,
+      endDate?: string,
     ) {
       try {
+        this.bookings = [];
         const response = await $fetch<ResponseType>("/api/booking/list", {
           method: "GET",
           headers: {
@@ -136,9 +138,13 @@ export const useMyBookingsStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error("Błąd podczas pobierania meldunków");
+        push.error("Błąd podczas pobierania danych");
       } finally {
         this.loading = false;
+
+        if (this.bookings.length === 0) {
+          push.info("Brak wyników");
+        }
       }
     },
     selectRoom(roomId: number) {
@@ -273,8 +279,10 @@ export const useMyBookingsStore = defineStore({
             // Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            startDate: this.dateStart,
-            endDate: this.dateEnd,
+            startDate: new Date(
+              this.dateStart.setDate(this.dateStart.getDate() + 1),
+            ),
+            endDate: new Date(this.dateEnd.setDate(this.dateEnd.getDate() + 1)),
             roomId: this.room,
             guestId: this.guest,
             additions: this.additions,
@@ -294,6 +302,49 @@ export const useMyBookingsStore = defineStore({
       }
     },
     resetValues() {
+      this.currentStep = 1;
+      this.dateStart = new Date();
+      this.dateEnd = new Date();
+      this.room = null;
+      this.guest = null;
+      this.additions = [];
+
+      for (const step of this.steps) {
+        step.completed = false;
+      }
+    },
+    async addBooking(price: number) {
+      try {
+        const response = await $fetch("/api/booking/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            startDate: new Date(
+              this.dateStart.setDate(this.dateStart.getDate() + 1),
+            ),
+            endDate: new Date(this.dateEnd.setDate(this.dateEnd.getDate() + 1)),
+            roomId: this.room,
+            guestId: this.guest,
+            additions: this.additions,
+            price: price,
+            status: "GUARANTEED",
+            source: "DIRECT",
+          }),
+        });
+
+        if (response) {
+          push.success("Pomyślnie dodano rezerwację");
+          this.stepper("close");
+          this.resetValues();
+        }
+      } catch (error) {
+        push.error("Błąd podczas dodawania rezerwacji");
+      }
+    },
+    resetValues2() {
       this.currentStep = 1;
       this.dateStart = new Date();
       this.dateEnd = new Date();

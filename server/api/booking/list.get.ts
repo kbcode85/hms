@@ -10,7 +10,6 @@ type BookingStatus =
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
-
   const { limit, page, query, startDate, endDate, status } = getQuery(event);
 
   let statuses: BookingStatus[];
@@ -28,26 +27,36 @@ export default defineEventHandler(async (event) => {
     ];
   }
 
-  let start: Date;
-  let end: Date;
+  const where: any = {
+    status: {
+      in: statuses,
+    },
+  };
 
-  if (typeof startDate === "string") {
-    start = new Date(startDate);
-  } else {
-    start = new Date();
+  if (typeof query === "string" && query.trim() !== "") {
+    const searchConditions = [
+      { guest: { name: { contains: query, mode: "insensitive" } } },
+      { guest: { surname: { contains: query, mode: "insensitive" } } },
+      { guest: { email: { contains: query, mode: "insensitive" } } },
+    ];
+    where.OR = searchConditions;
   }
 
-  if (typeof endDate === "string") {
-    end = new Date(endDate);
-  } else {
-    end = new Date();
-    end.setDate(end.getDate() + 7);
+  // Warunki dla dat startu i końca rezerwacji
+  if (
+    typeof startDate === "string" &&
+    startDate.trim() !== "" &&
+    typeof endDate === "string" &&
+    endDate.trim() !== ""
+  ) {
+    where.startDate = {
+      gte: new Date(startDate),
+      lte: new Date(endDate),
+    };
   }
 
-  let bookings;
-  let totalPages;
   try {
-    bookings = await prisma.booking.findMany({
+    const bookings = await prisma.booking.findMany({
       take: Number(limit),
       skip: (Number(page) - 1) * Number(limit),
       include: {
@@ -59,44 +68,16 @@ export default defineEventHandler(async (event) => {
           },
         },
       },
-      where: {
-        AND: [
-          {
-            status: {
-              in: statuses,
-            },
-          },
-          {
-            startDate: {
-              gte: start,
-              lte: end,
-            },
-          },
-        ],
-      },
+      where,
     });
 
     const totalBookings = await prisma.booking.count({
-      where: {
-        AND: [
-          {
-            status: {
-              in: statuses,
-            },
-          },
-          {
-            startDate: {
-              gte: start,
-              lte: end,
-            },
-          },
-        ],
-      },
+      where,
     });
-    totalPages = Math.ceil(totalBookings / Number(limit));
+    const totalPages = Math.ceil(totalBookings / Number(limit));
 
     if (bookings.length === 0) {
-      setResponseStatus(event, 201, "No Content");
+      setResponseStatus(event, 204);
     }
 
     return { bookings, totalPages };

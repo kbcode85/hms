@@ -20,13 +20,13 @@
         >
           <span class="material-icons-sharp">add</span>
         </button>
-        <input placeholder="Szukajka" type="input" />
-        <div class="m-2">
+        <input v-model="searchQuery" placeholder="Szukajka" type="input" />
+        <!-- <div class="m-2">
           <label>Zakres dat:</label>
           <input id="start" v-model="startDate" type="date" name="trip-start" />
           <label> - </label>
           <input id="end" v-model="endDate" type="date" name="trip-end" />
-        </div>
+        </div> -->
       </div>
 
       <div class="col text-end">
@@ -54,12 +54,8 @@
           </tr>
         </thead>
         <tbody class="align-middle">
-          <tr
-            v-for="(checkinout, index) in checkinouts"
-            :key="checkinout.id"
-            :class="{ 'bg-light': index % 2 === 0 }"
-          >
-            <td>{{ checkinout.roomId }}</td>
+          <tr v-for="checkinout in checkinouts" :key="checkinout.id">
+            <td>{{ checkinout.id }}</td>
             <td>
               {{ checkinout.guest.name + " " + checkinout.guest.surname }}
             </td>
@@ -168,22 +164,22 @@ onMounted(async () => {
     entriesPerPage.value,
     currentPage.value,
     searchQuery.value,
-    startDate.value,
-    endDate.value,
     "CHECKED_IN",
+    // startDate.value,
+    // endDate.value,
   );
 });
 
 watch(
-  [entriesPerPage, currentPage, searchQuery, startDate, endDate],
+  [entriesPerPage, currentPage, searchQuery, startDate, endDate, isStepper],
   async () => {
     await store.fetchBookings(
       entriesPerPage.value,
       currentPage.value,
       searchQuery.value,
-      startDate.value,
-      endDate.value,
       "CHECKED_IN",
+      // startDate.value,
+      // endDate.value,
     );
   },
 );

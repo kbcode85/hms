@@ -12,7 +12,7 @@
       </div> -->
     </div>
     <div class="row align-items-center">
-      <div class="col">
+      <div class="col d-flex align-items-center me-2">
         <button
           class="btn btn-primary me-2"
           aria-label="Edit"
@@ -21,6 +21,12 @@
           <span class="material-icons-sharp">add</span>
         </button>
         <input v-model="searchQuery" placeholder="Szukajka" type="input" />
+        <div class="m-2">
+          <label>Zakres dat:</label>
+          <input id="start" v-model="startDate" type="date" name="trip-start" />
+          <label> - </label>
+          <input id="end" v-model="endDate" type="date" name="trip-end" />
+        </div>
       </div>
 
       <div class="col text-end">
@@ -52,11 +58,7 @@
           </tr>
         </thead>
         <tbody class="align-middle">
-          <tr
-            v-for="(booking, index) in bookings"
-            :key="booking.id"
-            :class="{ 'bg-light': index % 2 === 0 }"
-          >
+          <tr v-for="booking in bookings" :key="booking.id">
             <td>{{ booking.id }}</td>
             <td v-if="booking.ota">{{ booking.ota }}</td>
             <td v-else>-</td>
@@ -171,22 +173,22 @@ onMounted(async () => {
     entriesPerPage.value,
     currentPage.value,
     searchQuery.value,
+    "PENDING,CONFIRMED,GUARANTEED,CANCELED",
     startDate.value,
     endDate.value,
-    "PENDING,CONFIRMED,GUARANTEED,CANCELED",
   );
 });
 
 watch(
-  [entriesPerPage, currentPage, searchQuery, startDate, endDate],
+  [entriesPerPage, currentPage, searchQuery, isStepper, startDate, endDate],
   async () => {
     await store.fetchBookings(
       entriesPerPage.value,
       currentPage.value,
       searchQuery.value,
+      "PENDING,CONFIRMED,GUARANTEED,CANCELED",
       startDate.value,
       endDate.value,
-      "PENDING,CONFIRMED,GUARANTEED,CANCELED",
     );
   },
 );

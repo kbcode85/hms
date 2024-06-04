@@ -336,7 +336,7 @@
           <button
             class="btn btn-primary"
             :disabled="!activeStep?.completed"
-            @click="currentStep === 5 ? addCheckin(totalPrice) : nextStep()"
+            @click="currentStep === 5 ? addBooking(totalPrice) : nextStep()"
           >
             {{ currentStep === 5 ? "Dodaj" : "Następny" }}
           </button>
@@ -347,7 +347,7 @@
 </template>
 
 <script lang="ts" setup>
-import { format } from "date-fns";
+import { format, parseISO, addDays } from "date-fns";
 const formatDate = (date: Date) => {
   return format(date, "yyyy-MM-dd");
 };
@@ -402,7 +402,7 @@ const totalPrice = computed(() => {
   );
 });
 
-const addCheckin = () => store.addCheckin(totalPrice.value);
+const addBooking = () => store.addBooking(totalPrice.value);
 
 const sroom = computed(() => store.room);
 const sguest = computed(() => store.guest);
