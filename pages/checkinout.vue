@@ -20,7 +20,7 @@
         >
           <span class="material-icons-sharp">add</span>
         </button>
-        <input v-model="searchQuery" placeholder="Szukajka" type="input" />
+        <input v-model="searchQuery" placeholder="Szukaj" type="input" />
         <!-- <div class="m-2">
           <label>Zakres dat:</label>
           <input id="start" v-model="startDate" type="date" name="trip-start" />

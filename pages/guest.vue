@@ -15,7 +15,7 @@
         >
           <span>Nowy gość</span>
         </button>
-        <input v-model="searchQuery" placeholder="Szukajka" type="input" />
+        <input v-model="searchQuery" placeholder="Szukaj" type="input" />
       </div>
 
       <div class="col text-end">
