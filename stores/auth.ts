@@ -6,6 +6,7 @@ interface UserData {
     id: string;
     username: string;
     email: string;
+    role: string;
   };
 }
 
@@ -14,7 +15,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     data: {
       authed: true,
-      userdata: { id: "", username: "", email: "" },
+      userdata: { id: "", username: "", email: "", role: "" },
     } as UserData,
   }),
   actions: {
@@ -34,10 +35,9 @@ export const useAuthStore = defineStore({
         if (response) {
           this.data.authed = true;
           this.data.userdata = response.userdata;
-        } else {
-          this.data.authed = false;
         }
       } catch (error: unknown) {
+        this.data.authed = false;
         if (error instanceof Error) {
           console.log(error.message);
         }

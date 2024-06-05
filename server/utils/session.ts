@@ -65,7 +65,10 @@ export function getUserIdFromToken(token: string): string | null {
   try {
     const decoded = decodeToken(token);
 
-    if (typeof decoded === "object" && decoded.hasOwnProperty("userId")) {
+    if (
+      typeof decoded === "object" &&
+      Object.prototype.hasOwnProperty.call(decoded, "userId")
+    ) {
       return decoded.userId;
     } else {
       return null;
@@ -80,7 +83,7 @@ export function decodeToken(token: string): any {
 }
 
 export async function getStoreRefreshToken(
-  userId: string | null
+  userId: string | null,
 ): Promise<string | null> {
   if (!userId) {
     return null;

@@ -50,19 +50,19 @@
           </NuxtLink>
         </li>
 
-        <li class="sidebar-item">
+        <!-- <li class="sidebar-item">
           <NuxtLink to="/invoices" class="sidebar-link" active-class="active">
             <i class="align-middle material-icons-sharp">receipt_long</i>
             <span class="align-middle">Faktury</span>
           </NuxtLink>
-        </li>
+        </li> -->
 
-        <li class="sidebar-item">
+        <!-- <li class="sidebar-item">
           <NuxtLink to="/reports" class="sidebar-link" active-class="active">
             <i class="align-middle material-icons-sharp">show_chart</i>
             <span class="align-middle">Raporty</span>
           </NuxtLink>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>

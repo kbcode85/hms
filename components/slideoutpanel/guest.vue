@@ -1,8 +1,12 @@
 <template>
-  <div class="overlay" :class="{ active: isCollapsed }"></div>
+  <div
+    class="overlay"
+    :class="{ active: isCollapsed }"
+    @click="slideout.closePanel"
+  ></div>
   <div class="sidebar2" :class="{ collapsed: isCollapsed }">
     <button class="close-btn" @click="slideout.closePanel">X</button>
-    <h3 class="text-dark">Active action: {{ action }}</h3>
+    <!-- <h3 class="text-dark">Active action: {{ action }}</h3> -->
 
     <div v-if="action === 'edit'">
       <form>
@@ -287,6 +291,15 @@ const action = computed(() => slideout.activeAction);
   padding-left: 10px;
   z-index: 2;
   padding: 30px;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    max-width: 100%;
+    button {
+      margin-bottom: 60px;
+    }
+  }
 }
 
 .sidebar2.collapsed {

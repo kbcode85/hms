@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
           username: username,
           password: hash,
           salt: salt,
-          lastLoginIpAddress: "",
         },
       });
 

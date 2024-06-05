@@ -71,6 +71,10 @@ export default defineEventHandler(async (event) => {
     });
     totalPages = Math.ceil(totalGuests / Number(limit));
 
+    if (guests.length === 0) {
+      setResponseStatus(event, 201, "No Content");
+    }
+
     return { guests, totalPages };
   } catch (error) {
     if (error instanceof Error) {
