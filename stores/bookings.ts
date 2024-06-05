@@ -63,6 +63,8 @@ export const useMyBookingsStore = defineStore({
     activeActions: null as string | null,
     currentStep: 1,
     isModalOpen: false,
+    modalAction: null as string | null,
+    selectBooking: null as Booking | null,
     isStepper: false,
     dateStart: new Date(),
     dateEnd: new Date(),
@@ -354,6 +356,55 @@ export const useMyBookingsStore = defineStore({
 
       for (const step of this.steps) {
         step.completed = false;
+      }
+    },
+    openModal(id: number, action: string) {
+      const booking = this.bookings.find((booking) => booking.id === id);
+      if (booking) {
+        this.selectBooking = booking;
+        this.modalAction = action;
+        this.isModalOpen = true;
+      } else {
+        push.error("Nie znaleziono");
+      }
+    },
+    closeModal() {
+      this.isModalOpen = false;
+    },
+    toggleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    },
+    async editBooking(id: number, action?: string) {
+      if (action === "checkout" && this.selectBooking) {
+        this.selectBooking.status = "CHECKED_OUT";
+      }
+      if (action === "checkin" && this.selectBooking) {
+        this.selectBooking.status = "CHECKED_IN";
+      }
+      if (action === "cancel" && this.selectBooking) {
+        this.selectBooking.status = "CANCELED";
+      }
+      try {
+        const response = await $fetch<Booking>(`/api/booking/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(this.selectBooking),
+        });
+        if (!response) {
+          throw new Error(`HTTP error! status: ${response}`);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        push.error("Wystąpił błąd");
+      } finally {
+        if (action === "checkout") push.info("Gość został wymeldowany");
+        if (action === "checkin") push.info("Gość został zameldowany");
+        if (action === "cancel") push.info("Rezerwacja została anulowana");
+        this.selectBooking = {} as Booking;
+        this.closeModal();
       }
     },
   },

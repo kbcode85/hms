@@ -63,26 +63,33 @@
             <td>{{ formatDate(checkinout.startDate) }}</td>
             <td>{{ formatDate(checkinout.endDate) }}</td>
             <td>
-              <span class="material-icons-sharp text-success">
+              <span
+                class="material-icons-sharp"
+                :class="{
+                  'text-success': isParkingAvailable(checkinout.additions),
+                  'text-muted': !isParkingAvailable(checkinout.additions),
+                }"
+              >
                 local_parking
               </span>
-              <span class="material-icons-sharp text-success">
+              <span
+                class="material-icons-sharp"
+                :class="{
+                  'text-success': isMealAvailable(checkinout.additions),
+                  'text-muted': !isMealAvailable(checkinout.additions),
+                }"
+              >
                 restaurant
               </span>
             </td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-success p-1" aria-label="Edit">
+                <button
+                  class="btn btn-success p-1"
+                  aria-label="Edit"
+                  @click="openModal(checkinout.id, 'checkout')"
+                >
                   <span class="material-icons-sharp">logout</span>
-                </button>
-                <button class="btn btn-warning p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">change_circle</span>
-                </button>
-                <button class="btn btn-primary p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">edit</span>
-                </button>
-                <button class="btn btn-danger p-1" aria-label="Edit">
-                  <span class="material-icons-sharp">delete</span>
                 </button>
               </div>
             </td>
@@ -159,6 +166,38 @@ function formatDate(date: Date | string): string {
 const startDate = ref(formatDate(new Date()));
 const endDate = ref(formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)));
 
+const openModal = (id: number, type: string) => {
+  store.openModal(id, type);
+};
+
+interface Addition {
+  id: number;
+  bookingId: number;
+  additionId: number;
+  quantity: number;
+  addition: {
+    id: number;
+    name: string;
+    price: number;
+  };
+}
+
+const isParkingAvailable = (additions: Addition[]): boolean => {
+  return additions.some(
+    (addition) =>
+      addition.addition.name === "Miejsce parkingowe" && addition.quantity >= 1,
+  );
+};
+
+const isMealAvailable = (additions: Addition[]): boolean => {
+  return additions.some(
+    (addition) =>
+      (addition.addition.name === "Śniadanie" ||
+        addition.addition.name === "Obiadokolacja") &&
+      addition.quantity >= 1,
+  );
+};
+
 onMounted(async () => {
   await store.fetchBookings(
     entriesPerPage.value,
@@ -181,6 +220,22 @@ watch(
       // startDate.value,
       // endDate.value,
     );
+  },
+);
+
+watch(
+  () => store.isModalOpen,
+  async (newVal, oldVal) => {
+    if (!newVal && oldVal) {
+      await store.fetchBookings(
+        entriesPerPage.value,
+        currentPage.value,
+        searchQuery.value,
+        "CHECKED_IN",
+        // startDate.value,
+        // endDate.value,
+      );
+    }
   },
 );
 </script>
