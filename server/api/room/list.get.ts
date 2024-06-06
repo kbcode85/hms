@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
     rooms.sort((a, b) => Number(a.number) - Number(b.number));
 
-    return rooms;
+    return { rooms: rooms };
   } catch (error) {
     console.error("Failed to fetch rooms:", error);
   }

@@ -4,6 +4,10 @@
       "name": "🌱 Root",
       "path": "./",
     },
+    {
+      "name": "🤖 DataGen"
+      "path": "../hms-ai-tool",
+    },
   ],
   "settings": {
     "nuxtr.monorepoMode.DirectoryName": "./",
