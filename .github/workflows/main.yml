@@ -7,7 +7,7 @@ on:
 jobs:
   web-deploy:
     name: 🎉 Deploy
-    runs-on: misty-kb
+    runs-on: self-hosted
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
