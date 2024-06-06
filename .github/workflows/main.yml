@@ -23,7 +23,6 @@ jobs:
       - name: 🔨 Create .env file
         run: |
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo DIRECT_URL=${{ secrets.DIRECT_URL }} >> .env
           echo NUXT_ACCESS_TOKEN=${{ secrets.NUXT_ACCESS_TOKEN }} >> .env
           echo NUXT_ACCESS_TOKEN_EXP=${{ secrets.NUXT_ACCESS_TOKEN_EXP }} >> .env
           echo NUXT_REFRESH_TOKEN=${{ secrets.NUXT_REFRESH_TOKEN }} >> .env
