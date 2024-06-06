@@ -31,6 +31,8 @@ jobs:
           echo NUXT_PUBLIC_ENV=${{ secrets.NUXT_PUBLIC_ENV }} >> .env
       - name: 🔨 Create ecosystem.config.cjs file
         run: |
+          echo "const dotenv = require('dotenv');" >> ecosystem.config.cjs
+          echo "dotenv.config();" >> ecosystem.config.cjs
           echo "module.exports = {" >> ecosystem.config.cjs
           echo "  apps: [" >> ecosystem.config.cjs
           echo "    {" >> ecosystem.config.cjs
