@@ -49,7 +49,7 @@ export const useMyRoomStore = defineStore({
     async fetchRooms() {
       this.isLoading = true;
       try {
-        const response = await $fetch<Room[]>(`/api/room/list`, {
+        const response = await $fetch<Response>(`/api/room/list`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export const useMyRoomStore = defineStore({
         });
 
         if (response) {
-          this.rooms = response;
+          this.rooms = response.rooms;
         }
       } catch (error) {
         console.error("Failed to fetch rooms:", error);
