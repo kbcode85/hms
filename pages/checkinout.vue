@@ -81,6 +81,24 @@
               >
                 restaurant
               </span>
+              <span
+                class="material-icons-sharp"
+                :class="{
+                  'text-success': isPoolAvailable(checkinout.additions),
+                  'text-muted': !isPoolAvailable(checkinout.additions),
+                }"
+              >
+                pool
+              </span>
+              <span
+                class="material-icons-sharp"
+                :class="{
+                  'text-success': isGymAvailable(checkinout.additions),
+                  'text-muted': !isGymAvailable(checkinout.additions),
+                }"
+              >
+                fitness_center
+              </span>
             </td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
@@ -195,6 +213,19 @@ const isMealAvailable = (additions: Addition[]): boolean => {
       (addition.addition.name === "Śniadanie" ||
         addition.addition.name === "Obiadokolacja") &&
       addition.quantity >= 1,
+  );
+};
+
+const isPoolAvailable = (additions: Addition[]): boolean => {
+  return additions.some(
+    (addition) => addition.addition.name === "Basen" && addition.quantity >= 1,
+  );
+};
+
+const isGymAvailable = (additions: Addition[]): boolean => {
+  return additions.some(
+    (addition) =>
+      addition.addition.name === "Siłownia" && addition.quantity >= 1,
   );
 };
 
