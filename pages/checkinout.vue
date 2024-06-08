@@ -234,7 +234,7 @@ onMounted(async () => {
     entriesPerPage.value,
     currentPage.value,
     searchQuery.value,
-    "CHECKED_IN",
+    ["CHECKED_IN"],
     // startDate.value,
     // endDate.value,
   );
@@ -247,7 +247,7 @@ watch(
       entriesPerPage.value,
       currentPage.value,
       searchQuery.value,
-      "CHECKED_IN",
+      ["CHECKED_IN"],
       // startDate.value,
       // endDate.value,
     );
@@ -262,7 +262,7 @@ watch(
         entriesPerPage.value,
         currentPage.value,
         searchQuery.value,
-        "CHECKED_IN",
+        ["CHECKED_IN"],
         // startDate.value,
         // endDate.value,
       );

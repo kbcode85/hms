@@ -15,11 +15,21 @@ export default defineEventHandler(async (event) => {
     },
   });
 
+  const updatedRoom = await prisma.room.updateMany({
+    where: { id: updatedBooking.roomId },
+    data: {
+      status: data.room.status,
+    },
+  });
+
   setResponseStatus(event, 201, "Edited");
   return {
     message: "Successful edit",
     bookingdata: {
       updatedBooking,
+    },
+    roomdata: {
+      updatedRoom,
     },
   };
 });

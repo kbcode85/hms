@@ -252,7 +252,7 @@ onMounted(async () => {
     entriesPerPage.value,
     currentPage.value,
     searchQuery.value,
-    "PENDING,CONFIRMED,GUARANTEED,CANCELED",
+    ["PENDING,CONFIRMED,GUARANTEED,CANCELED"],
     startDate.value,
     endDate.value,
   );
@@ -265,7 +265,7 @@ watch(
       entriesPerPage.value,
       currentPage.value,
       searchQuery.value,
-      "PENDING,CONFIRMED,GUARANTEED,CANCELED",
+      ["PENDING,CONFIRMED,GUARANTEED,CANCELED"],
       startDate.value,
       endDate.value,
     );
@@ -280,7 +280,7 @@ watch(
         entriesPerPage.value,
         currentPage.value,
         searchQuery.value,
-        "PENDING,CONFIRMED,GUARANTEED,CANCELED",
+        ["PENDING,CONFIRMED,GUARANTEED,CANCELED"],
         startDate.value,
         endDate.value,
       );

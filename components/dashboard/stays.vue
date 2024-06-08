@@ -1,5 +1,5 @@
 <template>
-  <table class="table">
+  <table v-if="stays > 0" class="table">
     <thead>
       <tr style="position: sticky; top: 0; background: white; z-index: 1">
         <th>Gość</th>
@@ -7,26 +7,25 @@
       </tr>
     </thead>
     <tr
-      v-for="(guest, index) in guests_stay"
+      v-for="(bookings, index) in stays"
       :key="index"
       :class="{ 'bg-light': index % 2 === 1 }"
     >
-      <td>{{ guest.name }}</td>
-      <td class="text-right">{{ guest.roomNumber }}</td>
+      <td>{{ bookings.guest.name + " " + bookings.guest.name }}</td>
+      <td class="text-right">{{ bookings.room.number }}</td>
     </tr>
   </table>
+  <div v-else class="d-flex justify-content-center align-items-center m-3 p-3">
+    Brak pobytów.
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { faker } from "@faker-js/faker";
-interface Guest {
-  name: string;
-  roomNumber: string;
-}
-const guests_stay: Guest[] = Array.from({ length: 30 }, () => ({
-  name: faker.person.fullName(),
-  roomNumber: faker.number.int({ min: 100, max: 200 }).toString(),
-}));
+const store = useMyDashboardStore();
+
+const stays = computed(() =>
+  store.stays.filter((stay) => stay.status !== "CHECKED_OUT"),
+);
 </script>
 
 <style></style>
