@@ -1,5 +1,5 @@
 <template>
-  <table v-if="stays > 0" class="table">
+  <table v-if="stays.length > 0" class="table">
     <thead>
       <tr style="position: sticky; top: 0; background: white; z-index: 1">
         <th>Gość</th>
