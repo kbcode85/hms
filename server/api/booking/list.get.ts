@@ -38,38 +38,70 @@ export default defineEventHandler(async (event) => {
       { guest: { name: { contains: query, mode: "insensitive" } } },
       { guest: { surname: { contains: query, mode: "insensitive" } } },
       { guest: { email: { contains: query, mode: "insensitive" } } },
+      { guest: { phone: { contains: query, mode: "insensitive" } } },
     ];
     where.OR = searchConditions;
   }
 
   // Warunki dla dat startu i końca rezerwacji
-  if (
-    typeof startDate === "string" &&
-    startDate.trim() !== "" &&
-    typeof endDate === "string" &&
-    endDate.trim() !== ""
-  ) {
+  if (typeof startDate === "string" && startDate.trim() !== "") {
     where.startDate = {
+      ...where.startDate,
       gte: new Date(startDate),
+    };
+  }
+
+  if (typeof endDate === "string" && endDate.trim() !== "") {
+    where.startDate = {
+      ...where.startDate,
       lte: new Date(endDate),
     };
   }
 
-  try {
-    const bookings = await prisma.booking.findMany({
-      take: Number(limit),
-      skip: (Number(page) - 1) * Number(limit),
-      include: {
-        guest: true,
-        room: true,
-        additions: {
-          include: {
-            addition: true,
-          },
+  interface FindManyOptions {
+    include?: {
+      guest?: boolean;
+      room?: boolean;
+      additions?: {
+        include?: {
+          addition?: boolean;
+        };
+      };
+    };
+    where?: any;
+    take?: number;
+    skip?: number;
+    orderBy?: {
+      startDate: "asc" | "desc";
+    };
+  }
+
+  let findManyArgs: FindManyOptions = {
+    include: {
+      guest: true,
+      room: true,
+      additions: {
+        include: {
+          addition: true,
         },
       },
-      where,
-    });
+    },
+    where,
+    orderBy: {
+      startDate: "asc", // Sortuj od najwcześniejszej do najpóźniejszej daty
+    },
+  };
+
+  if (limit) {
+    findManyArgs = {
+      ...findManyArgs,
+      take: Number(limit),
+      skip: page ? (Number(page) - 1) * Number(limit) : 0,
+    };
+  }
+
+  try {
+    const bookings = await prisma.booking.findMany(findManyArgs);
 
     const totalBookings = await prisma.booking.count({
       where,
@@ -80,7 +112,7 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 204);
     }
 
-    return { bookings, totalPages };
+    return { bookings, totalPages, count: bookings.length };
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Error finding bookings: ${error.message}`);

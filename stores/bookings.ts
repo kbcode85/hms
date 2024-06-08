@@ -145,7 +145,7 @@ export const useMyBookingsStore = defineStore({
         this.loading = false;
 
         if (this.bookings.length === 0) {
-          push.info("Brak wyników");
+          this.totalPages = 0;
         }
       }
     },
@@ -281,10 +281,8 @@ export const useMyBookingsStore = defineStore({
             // Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            startDate: new Date(
-              this.dateStart.setDate(this.dateStart.getDate() + 1),
-            ),
-            endDate: new Date(this.dateEnd.setDate(this.dateEnd.getDate() + 1)),
+            startDate: this.dateStart,
+            endDate: this.dateEnd,
             roomId: this.room,
             guestId: this.guest,
             additions: this.additions,
@@ -324,10 +322,8 @@ export const useMyBookingsStore = defineStore({
             // Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            startDate: new Date(
-              this.dateStart.setDate(this.dateStart.getDate() + 1),
-            ),
-            endDate: new Date(this.dateEnd.setDate(this.dateEnd.getDate() + 1)),
+            startDate: this.dateStart,
+            endDate: this.dateEnd,
             roomId: this.room,
             guestId: this.guest,
             additions: this.additions,
@@ -377,9 +373,11 @@ export const useMyBookingsStore = defineStore({
     async editBooking(id: number, action?: string) {
       if (action === "checkout" && this.selectBooking) {
         this.selectBooking.status = "CHECKED_OUT";
+        this.selectBooking.room.status = "DIRTY";
       }
       if (action === "checkin" && this.selectBooking) {
         this.selectBooking.status = "CHECKED_IN";
+        this.selectBooking.room.status = "OCCUPIED";
       }
       if (action === "cancel" && this.selectBooking) {
         this.selectBooking.status = "CANCELED";

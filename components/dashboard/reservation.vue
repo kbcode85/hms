@@ -23,6 +23,18 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
 );
+const store = useMyDashboardStore();
+
+const weeklyBookingsCount = computed(() => {
+  const counts = [0, 0, 0, 0, 0, 0, 0];
+  store.weeklyBookings.forEach((booking) => {
+    const date = new Date(booking.startDate);
+    const dayOfWeek = date.getDay();
+    counts[dayOfWeek] += 1;
+  });
+  counts.push(counts.shift());
+  return counts;
+});
 
 const chartData = ref({
   labels: [
@@ -38,7 +50,7 @@ const chartData = ref({
     {
       label: "Rezerwacje",
       backgroundColor: "#3b7ddd",
-      data: [40, 20, 12, 50, 10, 30, 40],
+      data: weeklyBookingsCount.value,
     },
   ],
 });

@@ -3,6 +3,7 @@
     <div class="row mb-2 mb-xl-3">
       <div class="col-auto d-none d-sm-block">
         <h3>Dashboard</h3>
+        <p>Dzisiaj jest {{ currentDay }} {{ currentDate }}</p>
       </div>
 
       <div class="col-auto ms-auto text-end mt-n1">
@@ -40,18 +41,6 @@
       <div class="col-xl-6 col-xxl-7">
         <div class="card flex-fill w-100">
           <div class="card-header">
-            <div class="float-end">
-              <form class="row g-2">
-                <div class="col-auto">
-                  <select class="form-select form-select-sm bg-light border-0">
-                    <option>Jan</option>
-                    <option value="1">Feb</option>
-                    <option value="2">Mar</option>
-                    <option value="3">Apr</option>
-                  </select>
-                </div>
-              </form>
-            </div>
             <h5 class="card-title mb-0">Rezerwacje</h5>
           </div>
           <div class="card-body pt-2 pb-3">
@@ -63,7 +52,7 @@
       </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="row mt-2">
       <div class="col-sm-12 col-xl-6 col-xxl-4">
         <div class="card">
           <div class="card-header">
@@ -140,24 +129,24 @@
                   <th scope="col">Przyjazd</th>
                   <th scope="col">Wyjazd</th>
                   <th scope="col">Cena</th>
-                  <th scope="col">Płatność</th>
+                  <th scope="col">Status</th>
                 </tr>
               </thead>
               <tr
-                v-for="(reservation, index) in res"
+                v-for="(booking, index) in store.newBookings"
                 :key="index"
                 :class="{ 'bg-light': index % 2 === 1 }"
               >
-                <td>{{ reservation.name }}</td>
-                <td>{{ reservation.roomNumber }}</td>
+                <td>{{ booking.guest.name + " " + booking.guest.surname }}</td>
+                <td>{{ booking.room.number }}</td>
                 <td>
-                  {{ new Date(reservation.startDate).toLocaleDateString() }}
+                  {{ new Date(booking.startDate).toLocaleDateString() }}
                 </td>
                 <td>
-                  {{ new Date(reservation.endDate).toLocaleDateString() }}
+                  {{ new Date(booking.endDate).toLocaleDateString() }}
                 </td>
-                <td>{{ reservation.price }}</td>
-                <td>{{ reservation.isPaid ? "Tak" : "Nie" }}</td>
+                <td>{{ booking.price + " PLN" }}</td>
+                <td>{{ translateStatus(booking.status) }}</td>
               </tr>
             </table>
           </div>
@@ -172,44 +161,147 @@ definePageMeta({
   middleware: ["auth"],
 });
 
+const store = useMyDashboardStore();
+
+const today = ref(formatDate(new Date()));
+
+const staysCount = computed(
+  () => store.stays.filter((stay) => stay.status !== "CHECKED_OUT").length,
+);
+const arrivalsCount = computed(() => store.arrivals.length);
+const newBookingsCount = computed(() => store.newBookings.length);
+
+const departuresCount = computed(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return store.stays.filter((booking) => {
+    const bookingEndDate = new Date(booking.endDate);
+    bookingEndDate.setHours(0, 0, 0, 0);
+
+    return (
+      bookingEndDate.getTime() === today.getTime() &&
+      booking.status === "CHECKED_IN"
+    );
+  }).length;
+});
+
 const cards = [
-  { id: 1, title: "Pobyty", value: "124", icon: "hotel", data: "data1" },
+  { id: 1, title: "Pobyty", value: staysCount, icon: "hotel", data: "data1" },
   {
     id: 2,
     title: "Przyjazdy",
-    value: "50",
+    value: arrivalsCount,
     icon: "flight_land",
     data: "data2",
   },
   {
     id: 3,
     title: "Wyjazdy",
-    value: "90",
+    value: departuresCount,
     icon: "flight_takeoff",
     data: "data3",
   },
-  { id: 4, title: "Rezerwacje", value: "54", icon: "fiber_new", data: "data4" },
+  {
+    id: 4,
+    title: "Rezerwacje",
+    value: newBookingsCount,
+    icon: "fiber_new",
+    data: "data4",
+  },
 ];
 
-import { faker } from "@faker-js/faker";
-interface Reservation {
-  name: string;
-  roomNumber: string;
-  startDate: string;
-  endDate: string;
-  price: number;
-  isPaid: boolean;
-  status?: string;
+const date = new Date();
+const days = [
+  "niedziela",
+  "poniedziałek",
+  "wtorek",
+  "środa",
+  "czwartek",
+  "piątek",
+  "sobota",
+];
+
+const currentDay = days[date.getDay()];
+const currentDate = date.toLocaleDateString();
+
+function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  let month = "" + (d.getMonth() + 1);
+  let day = "" + d.getDate();
+  const year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
 }
 
-const res: Reservation[] = Array.from({ length: 30 }, () => ({
-  name: faker.person.fullName(),
-  roomNumber: faker.number.int({ min: 100, max: 200 }).toString(),
-  startDate: faker.date.past().toISOString(),
-  endDate: faker.date.future().toISOString(),
-  price: parseFloat(faker.commerce.price()),
-  isPaid: faker.datatype.boolean(),
-}));
+const nextDay = ref(
+  formatDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000)),
+);
+
+function startOfWeek(date: Date): Date {
+  const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1);
+  return new Date(date.setDate(diff));
+}
+
+function endOfWeek(date: Date): Date {
+  const start = startOfWeek(date);
+  return new Date(start.setDate(start.getDate() + 6));
+}
+
+function translateStatus(status: string): string {
+  switch (status) {
+    case "PENDING":
+      return "Oczekująca";
+    case "CONFIRMED":
+      return "Potwierdzona";
+    case "GUARANTEED":
+      return "Gwarantowana";
+    case "CANCELED":
+      return "Anulowana";
+    case "CHECKED_IN":
+      return "Zameldowana";
+    case "CHECKED_OUT":
+      return "Wymeldowana";
+    default:
+      return status;
+  }
+}
+
+const startOfThisWeek = ref(startOfWeek(new Date()));
+const endOfThisWeek = ref(endOfWeek(new Date()));
+
+onMounted(async () => {
+  try {
+    await Promise.all([
+      store.fetchRooms(),
+      store.fetchStays(["CHECKED_IN,CHECKED_OUT"]),
+      store.fetchTodayArrivals(
+        ["GUARANTEED,CONFIRMED,CHECKED_IN"],
+        today.value,
+        today.value,
+      ),
+      store.updateRoomStatusForArrivals(store.arrivals),
+      store.fetchNewBookings(["GUARANTEED,CONFIRMED,PENDING"], nextDay.value),
+      store.fetchWeeklyBookings(
+        ["GUARANTEED,CONFIRMED,PENDING"],
+        formatDate(startOfThisWeek.value),
+        formatDate(endOfThisWeek.value),
+      ),
+      store.updateRoomStatusForArrivals(store.arrivals),
+    ]);
+  } catch (error) {
+    if (error.response && error.response.status === 503) {
+      console.error(
+        "Serwer jest tymczasowo niedostępny. Spróbuj ponownie później.",
+      );
+    } else {
+      console.error(error);
+    }
+  }
+});
 </script>
 
 <style>
@@ -308,7 +400,8 @@ tr {
 }
 
 .pre-scrollable {
-  max-height: 340px;
+  min-height: 280px;
+  max-height: 280px;
   overflow-y: scroll;
 }
 

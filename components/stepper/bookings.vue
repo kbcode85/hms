@@ -68,11 +68,11 @@
             <div v-if="activeStep.id === 1" class="m-2">
               <p>
                 <strong>Data przyjazdu:</strong>
-                {{ formatDate(dateStart) }}
+                {{ new Date(formatDate(dateStart)).toLocaleDateString() }}
               </p>
               <p>
                 <strong>Data wyjazdu:</strong>
-                {{ formatDate(dateEnd) }}
+                {{ new Date(formatDate(dateEnd)).toLocaleDateString() }}
               </p>
               <p>
                 <strong>Ilość nocy:</strong>
@@ -87,7 +87,10 @@
               <p class="d-none d-sm-block">
                 <strong>Wybierz pokój:</strong>
               </p>
-              <div class="d-flex flex-wrap">
+              <div
+                class="d-flex flex-wrap"
+                style="overflow-y: auto; max-height: 500px"
+              >
                 <div
                   v-for="room in rooms"
                   :key="room.id"
@@ -98,7 +101,7 @@
                     <h5 class="card-title">{{ room.number }}</h5>
                     <p class="card-text">
                       <strong>Standard:</strong>
-                      {{ room.type }}
+                      {{ translateStandard(room.type) }}
                     </p>
                     <p class="card-text">
                       <strong>Liczba gości:</strong>
@@ -310,12 +313,12 @@
                 <p class="fs-4 mb-2">
                   <i class="bi bi-calendar-check"></i>
                   Data przyjazdu:
-                  {{ formatDate(dateStart) }}
+                  {{ new Date(formatDate(dateStart)).toLocaleDateString() }}
                 </p>
                 <p class="fs-4 mb-2">
                   <i class="bi bi-calendar-minus"></i>
                   Data wyjazdu:
-                  {{ formatDate(dateEnd) }}
+                  {{ new Date(formatDate(dateEnd)).toLocaleDateString() }}
                 </p>
                 <p class="fs-4 mb-2">
                   <i class="bi bi-calendar3"></i>
@@ -347,7 +350,7 @@
 </template>
 
 <script lang="ts" setup>
-import { format} from "date-fns";
+import { format } from "date-fns";
 const formatDate = (date: Date) => {
   return format(date, "yyyy-MM-dd");
 };
@@ -422,6 +425,21 @@ const date = ref({
     return date;
   })(),
 });
+
+function translateStandard(standard: string) {
+  switch (standard) {
+    case "ECONOMY":
+      return "Ekonomiczny";
+    case "STANDARD":
+      return "Standardowy";
+    case "LUXURY":
+      return "Luksusowy";
+    case "APARTMENT":
+      return "Apartament";
+    default:
+      return standard;
+  }
+}
 
 const entriesPerPage = ref(10);
 const currentPage = ref(1);

@@ -60,8 +60,16 @@
               {{ checkinout.guest.name + " " + checkinout.guest.surname }}
             </td>
             <td>{{ checkinout.room.number }}</td>
-            <td>{{ formatDate(checkinout.startDate) }}</td>
-            <td>{{ formatDate(checkinout.endDate) }}</td>
+            <td>
+              {{
+                new Date(formatDate(checkinout.startDate)).toLocaleDateString()
+              }}
+            </td>
+            <td>
+              {{
+                new Date(formatDate(checkinout.endDate)).toLocaleDateString()
+              }}
+            </td>
             <td>
               <span
                 class="material-icons-sharp"
@@ -234,7 +242,7 @@ onMounted(async () => {
     entriesPerPage.value,
     currentPage.value,
     searchQuery.value,
-    "CHECKED_IN",
+    ["CHECKED_IN"],
     // startDate.value,
     // endDate.value,
   );
@@ -247,7 +255,7 @@ watch(
       entriesPerPage.value,
       currentPage.value,
       searchQuery.value,
-      "CHECKED_IN",
+      ["CHECKED_IN"],
       // startDate.value,
       // endDate.value,
     );
@@ -262,7 +270,7 @@ watch(
         entriesPerPage.value,
         currentPage.value,
         searchQuery.value,
-        "CHECKED_IN",
+        ["CHECKED_IN"],
         // startDate.value,
         // endDate.value,
       );

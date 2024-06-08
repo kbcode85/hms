@@ -46,7 +46,7 @@ export const useMyRoomStore = defineStore({
         this.isLoading = false;
       }
     },
-    async fetchRooms() {
+    async fetchRooms(number?: string) {
       this.isLoading = true;
       try {
         const response = await $fetch<Response>(`/api/room/list`, {
@@ -54,6 +54,9 @@ export const useMyRoomStore = defineStore({
           headers: {
             "Content-Type": "application/json",
             // Authorization: `Bearer ${token}`,
+          },
+          params: {
+            number: number,
           },
         });
 

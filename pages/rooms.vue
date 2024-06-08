@@ -7,62 +7,63 @@
     </div>
 
     <div class="row">
-      <div
-        v-for="room in rooms"
-        :key="room.id"
-        class="col-12 col-md-6 col-lg-4 col-xl-3"
-      >
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Pokój {{ room.number }}</h5>
-            <p class="card-text"><strong>Standard:</strong> {{ room.type }}</p>
-
-            <p class="card-text">
-              <strong>Maksymalna liczba gości:</strong> {{ room.maxGuests }}
-            </p>
-            <p class="card-text">
-              <strong>Cena:</strong> {{ room.pricePerNight }} PLN/noc
-            </p>
-            <div class="mb-3">
-              <p class="card-text">
-                <strong>Status:</strong> {{ room.status }}
-              </p>
-            </div>
-            <div class="card-actions d-flex justify-content-end">
-              <button
-                class="btn btn-primary me-2"
-                @click="store.openModal('edit', room.id)"
-              >
-                <i class="bi bi-pencil-square"></i>
-              </button>
-              <button
-                class="btn btn-danger me-2"
-                @click="store.openModal('delete', room.id)"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-              <button
-                class="btn btn-info"
-                @click="store.openModal('info', room.id)"
-              >
-                <i class="bi bi-info-circle"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+      <div class="mb-4">
+        <button
+          class="btn btn-primary me-2"
+          aria-label="Edit"
+          @click="store.openModal('add')"
+        >
+          <span>Dodaj pokój</span>
+        </button>
+        <input v-model="searchQuery" placeholder="Szukaj" type="input" />
       </div>
-
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card">
+      <div style="overflow-y: auto; max-height: 900px">
+        <div class="d-flex flex-wrap">
           <div
-            class="card-body d-flex justify-content-center align-items-center"
+            v-for="room in rooms"
+            :key="room.id"
+            class="col-12 col-md-6 col-lg-4 col-xl-3 animate__animated animate__fadeIn p-3"
           >
-            <button
-              class="btn btn-primary btn-lg"
-              @click="store.openModal('add')"
-            >
-              <span>Nowy pokój</span>
-            </button>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Pokój {{ room.number }}</h5>
+                <p class="card-text">
+                  <strong>Typ:</strong> {{ translateStandard(room.type) }}
+                </p>
+
+                <p class="card-text">
+                  <strong>Max os.:</strong> {{ room.maxGuests }}
+                </p>
+                <p class="card-text">
+                  <strong>Cena:</strong> {{ room.pricePerNight }} PLN/noc
+                </p>
+                <div class="mb-3">
+                  <p class="card-text">
+                    <strong>Status:</strong> {{ translateStatus(room.status) }}
+                  </p>
+                </div>
+                <div class="card-actions d-flex justify-content-end">
+                  <button
+                    class="btn btn-primary me-2"
+                    @click="store.openModal('edit', room.id)"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button
+                    class="btn btn-danger me-2"
+                    @click="store.openModal('delete', room.id)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                  <button
+                    class="btn btn-info"
+                    @click="store.openModal('info', room.id)"
+                  >
+                    <i class="bi bi-info-circle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -71,6 +72,7 @@
 </template>
 
 <script lang="ts" setup>
+import "animate.css";
 definePageMeta({
   middleware: ["auth"],
 });
@@ -81,14 +83,51 @@ const rooms = computed(() => store.$state.rooms);
 
 const isModalOpen = computed(() => store.$state.isModalOpen);
 
+const searchQuery = ref("");
+
+function translateStatus(status: string) {
+  switch (status) {
+    case "CLEAN":
+      return "Czysty";
+    case "DIRTY":
+      return "Brudny";
+    case "SERVICE":
+      return "Serwis";
+    case "OCCUPIED":
+      return "Zajęty";
+    case "ARRIVAL":
+      return "Przyjazd";
+    default:
+      return status;
+  }
+}
+
+function translateStandard(standard: string) {
+  switch (standard) {
+    case "ECONOMY":
+      return "Ekonomiczny";
+    case "STANDARD":
+      return "Standardowy";
+    case "LUXURY":
+      return "Luksusowy";
+    case "APARTMENT":
+      return "Apartament";
+    default:
+      return standard;
+  }
+}
 onMounted(async () => {
-  await store.fetchRooms();
+  await store.fetchRooms(searchQuery.value);
 });
 
 watch(isModalOpen, async (newVal, oldVal) => {
   if (oldVal === true && newVal === false) {
-    await store.fetchRooms();
+    await store.fetchRooms(searchQuery.value);
   }
+});
+
+watch([searchQuery], async () => {
+  await store.fetchRooms(searchQuery.value);
 });
 </script>
 
