@@ -178,5 +178,30 @@ export const useMyDashboardStore = defineStore({
         console.error("Failed to fetch rooms:", error);
       }
     },
+    async updateRoomStatusForArrivals(arivals: Booking[]) {
+      try {
+        for (const arrival of arivals) {
+          if (arrival.status !== "CHECKED_IN") {
+            const response = await $fetch<Response>(`/api/room/status`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                // Authorization: `Bearer ${token}`,
+              },
+              body: {
+                roomId: arrival.room.id,
+                status: "ARRIVAL",
+              },
+            });
+
+            if (response) {
+              console.log("Room status updated");
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to update room status:", error);
+      }
+    },
   },
 });

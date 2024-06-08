@@ -60,8 +60,16 @@
               {{ checkinout.guest.name + " " + checkinout.guest.surname }}
             </td>
             <td>{{ checkinout.room.number }}</td>
-            <td>{{ formatDate(checkinout.startDate) }}</td>
-            <td>{{ formatDate(checkinout.endDate) }}</td>
+            <td>
+              {{
+                new Date(formatDate(checkinout.startDate)).toLocaleDateString()
+              }}
+            </td>
+            <td>
+              {{
+                new Date(formatDate(checkinout.endDate)).toLocaleDateString()
+              }}
+            </td>
             <td>
               <span
                 class="material-icons-sharp"

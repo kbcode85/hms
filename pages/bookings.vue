@@ -66,10 +66,14 @@
               {{ booking.guest.name + " " + booking.guest.surname }}
             </td>
             <td>{{ booking.room.number }}</td>
-            <td>{{ formatDate(booking.startDate) }}</td>
-            <td>{{ formatDate(booking.endDate) }}</td>
-            <td>{{ booking.status }}</td>
-            <td>{{ booking.source }}</td>
+            <td>
+              {{ new Date(formatDate(booking.startDate)).toLocaleDateString() }}
+            </td>
+            <td>
+              {{ new Date(formatDate(booking.endDate)).toLocaleDateString() }}
+            </td>
+            <td>{{ translateStatus(booking.status) }}</td>
+            <td>{{ translateSource(booking.source) }}</td>
             <td>{{ booking.price + " PLN" }}</td>
             <td>
               <span
@@ -246,6 +250,42 @@ const isGymAvailable = (additions: Addition[]): boolean => {
       addition.addition.name === "Siłownia" && addition.quantity >= 1,
   );
 };
+
+function translateStatus(status: string): string {
+  switch (status) {
+    case "PENDING":
+      return "Oczekująca";
+    case "CONFIRMED":
+      return "Potwierdzona";
+    case "GUARANTEED":
+      return "Gwarantowana";
+    case "CANCELED":
+      return "Anulowana";
+    case "CHECKED_IN":
+      return "Zameldowana";
+    case "CHECKED_OUT":
+      return "Wymeldowana";
+    default:
+      return status;
+  }
+}
+
+function translateSource(source: string): string {
+  switch (source) {
+    case "DIRECT":
+      return "Bezpośrednia";
+    case "EMAIL":
+      return "Email";
+    case "PHONE":
+      return "Telefon";
+    case "BOOKING":
+      return "Serwis online";
+    case "OTHER":
+      return "Inne";
+    default:
+      return source;
+  }
+}
 
 onMounted(async () => {
   await store.fetchBookings(

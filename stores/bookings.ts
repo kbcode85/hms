@@ -145,7 +145,7 @@ export const useMyBookingsStore = defineStore({
         this.loading = false;
 
         if (this.bookings.length === 0) {
-          push.info("Brak wyników");
+          this.totalPages = 0;
         }
       }
     },

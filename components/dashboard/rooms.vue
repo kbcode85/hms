@@ -51,6 +51,7 @@ const chartData = ref({
     },
   ],
 });
+
 const chartOptions = ref({
   maintainAspectRatio: false,
 });

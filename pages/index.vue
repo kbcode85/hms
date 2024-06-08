@@ -41,18 +41,6 @@
       <div class="col-xl-6 col-xxl-7">
         <div class="card flex-fill w-100">
           <div class="card-header">
-            <div class="float-end">
-              <form class="row g-2">
-                <div class="col-auto">
-                  <select class="form-select form-select-sm bg-light border-0">
-                    <option>Jan</option>
-                    <option value="1">Feb</option>
-                    <option value="2">Mar</option>
-                    <option value="3">Apr</option>
-                  </select>
-                </div>
-              </form>
-            </div>
             <h5 class="card-title mb-0">Rezerwacje</h5>
           </div>
           <div class="card-body pt-2 pb-3">
@@ -158,7 +146,7 @@
                   {{ new Date(booking.endDate).toLocaleDateString() }}
                 </td>
                 <td>{{ booking.price + " PLN" }}</td>
-                <td>{{ booking.status }}</td>
+                <td>{{ translateStatus(booking.status) }}</td>
               </tr>
             </table>
           </div>
@@ -172,6 +160,8 @@
 definePageMeta({
   middleware: ["auth"],
 });
+
+const store = useMyDashboardStore();
 
 const today = ref(formatDate(new Date()));
 
@@ -235,8 +225,6 @@ const days = [
 const currentDay = days[date.getDay()];
 const currentDate = date.toLocaleDateString();
 
-const store = useMyDashboardStore();
-
 function formatDate(date: Date | string): string {
   const d = new Date(date);
   let month = "" + (d.getMonth() + 1);
@@ -263,34 +251,56 @@ function endOfWeek(date: Date): Date {
   return new Date(start.setDate(start.getDate() + 6));
 }
 
+function translateStatus(status: string): string {
+  switch (status) {
+    case "PENDING":
+      return "Oczekująca";
+    case "CONFIRMED":
+      return "Potwierdzona";
+    case "GUARANTEED":
+      return "Gwarantowana";
+    case "CANCELED":
+      return "Anulowana";
+    case "CHECKED_IN":
+      return "Zameldowana";
+    case "CHECKED_OUT":
+      return "Wymeldowana";
+    default:
+      return status;
+  }
+}
+
 const startOfThisWeek = ref(startOfWeek(new Date()));
 const endOfThisWeek = ref(endOfWeek(new Date()));
 
 onMounted(async () => {
-  await store.fetchStays(["CHECKED_IN,CHECKED_OUT"]);
-});
-
-onMounted(async () => {
-  await store.fetchTodayArrivals(
-    ["GUARANTEED,CONFIRMED,CHECKED_IN"],
-    today.value,
-    today.value,
-  );
-});
-
-onMounted(async () => {
-  await store.fetchNewBookings(["GUARANTEED,CONFIRMED,PENDING"], nextDay.value);
-});
-
-onMounted(async () => {
-  await store.fetchWeeklyBookings(
-    ["GUARANTEED,CONFIRMED,PENDING"],
-    formatDate(startOfThisWeek.value),
-    formatDate(endOfThisWeek.value),
-  );
-});
-onMounted(async () => {
-  await store.fetchRooms();
+  try {
+    await Promise.all([
+      store.fetchRooms(),
+      store.fetchStays(["CHECKED_IN,CHECKED_OUT"]),
+      store.fetchTodayArrivals(
+        ["GUARANTEED,CONFIRMED,CHECKED_IN"],
+        today.value,
+        today.value,
+      ),
+      store.updateRoomStatusForArrivals(store.arrivals),
+      store.fetchNewBookings(["GUARANTEED,CONFIRMED,PENDING"], nextDay.value),
+      store.fetchWeeklyBookings(
+        ["GUARANTEED,CONFIRMED,PENDING"],
+        formatDate(startOfThisWeek.value),
+        formatDate(endOfThisWeek.value),
+      ),
+      store.updateRoomStatusForArrivals(store.arrivals),
+    ]);
+  } catch (error) {
+    if (error.response && error.response.status === 503) {
+      console.error(
+        "Serwer jest tymczasowo niedostępny. Spróbuj ponownie później.",
+      );
+    } else {
+      console.error(error);
+    }
+  }
 });
 </script>
 
@@ -390,7 +400,8 @@ tr {
 }
 
 .pre-scrollable {
-  max-height: 300px;
+  min-height: 280px;
+  max-height: 280px;
   overflow-y: scroll;
 }
 

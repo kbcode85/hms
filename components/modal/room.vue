@@ -182,7 +182,7 @@
                       :key="types"
                       :value="types"
                     >
-                      {{ types }}
+                      {{ translateStandard(types) }}
                     </option>
                   </select>
                 </div>
@@ -225,7 +225,7 @@
                       :key="status"
                       :value="status"
                     >
-                      {{ status }}
+                      {{ translateStatus(status) }}
                     </option>
                   </select>
                 </div>
@@ -424,7 +424,7 @@
                       :key="types"
                       :value="types"
                     >
-                      {{ types }}
+                      {{ translateStandard(types) }}
                     </option>
                   </select>
                 </div>
@@ -467,7 +467,7 @@
                       :key="status"
                       :value="status"
                     >
-                      {{ status }}
+                      {{ translateStatus(status) }}
                     </option>
                   </select>
                 </div>
@@ -651,6 +651,38 @@ const equipment = computed(() => store.$state.equipment);
 const roomStandards = Object.values(RoomStandard);
 const roomStatuses = Object.values(RoomStatus);
 const bathroomTypes = Object.values(BathroomType);
+
+function translateStatus(status: string) {
+  switch (status) {
+    case "CLEAN":
+      return "Czysty";
+    case "DIRTY":
+      return "Brudny";
+    case "SERVICE":
+      return "Serwis";
+    case "OCCUPIED":
+      return "Zajęty";
+    case "ARRIVAL":
+      return "Przyjazd";
+    default:
+      return status;
+  }
+}
+
+function translateStandard(standard: string) {
+  switch (standard) {
+    case "ECONOMY":
+      return "Ekonomiczny";
+    case "STANDARD":
+      return "Standardowy";
+    case "LUXURY":
+      return "Luksusowy";
+    case "APARTMENT":
+      return "Apartament";
+    default:
+      return standard;
+  }
+}
 </script>
 
 <style lang="scss">
