@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   });
 
   let updatedRoom;
-  if (room && room.status !== "OCCUPIED") {
+  if (room) {
     updatedRoom = await prisma.room.update({
       where: { id: roomId },
       data: {

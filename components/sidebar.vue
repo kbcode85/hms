@@ -13,12 +13,19 @@
       </nuxt-link>
 
       <ul class="sidebar-nav">
-        <li class="sidebar-header">Recepcja</li>
+        <li class="sidebar-header">Menu</li>
 
         <li class="sidebar-item">
           <NuxtLink to="/" class="sidebar-link" active-class="active">
             <i class="align-middle material-icons-sharp">dashboard</i>
             <span class="align-middle">Dashboard</span>
+          </NuxtLink>
+        </li>
+
+        <li class="sidebar-item">
+          <NuxtLink to="/schedule" class="sidebar-link" active-class="active">
+            <i class="align-middle material-icons-sharp">calendar_month</i>
+            <span class="align-middle">Grafik rezerwacji</span>
           </NuxtLink>
         </li>
 
@@ -47,6 +54,17 @@
           <NuxtLink to="/rooms" class="sidebar-link" active-class="active">
             <i class="align-middle material-icons-sharp">bed</i>
             <span class="align-middle">Pokoje</span>
+          </NuxtLink>
+        </li>
+
+        <li class="sidebar-item">
+          <NuxtLink
+            to="/housekeeping"
+            class="sidebar-link"
+            active-class="active"
+          >
+            <i class="align-middle material-icons-sharp">cleaning_services</i>
+            <span class="align-middle">Housekeeping</span>
           </NuxtLink>
         </li>
 

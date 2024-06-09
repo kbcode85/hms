@@ -8,6 +8,14 @@ type Response = {
   rooms: Room[];
 };
 
+enum RoomStatus {
+  CLEAN = "CLEAN",
+  DIRTY = "DIRTY",
+  SERVICE = "SERVICE",
+  OCCUPIED = "OCCUPIED",
+  ARRIVAL = "ARRIVAL",
+}
+
 export const useMyRoomStore = defineStore({
   id: "myRoomStore",
   state: () => ({
@@ -94,6 +102,26 @@ export const useMyRoomStore = defineStore({
         this.activeAction = "add";
       }
 
+      if (action === "clean") {
+        try {
+          const response = await $fetch<Response>(`/api/room/${roomId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response) {
+            this.room = response.room;
+            this.equipment = response.equipment;
+          }
+        } catch (error) {
+          console.error("Failed to fetch room:", error);
+        }
+        this.activeAction = "clean";
+      }
+
       if (action === "delete") {
         try {
           const response = await $fetch<Response>(`/api/room/${roomId}`, {
@@ -157,8 +185,11 @@ export const useMyRoomStore = defineStore({
         this.closeModal();
       }
     },
-    async editRoom(roomId: number) {
+    async editRoom(roomId: number, status?: RoomStatus) {
       try {
+        if (status) {
+          this.room.status = status;
+        }
         const body = {
           room: this.room,
           equipment: this.equipment,
@@ -179,6 +210,7 @@ export const useMyRoomStore = defineStore({
       } finally {
         push.success("Pokój zaktualizowany pomyślnie");
         this.closeModal();
+        this.room = {} as Room;
       }
     },
     async addRoom() {

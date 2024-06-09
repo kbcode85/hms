@@ -147,6 +147,39 @@
             </div>
           </div>
 
+          <div v-if="action === 'clean'">
+            <div class="modal-header">
+              <h5 class="modal-title">Zmiana statusu</h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="store.closeModal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Czy na pewno chcesz zmienić status pokoju {{ room.number }} na
+                czysty ?
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="store.closeModal"
+              >
+                Nie
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="store.editRoom(room.id, RoomStatus.CLEAN)"
+              >
+                Tak
+              </button>
+            </div>
+          </div>
+
           <div v-if="action === 'edit'">
             <div class="modal-header">
               <h5 class="modal-title">Edycja pokoju</h5>

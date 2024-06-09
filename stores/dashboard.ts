@@ -58,12 +58,30 @@ export const useMyDashboardStore = defineStore({
   state: () => ({
     stays: [] as Booking[],
     arrivals: [] as Booking[],
-    departures: [] as Booking[],
     newBookings: [] as Booking[],
     weeklyBookings: [] as Booking[],
     rooms: {} as Room[],
+    noShows: [] as Booking[],
   }),
   actions: {
+    async fetchNoShows() {
+      try {
+        const response = await $fetch<ResponseType>("/api/booking/noshow", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response) {
+          this.noShows = response.bookings;
+        }
+      } catch (error) {
+        console.error("Failed to fetch bookings:", error);
+        push.error("Błąd podczas pobierania danych");
+      }
+    },
     async fetchStays(status: string[]) {
       try {
         const response = await $fetch<ResponseType>("/api/booking/list", {
@@ -178,10 +196,13 @@ export const useMyDashboardStore = defineStore({
         console.error("Failed to fetch rooms:", error);
       }
     },
-    async updateRoomStatusForArrivals(arivals: Booking[]) {
+    async updateRoomStatus(arivals: Booking[], stays: Booking[]) {
       try {
         for (const arrival of arivals) {
-          if (arrival.status !== "CHECKED_IN") {
+          if (
+            arrival.status !== "CHECKED_IN" &&
+            arrival.room.status !== "ARRIVAL"
+          ) {
             const response = await $fetch<Response>(`/api/room/status`, {
               method: "PUT",
               headers: {
@@ -196,6 +217,24 @@ export const useMyDashboardStore = defineStore({
 
             if (response) {
               console.log("Room status updated");
+            }
+          }
+        }
+        for (const stay of stays) {
+          if (stay.status === "CHECKED_IN" && stay.room.status !== "OCCUPIED") {
+            const response = await $fetch<Response>(`/api/room/status`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                // Authorization: `Bearer ${token}`,
+              },
+              body: {
+                roomId: stay.room.id,
+                status: "OCCUPIED",
+              },
+            });
+            if (response) {
+              console.log("Room status updated to OCCUPIED");
             }
           }
         }

@@ -255,6 +255,7 @@
                         placeholder="Ilość"
                         type="number"
                         min="0"
+                        default="0"
                         @input="updateAddition(addition.id, addition.quantity)"
                       />
                       <label for="quantity">Ilość</label>
@@ -283,8 +284,12 @@
 
                 <p class="fs-4 mb-2">
                   <i class="bi bi-house-door-fill"></i>
-                  Pokój: {{ selectedRoom?.number }} <br />
-                  <i class="bi bi-bed"></i>
+                  Pokój: {{ selectedRoom?.number }}
+                  <i class="text-muted">
+                    ({{
+                      "Cena za dobę " + selectedRoom?.pricePerNight + " zł"
+                    }})</i
+                  >
                 </p>
 
                 <p class="fs-4 mb-2">
@@ -339,7 +344,9 @@
           <button
             class="btn btn-primary"
             :disabled="!activeStep?.completed"
-            @click="currentStep === 5 ? addCheckin(totalPrice) : nextStep()"
+            @click="
+              currentStep === 5 ? store.addCheckin(totalPrice) : nextStep()
+            "
           >
             {{ currentStep === 5 ? "Dodaj" : "Następny" }}
           </button>
@@ -392,20 +399,32 @@ const rooms = computed(() => roomStore.availableRoom);
 
 const guests = computed(() => guestStore.guests);
 
-const additions = computed(() => store.additions);
+const additions = computed(() => {
+  return store.additions.map((addition) => ({
+    ...addition,
+    quantity: addition.quantity ?? 0,
+  }));
+});
 const updateAddition = (id: number, quantity: number) => {
   store.updateAddition(id, quantity);
 };
 
 const totalPrice = computed(() => {
+  let roomPrice = 0;
+  const nights = calculateNights(date.value.start, date.value.end);
+
+  if (selectedRoom.value) {
+    roomPrice = selectedRoom.value.pricePerNight * nights;
+  }
+
   return (
-    selectedRoom.value?.pricePerNight *
-      calculateNights(date.value.start, date.value.end) +
-    additions.value.reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
+    roomPrice +
+    additions.value.reduce(
+      (acc, curr) => acc + curr.quantity * curr.price * nights,
+      0,
+    )
   );
 });
-
-const addCheckin = () => store.addCheckin(totalPrice.value);
 
 const sroom = computed(() => store.room);
 const sguest = computed(() => store.guest);
