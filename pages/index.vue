@@ -168,7 +168,10 @@ const today = ref(formatDate(new Date()));
 const staysCount = computed(
   () => store.stays.filter((stay) => stay.status !== "CHECKED_OUT").length,
 );
-const arrivalsCount = computed(() => store.arrivals.length);
+const arrivalsCount = computed(
+  () =>
+    store.arrivals.filter((arrival) => arrival.status !== "CHECKED_IN").length,
+);
 const newBookingsCount = computed(() => store.newBookings.length);
 
 const departuresCount = computed(() => {
@@ -274,33 +277,23 @@ const startOfThisWeek = ref(startOfWeek(new Date()));
 const endOfThisWeek = ref(endOfWeek(new Date()));
 
 onMounted(async () => {
-  try {
-    await Promise.all([
-      store.fetchRooms(),
-      store.fetchStays(["CHECKED_IN,CHECKED_OUT"]),
-      store.fetchTodayArrivals(
-        ["GUARANTEED,CONFIRMED,CHECKED_IN"],
-        today.value,
-        today.value,
-      ),
-      store.updateRoomStatusForArrivals(store.arrivals),
-      store.fetchNewBookings(["GUARANTEED,CONFIRMED,PENDING"], nextDay.value),
-      store.fetchWeeklyBookings(
-        ["GUARANTEED,CONFIRMED,PENDING"],
-        formatDate(startOfThisWeek.value),
-        formatDate(endOfThisWeek.value),
-      ),
-      store.updateRoomStatusForArrivals(store.arrivals),
-    ]);
-  } catch (error) {
-    if (error.response && error.response.status === 503) {
-      console.error(
-        "Serwer jest tymczasowo niedostępny. Spróbuj ponownie później.",
-      );
-    } else {
-      console.error(error);
-    }
-  }
+  await Promise.all([
+    store.fetchRooms(),
+    store.fetchNoShows(),
+    store.fetchStays(["CHECKED_IN,CHECKED_OUT"]),
+    store.fetchTodayArrivals(
+      ["GUARANTEED,CONFIRMED,CHECKED_IN"],
+      today.value,
+      today.value,
+    ),
+    store.fetchNewBookings(["GUARANTEED,CONFIRMED,PENDING"], nextDay.value),
+    store.fetchWeeklyBookings(
+      ["GUARANTEED,CONFIRMED,PENDING"],
+      formatDate(startOfThisWeek.value),
+      formatDate(endOfThisWeek.value),
+    ),
+    store.updateRoomStatus(store.arrivals, store.stays),
+  ]);
 });
 </script>
 

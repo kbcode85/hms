@@ -105,7 +105,7 @@ model BookingAdditions {
   bookingId    Int
   addition     Addition @relation(fields: [additionId], references: [id])
   additionId   Int
-  quantity     Int
+  quantity     Int     @default(0)
 }
 
 model Addition {

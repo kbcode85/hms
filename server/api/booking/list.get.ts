@@ -8,6 +8,16 @@ type BookingStatus =
   | "CHECKED_IN"
   | "CHECKED_OUT";
 
+interface SearchCondition {
+  guest?: {
+    name?: { contains: string; mode: string };
+    surname?: { contains: string; mode: string };
+    email?: { contains: string; mode: string };
+    phone?: { contains: string; mode: string };
+  };
+  id?: number;
+}
+
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const { limit, page, query, startDate, endDate, status } = getQuery(event);
@@ -34,12 +44,19 @@ export default defineEventHandler(async (event) => {
   };
 
   if (typeof query === "string" && query.trim() !== "") {
-    const searchConditions = [
+    const searchConditions: SearchCondition[] = [
       { guest: { name: { contains: query, mode: "insensitive" } } },
       { guest: { surname: { contains: query, mode: "insensitive" } } },
       { guest: { email: { contains: query, mode: "insensitive" } } },
       { guest: { phone: { contains: query, mode: "insensitive" } } },
     ];
+
+    // Sprawdź, czy zapytanie może być przekształcone na liczbę
+    const queryAsNumber = Number(query);
+    if (!isNaN(queryAsNumber)) {
+      // Dodaj warunek wyszukiwania po id
+      searchConditions.push({ id: queryAsNumber });
+    }
     where.OR = searchConditions;
   }
 

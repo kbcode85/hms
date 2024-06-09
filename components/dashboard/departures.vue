@@ -31,21 +31,21 @@
 
 <script lang="ts" setup>
 const store = useMyDashboardStore();
-const today = ref(formatDate(new Date()));
-function formatDate(date: Date | string): string {
-  const d = new Date(date);
-  let month = "" + (d.getMonth() + 1);
-  let day = "" + d.getDate();
-  const year = d.getFullYear();
 
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
-
-  return [year, month, day].join("-");
+function stripTime(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
+const today = stripTime(new Date());
+
 const staysForToday = computed(() =>
-  store.stays.filter((booking) => booking.endDate === today.value),
+  store.stays.filter((booking) => {
+    const endDate = stripTime(new Date(booking.endDate));
+    return (
+      endDate.getTime() === today.getTime() &&
+      (booking.status === "CHECKED_IN" || booking.status === "CHECKED_OUT")
+    );
+  }),
 );
 </script>
 
