@@ -50,7 +50,6 @@
             <th scope="col">Data przyjazdu</th>
             <th scope="col">Data wyjazdu</th>
             <th scope="col">Dodatki</th>
-            <th scope="col">Pokój</th>
             <th scope="col">Akcje</th>
           </tr>
         </thead>
@@ -109,7 +108,6 @@
                 fitness_center
               </span>
             </td>
-            <td>{{ checkinout.room.status }}</td>
             <td>
               <div class="d-flex justify-content-between align-items-center">
                 <button
