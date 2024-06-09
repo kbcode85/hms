@@ -50,6 +50,13 @@
           </NuxtLink>
         </li>
 
+        <li class="sidebar-item">
+          <NuxtLink to="/housekeeping" class="sidebar-link" active-class="active">
+            <i class="align-middle material-icons-sharp">cleaning_services</i>
+            <span class="align-middle">Housekeeping</span>
+          </NuxtLink>
+        </li>
+
         <!-- <li class="sidebar-item">
           <NuxtLink to="/invoices" class="sidebar-link" active-class="active">
             <i class="align-middle material-icons-sharp">receipt_long</i>
