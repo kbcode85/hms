@@ -10,45 +10,46 @@
       <div class="mb-4">
         <input v-model="searchQuery" placeholder="Szukaj" type="input" />
       </div>
-      <div style="overflow-y: auto; max-height: 900px">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Numer pokoju</th>
-              <th>Typ</th>
-              <th>Max os.</th>
-              <th>Status</th>
-              <th>Akcje</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="room in rooms"
-              :key="room.id"
-              class="animate__animated animate__fadeIn"
-            >
-              <td>{{ room.number }}</td>
-              <td>{{ translateStandard(room.type) }}</td>
-              <td>{{ room.maxGuests }}</td>
-              <td>{{ translateStatus(room.status) }}</td>
-              <td>
-                <button
-                  class="btn btn-primary me-2"
-                  @click="store.openModal('clean', room.id)"
-                >
-                  <i class="bi bi-check-square"></i>
-                </button>
-                <button
-                  class="btn btn-info"
-                  @click="store.openModal('info', room.id)"
-                >
-                  <i class="bi bi-info-circle"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-stripe">
+        <thead>
+          <tr class="align-middle">
+            <th>Numer pokoju</th>
+            <th>Typ</th>
+            <th>Max os.</th>
+            <th>Status</th>
+            <th>Akcje</th>
+          </tr>
+        </thead>
+        <tbody class="align-middle">
+          <tr
+            v-for="(room, index) in rooms"
+            :key="room.id"
+            :class="{ 'bg-light': index % 2 === 0 }"
+          >
+            <td>{{ room.number }}</td>
+            <td>{{ translateStandard(room.type) }}</td>
+            <td>{{ room.maxGuests }}</td>
+            <td>{{ translateStatus(room.status) }}</td>
+            <td>
+              <button
+                class="btn btn-primary me-2"
+                @click="store.openModal('clean', room.id)"
+              >
+                <i class="bi bi-check-square"></i>
+              </button>
+              <button
+                class="btn btn-info"
+                @click="store.openModal('info', room.id)"
+              >
+                <i class="bi bi-info-circle"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -115,7 +116,7 @@ watch([searchQuery], async () => {
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
 .icon-with-text span {
   vertical-align: middle; /* Aby ikony były w linii z tekstem */
   margin-right: 4px; /* Odległość między ikoną a tekstem */

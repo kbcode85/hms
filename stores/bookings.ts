@@ -109,8 +109,8 @@ export const useMyBookingsStore = defineStore({
   }),
   actions: {
     async fetchBookings(
-      limit: number,
-      page: number,
+      limit?: number,
+      page?: number,
       sq?: string,
       status?: string[],
       startDate?: string,
