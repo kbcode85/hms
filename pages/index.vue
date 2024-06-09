@@ -288,7 +288,7 @@ onMounted(async () => {
     ),
     store.fetchNewBookings(["GUARANTEED,CONFIRMED,PENDING"], nextDay.value),
     store.fetchWeeklyBookings(
-      ["GUARANTEED,CONFIRMED,PENDING"],
+      ["GUARANTEED,CONFIRMED,PENDING,CANCELED"],
       formatDate(startOfThisWeek.value),
       formatDate(endOfThisWeek.value),
     ),

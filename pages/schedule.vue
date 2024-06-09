@@ -7,6 +7,7 @@
     </div>
 
     <div
+      v-if="isLoaded"
       class="table-responsive"
       style="overflow-y: auto; overflow-x: auto; height: 900px"
     >
@@ -65,6 +66,8 @@
 <script lang="ts" setup>
 const bookingStore = useMyBookingsStore();
 const roomStore = useMyRoomStore();
+
+const isLoaded = ref(false);
 
 const rooms = computed(() => roomStore.rooms);
 const bookings = computed(() => {
@@ -156,6 +159,7 @@ onMounted(async () => {
     startDate.value,
   );
   await roomStore.fetchRooms();
+  isLoaded.value = true;
 });
 </script>
 
