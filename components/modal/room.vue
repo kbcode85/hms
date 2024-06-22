@@ -191,7 +191,7 @@
             </div>
             <div class="modal-body">
               <form>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="name">Numer pokoju:</label>
                   <input
                     id="name"
@@ -201,7 +201,7 @@
                     required
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="type">Typ pokoju:</label>
                   <select
                     id="type"
@@ -220,7 +220,7 @@
                   </select>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="maxGuests">Maksymalna liczba gości:</label>
                   <input
                     id="maxGuests"
@@ -232,7 +232,7 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="pricePerNight">Cena za noc:</label>
                   <input
                     id="pricePerNight"
@@ -244,7 +244,7 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="status">Status pokoju:</label>
                   <select
                     id="status"
@@ -263,7 +263,7 @@
                   </select>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="singleBeds">Liczba pojedynczych łóżek:</label>
                   <input
                     id="singleBeds"
@@ -275,7 +275,7 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="doubleBeds">Liczba podwójnych łóżek:</label>
                   <input
                     id="doubleBeds"
@@ -287,12 +287,12 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasTV">Czy pokój ma telewizor?</label>
                   <input id="hasTV" v-model="equipment.hasTV" type="checkbox" />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasWifi">Czy pokój ma Wifi?</label>
                   <input
                     id="hasWifi"
@@ -300,7 +300,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasBathroom">Czy pokój ma łazienkę?</label>
                   <input
                     id="hasBathroom"
@@ -308,7 +308,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasKitchen">Czy pokój ma kuchnię?</label>
                   <input
                     id="hasKitchen"
@@ -316,7 +316,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasFridge">Czy pokój ma lodówkę?</label>
                   <input
                     id="hasFridge"
@@ -324,7 +324,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasBalcony">Czy pokój ma balkon?</label>
                   <input
                     id="hasBalcony"
@@ -332,7 +332,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasAirConditioning"
                     >Czy pokój ma klimatyzację?</label
                   >
@@ -342,7 +342,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasWardrobe">Czy pokój ma szafę?</label>
                   <input
                     id="hasWardrobe"
@@ -350,7 +350,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasHairDryer">Czy pokój ma suszarkę?</label>
                   <input
                     id="hasHairDryer"
@@ -358,7 +358,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasCoffeeAndTeaSet"
                     >Czy pokój ma zestaw do kawy i herbaty?</label
                   >
@@ -368,7 +368,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasCosmetics">Czy pokój ma kosmetyki?</label>
                   <input
                     id="hasCosmetics"
@@ -376,7 +376,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasTowels">Czy pokój ma ręczniki?</label>
                   <input
                     id="hasTowels"
@@ -384,7 +384,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="bathroomType">Typ łazienki:</label>
                   <select
                     id="bathroomType"
@@ -433,7 +433,7 @@
             </div>
             <div class="modal-body">
               <form>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="name">Numer pokoju:</label>
                   <input
                     id="name"
@@ -443,7 +443,7 @@
                     required
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="type">Typ pokoju:</label>
                   <select
                     id="type"
@@ -462,7 +462,7 @@
                   </select>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="maxGuests">Maksymalna liczba gości:</label>
                   <input
                     id="maxGuests"
@@ -474,7 +474,7 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="pricePerNight">Cena za noc:</label>
                   <input
                     id="pricePerNight"
@@ -486,7 +486,7 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="status">Status pokoju:</label>
                   <select
                     id="status"
@@ -505,7 +505,7 @@
                   </select>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="singleBeds">Liczba pojedynczych łóżek:</label>
                   <input
                     id="singleBeds"
@@ -517,7 +517,7 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="doubleBeds">Liczba podwójnych łóżek:</label>
                   <input
                     id="doubleBeds"
@@ -529,12 +529,12 @@
                   />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasTV">Czy pokój ma telewizor?</label>
                   <input id="hasTV" v-model="equipment.hasTV" type="checkbox" />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasWifi">Czy pokój ma Wifi?</label>
                   <input
                     id="hasWifi"
@@ -542,7 +542,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasBathroom">Czy pokój ma łazienkę?</label>
                   <input
                     id="hasBathroom"
@@ -550,7 +550,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasKitchen">Czy pokój ma kuchnię?</label>
                   <input
                     id="hasKitchen"
@@ -558,7 +558,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasFridge">Czy pokój ma lodówkę?</label>
                   <input
                     id="hasFridge"
@@ -566,7 +566,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasBalcony">Czy pokój ma balkon?</label>
                   <input
                     id="hasBalcony"
@@ -574,7 +574,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasAirConditioning"
                     >Czy pokój ma klimatyzację?</label
                   >
@@ -584,7 +584,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasWardrobe">Czy pokój ma szafę?</label>
                   <input
                     id="hasWardrobe"
@@ -592,7 +592,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasHairDryer">Czy pokój ma suszarkę?</label>
                   <input
                     id="hasHairDryer"
@@ -600,7 +600,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasCoffeeAndTeaSet"
                     >Czy pokój ma zestaw do kawy i herbaty?</label
                   >
@@ -610,7 +610,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasCosmetics">Czy pokój ma kosmetyki?</label>
                   <input
                     id="hasCosmetics"
@@ -618,7 +618,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3 d-flex justify-content-between">
                   <label for="hasTowels">Czy pokój ma ręczniki?</label>
                   <input
                     id="hasTowels"
@@ -626,7 +626,7 @@
                     type="checkbox"
                   />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
                   <label for="bathroomType">Typ łazienki:</label>
                   <select
                     id="bathroomType"
