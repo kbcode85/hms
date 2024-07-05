@@ -112,9 +112,9 @@
           </div>
           <div
             class="card-body"
-            style="max-height: 340px; overflow-y: auto; padding: 0"
+            style="height: 340px; overflow-y: auto; padding: 0"
           >
-            <table class="table">
+            <table v-if="store.newBookings.length > 0" class="table">
               <thead>
                 <tr
                   style="
@@ -149,6 +149,12 @@
                 <td>{{ translateStatus(booking.status) }}</td>
               </tr>
             </table>
+            <div
+              v-else
+              class="d-flex justify-content-center align-items-center m-3 p-3"
+            >
+              Brak przyszłych rezerwacji.
+            </div>
           </div>
         </div>
       </div>

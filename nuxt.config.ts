@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   },
   css: [
     "~/assets/scss/main.scss",
-    "notivue/notification.css", // Only needed if using built-in <Notification />
+    "notivue/notification.css",
     "notivue/animations.css",
   ],
   vite: {
