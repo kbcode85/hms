@@ -11,7 +11,7 @@ Check out the live preview of HMSuite [here](https://hms.kbdev.pl/).
 Use the following credentials to log in as an admin:
 - **Username**: admin
 - **Password**: password
-- 
+  
 ## Technologies Used
 - **Frontend**: Nuxt 3, Bootstrap 5
 - **Backend**: Prisma ORM, PostgreSQL
