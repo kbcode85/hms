@@ -4,6 +4,14 @@
 ## Overview
 This project focuses on developing a web application to manage reservations in accommodation facilities. The application aims to streamline the booking process, enhance user experience, and provide a comprehensive dashboard for administrators.
 
+## Preview
+Check out the live preview of HMSuite [here](https://hms.kbdev.pl/).
+
+## Admin Credentials
+Use the following credentials to log in as an admin:
+- **Username**: admin
+- **Password**: password
+- 
 ## Technologies Used
 - **Frontend**: Nuxt 3, Bootstrap 5
 - **Backend**: Prisma ORM, PostgreSQL
